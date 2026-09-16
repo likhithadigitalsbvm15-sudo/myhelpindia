@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Time Calculator - MyHelp India</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:Arial,sans-serif;
+    background:#f4f8ff;
+    color:#222;
+}
+
+header{
+    background:linear-gradient(135deg,#0d47a1,#1976d2,#42a5f5);
+    color:white;
+    text-align:center;
+    padding:25px 15px;
+}
+
+header h1{
+    font-size:30px;
+    margin-bottom:8px;
+}
+
+header p{
+    font-size:15px;
+}
+
+.container{
+    max-width:850px;
+    margin:30px auto;
+    padding:0 15px;
+}
+
+.card{
+    background:white;
+    padding:25px;
+    border-radius:15px;
+    box-shadow:0 5px 20px rgba(0,0,0,.10);
+    margin-bottom:25px;
+}
+
+h2{
+    color:#0d47a1;
+    margin-bottom:20px;
+}
+
+h3{
+    margin-bottom:15px;
+    color:#333;
+}
+
+.section{
+    background:#f8fbff;
+    padding:18px;
+    border-radius:12px;
+    margin-bottom:20px;
+}
+
+.input-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:12px;
+}
+
+label{
+    display:block;
+    font-weight:bold;
+    margin-bottom:7px;
+}
+
+input{
+    width:100%;
+    padding:13px;
+    border:1px solid #ccc;
+    border-radius:8px;
+    font-size:16px;
+}
+
+input:focus{
+    outline:none;
+    border-color:#1976d2;
+}
+
+.button-area{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-top:22px;
+}
+
+button,.back-btn{
+    border:none;
+    padding:13px 20px;
+    border-radius:8px;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.calculate{
+    background:#1976d2;
+    color:white;
+}
+
+.clear{
+    background:#e53935;
+    color:white;
+}
+
+.back-btn{
+    background:#555;
+    color:white;
+    text-decoration:none;
+    display:inline-block;
+}
+
+.results{
+    display:none;
+}
+
+.answer{
+    text-align:center;
+    background:#e8f5e9;
+    border-radius:14px;
+    padding:25px;
+    margin-bottom:20px;
+}
+
+.answer h3{
+    color:#2e7d32;
+}
+
+.answer p{
+    font-size:34px;
+    font-weight:bold;
+    color:#1b5e20;
+}
+
+.result-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:15px;
+}
+
+.result-box{
+    background:#f4f8ff;
+    border:1px solid #dbe7f5;
+    border-radius:12px;
+    padding:20px;
+    text-align:center;
+}
+
+.result-box h3{
+    color:#555;
+    font-size:15px;
+}
+
+.result-box p{
+    color:#0d47a1;
+    font-size:22px;
+    font-weight:bold;
+}
+
+@media(max-width:600px){
+
+    header h1{
+        font-size:24px;
+    }
+
+    .card{
+        padding:18px;
+    }
+
+    .input-grid,
+    .result-grid{
+        grid-template-columns:1fr;
+    }
+
+    .button-area{
+        flex-direction:column;
+    }
+
+    button,.back-btn{
+        width:100%;
+        text-align:center;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>MyHelp India</h1>
+    <p>Professional Time Calculator</p>
+</header>
+
+<div class="container">
+
+    <div class="card">
+
+        <h2>⏱️ Time Calculator</h2>
+
+        <div class="section">
+
+            <h3>First Time</h3>
+
+            <div class="input-grid">
+
+                <div>
+                    <label>Hours</label>
+                    <input type="number" id="h1" min="0" placeholder="0">
+                </div>
+
+                <div>
+                    <label>Minutes</label>
+                    <input type="number" id="m1" min="0" placeholder="0">
+                </div>
+
+                <div>
+                    <label>Seconds</label>
+                    <input type="number" id="s1" min="0" placeholder="0">
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="section">
+
+            <h3>Second Time</h3>
+
+            <div class="input-grid">
+
+                <div>
+                    <label>Hours</label>
+                    <input type="number" id="h2" min="0" placeholder="0">
+                </div>
+
+                <div>
+                    <label>Minutes</label>
+                    <input type="number" id="m2" min="0" placeholder="0">
+                </div>
+
+                <div>
+                    <label>Seconds</label>
+                    <input type="number" id="s2" min="0" placeholder="0">
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="button-area">
+
+            <button
+                class="calculate"
+                onclick="calculateTime()"
+            >
+                🧮 Add Time
+            </button>
+
+            <button
+                class="clear"
+                onclick="clearCalculator()"
+            >
+                🗑️ Clear
+            </button>
+
+            <a
+                href="index.html"
+                class="back-btn"
+            >
+                ← Back to MyHelp India
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <div class="card results" id="results">
+
+        <h2>📊 Time Result</h2>
+
+        <div class="answer">
+
+            <h3>Total Time</h3>
+
+            <p id="totalTime">00:00:00</p>
+
+        </div>
+
+        <div class="result-grid">
+
+            <div class="result-box">
+                <h3>Total Hours</h3>
+                <p id="totalHours">0</p>
+            </div>
+
+            <div class="result-box">
+                <h3>Total Minutes</h3>
+                <p id="totalMinutes">0</p>
+            </div>
+
+            <div class="result-box">
+                <h3>Total Seconds</h3>
+                <p id="totalSeconds">0</p>
+            </div>
+
+            <div class="result-box">
+                <h3>Calculation</h3>
+                <p id="calculation">0 + 0</p>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+function getValue(id){
+
+    let value = Number(document.getElementById(id).value);
+
+    return value >= 0 ? value : 0;
+
+}
+
+
+function calculateTime(){
+
+    let h1 = getValue("h1");
+    let m1 = getValue("m1");
+    let s1 = getValue("s1");
+
+    let h2 = getValue("h2");
+    let m2 = getValue("m2");
+    let s2 = getValue("s2");
+
+
+    let totalSeconds =
+        (h1 * 3600) +
+        (m1 * 60) +
+        s1 +
+        (h2 * 3600) +
+        (m2 * 60) +
+        s2;
+
+
+    let hours =
+        Math.floor(totalSeconds / 3600);
+
+    let remainingSeconds =
+        totalSeconds % 3600;
+
+    let minutes =
+        Math.floor(remainingSeconds / 60);
+
+    let seconds =
+        remainingSeconds % 60;
+
+
+    let displayHours =
+        String(hours).padStart(2,"0");
+
+    let displayMinutes =
+        String(minutes).padStart(2,"0");
+
+    let displaySeconds =
+        String(seconds).padStart(2,"0");
+
+
+    document.getElementById("totalTime").innerText =
+        displayHours + ":" +
+        displayMinutes + ":" +
+        displaySeconds;
+
+
+    document.getElementById("totalHours").innerText =
+        hours + " Hours";
+
+
+    document.getElementById("totalMinutes").innerText =
+        Math.floor(totalSeconds / 60) + " Minutes";
+
+
+    document.getElementById("totalSeconds").innerText =
+        totalSeconds + " Seconds";
+
+
+    document.getElementById("calculation").innerText =
+        h1 + "h " + m1 + "m " + s1 + "s + " +
+        h2 + "h " + m2 + "m " + s2 + "s";
+
+
+    document.getElementById("results").style.display =
+        "block";
+
+
+    document.getElementById("results").scrollIntoView({
+        behavior:"smooth"
+    });
+
+}
+
+
+function clearCalculator(){
+
+    document.getElementById("h1").value = "";
+
+    document.getElementById("m1").value = "";
+
+    document.getElementById("s1").value = "";
+
+    document.getElementById("h2").value = "";
+
+    document.getElementById("m2").value = "";
+
+    document.getElementById("s2").value = "";
+
+    document.getElementById("results").style.display =
+        "none";
+
+}
+
+</script>
+
+</body>
+</html>

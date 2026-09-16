@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Date Difference Calculator - MyHelp India</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    background:#f4f8ff;
+    color:#17345f;
+}
+
+.header{
+    background:linear-gradient(135deg,#0d47a1,#1976d2,#42a5f5);
+    color:white;
+    text-align:center;
+    padding:25px 15px;
+}
+
+.header h1{
+    font-size:30px;
+    margin-bottom:8px;
+}
+
+.header p{
+    font-size:15px;
+}
+
+.container{
+    max-width:650px;
+    margin:30px auto;
+    padding:0 15px;
+}
+
+.card{
+    background:white;
+    border-radius:18px;
+    padding:25px;
+    box-shadow:0 8px 25px rgba(0,0,0,0.10);
+}
+
+.card h2{
+    text-align:center;
+    color:#0d47a1;
+    margin-bottom:25px;
+}
+
+.input-group{
+    margin-bottom:20px;
+}
+
+label{
+    display:block;
+    font-weight:bold;
+    margin-bottom:8px;
+}
+
+input{
+    width:100%;
+    padding:13px;
+    border:1px solid #ccd8e8;
+    border-radius:10px;
+    font-size:16px;
+    outline:none;
+}
+
+input:focus{
+    border-color:#1976d2;
+}
+
+.buttons{
+    display:flex;
+    gap:10px;
+    margin-top:20px;
+}
+
+button{
+    flex:1;
+    padding:13px;
+    border:none;
+    border-radius:10px;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.calculate{
+    background:#1976d2;
+    color:white;
+}
+
+.clear{
+    background:#e9eef5;
+    color:#17345f;
+}
+
+.back{
+    width:100%;
+    margin-top:12px;
+    background:#0d47a1;
+    color:white;
+}
+
+.result{
+    display:none;
+    margin-top:25px;
+    padding:20px;
+    background:#eef6ff;
+    border-radius:15px;
+    border:1px solid #c9e0fa;
+}
+
+.result h3{
+    text-align:center;
+    color:#0d47a1;
+    margin-bottom:18px;
+}
+
+.result-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:12px;
+}
+
+.result-box{
+    background:white;
+    padding:18px 10px;
+    border-radius:12px;
+    text-align:center;
+    box-shadow:0 3px 10px rgba(0,0,0,0.06);
+}
+
+.result-box strong{
+    display:block;
+    font-size:25px;
+    color:#1976d2;
+    margin-bottom:5px;
+}
+
+.summary{
+    margin-top:15px;
+    background:white;
+    padding:15px;
+    border-radius:10px;
+    text-align:center;
+}
+
+.footer{
+    text-align:center;
+    margin-top:30px;
+    padding:20px;
+    color:#607d9b;
+    font-size:14px;
+}
+
+@media(max-width:500px){
+    .buttons{
+        flex-direction:column;
+    }
+
+    .result-grid{
+        grid-template-columns:1fr;
+    }
+
+    .header h1{
+        font-size:25px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+    <h1>📅 Date Difference Calculator</h1>
+    <p>Calculate the difference between two dates</p>
+</div>
+
+<div class="container">
+
+<div class="card">
+
+<h2>Enter Two Dates</h2>
+
+<div class="input-group">
+    <label>Start Date</label>
+    <input type="date" id="startDate">
+</div>
+
+<div class="input-group">
+    <label>End Date</label>
+    <input type="date" id="endDate">
+</div>
+
+<div class="buttons">
+
+    <button class="calculate" onclick="calculateDifference()">
+        Calculate Difference
+    </button>
+
+    <button class="clear" onclick="clearAll()">
+        Clear
+    </button>
+
+</div>
+
+<div class="result" id="result">
+
+    <h3>Date Difference</h3>
+
+    <div class="result-grid">
+
+        <div class="result-box">
+            <strong id="totalDays">0</strong>
+            Total Days
+        </div>
+
+        <div class="result-box">
+            <strong id="weeks">0</strong>
+            Weeks
+        </div>
+
+        <div class="result-box">
+            <strong id="months">0</strong>
+            Approx. Months
+        </div>
+
+        <div class="result-box">
+            <strong id="years">0</strong>
+            Approx. Years
+        </div>
+
+    </div>
+
+    <div class="summary" id="summary">
+        Date difference
+    </div>
+
+</div>
+
+<button class="back" onclick="goBack()">
+    ← Back to MyHelp India
+</button>
+
+</div>
+
+<div class="footer">
+    © 2026 MyHelp India • Simple Solutions for a Better Life
+</div>
+
+</div>
+
+<script>
+
+function calculateDifference(){
+
+    let startValue = document.getElementById("startDate").value;
+    let endValue = document.getElementById("endDate").value;
+
+    if(!startValue || !endValue){
+        alert("Please select both dates.");
+        return;
+    }
+
+    let start = new Date(startValue + "T00:00:00");
+    let end = new Date(endValue + "T00:00:00");
+
+    if(start > end){
+        let temp = start;
+        start = end;
+        end = temp;
+    }
+
+    let difference = end - start;
+
+    let totalDays = Math.floor(
+        difference / (1000 * 60 * 60 * 24)
+    );
+
+    let weeks = Math.floor(totalDays / 7);
+
+    let months = Math.floor(totalDays / 30.44);
+
+    let years = Math.floor(totalDays / 365.25);
+
+    document.getElementById("totalDays").textContent =
+        totalDays.toLocaleString();
+
+    document.getElementById("weeks").textContent =
+        weeks.toLocaleString();
+
+    document.getElementById("months").textContent =
+        months.toLocaleString();
+
+    document.getElementById("years").textContent =
+        years.toLocaleString();
+
+    document.getElementById("summary").textContent =
+        "The difference between the selected dates is " +
+        totalDays.toLocaleString() + " days.";
+
+    document.getElementById("result").style.display = "block";
+}
+
+function clearAll(){
+
+    document.getElementById("startDate").value = "";
+    document.getElementById("endDate").value = "";
+
+    document.getElementById("result").style.display = "none";
+}
+
+function goBack(){
+
+    window.location.href = "index.html";
+
+}
+
+</script>
+
+</body>
+</html>

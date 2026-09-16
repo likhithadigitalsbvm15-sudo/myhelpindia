@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>MyHelp India - PDF Rotate</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    background:#f4f8ff;
+    color:#222;
+}
+
+header{
+    background:linear-gradient(135deg,#0d47a1,#1976d2,#42a5f5);
+    color:white;
+    text-align:center;
+    padding:28px 15px;
+}
+
+header h1{
+    font-size:30px;
+    margin-bottom:8px;
+}
+
+header p{
+    font-size:16px;
+}
+
+.container{
+    max-width:850px;
+    margin:25px auto;
+    padding:15px;
+}
+
+.card{
+    background:white;
+    border-radius:15px;
+    padding:25px;
+    margin-bottom:20px;
+    box-shadow:0 5px 18px rgba(0,0,0,.10);
+}
+
+h2{
+    color:#0d47a1;
+    margin-bottom:15px;
+}
+
+.file-box{
+    border:2px dashed #1976d2;
+    border-radius:12px;
+    padding:25px;
+    text-align:center;
+    background:#f8fbff;
+}
+
+input[type="file"],
+select{
+    width:100%;
+    padding:13px;
+    margin-top:10px;
+    border:1px solid #ccc;
+    border-radius:8px;
+    font-size:16px;
+    background:white;
+}
+
+label{
+    display:block;
+    font-weight:bold;
+    margin-top:20px;
+    margin-bottom:6px;
+}
+
+button{
+    border:none;
+    padding:13px 18px;
+    border-radius:8px;
+    font-size:16px;
+    cursor:pointer;
+    margin:8px 5px 0 0;
+    background:#1976d2;
+    color:white;
+}
+
+button:hover{
+    background:#0d47a1;
+}
+
+.green{
+    background:#2e7d32;
+}
+
+.green:hover{
+    background:#1b5e20;
+}
+
+.red{
+    background:#d32f2f;
+}
+
+.red:hover{
+    background:#b71c1c;
+}
+
+.gray{
+    background:#607d8b;
+}
+
+.gray:hover{
+    background:#455a64;
+}
+
+#fileInfo{
+    margin-top:18px;
+    padding:15px;
+    background:#eef5ff;
+    border-radius:10px;
+    display:none;
+    line-height:1.7;
+}
+
+#status{
+    display:none;
+    margin-top:18px;
+    padding:13px;
+    background:#e3f2fd;
+    border-radius:8px;
+    color:#0d47a1;
+    line-height:1.5;
+}
+
+.info{
+    background:#f1f8e9;
+    padding:15px;
+    border-radius:10px;
+    margin-top:18px;
+    line-height:1.7;
+}
+
+.example{
+    margin-top:15px;
+    padding:15px;
+    background:#fff8e1;
+    border-radius:10px;
+    line-height:1.7;
+}
+
+.footer{
+    text-align:center;
+    padding:25px;
+    color:#666;
+    font-size:14px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>🔄 PDF Rotate</h1>
+    <p>Rotate PDF pages and save a new PDF</p>
+</header>
+
+<div class="container">
+
+<div class="card">
+
+    <h2>📄 Select PDF</h2>
+
+    <div class="file-box">
+
+        <p><b>Choose your PDF file</b></p>
+
+        <input
+            type="file"
+            id="pdfInput"
+            accept="application/pdf,.pdf"
+        >
+
+    </div>
+
+    <div id="fileInfo"></div>
+
+    <label>🔄 Rotation</label>
+
+    <select id="rotation">
+        <option value="90">Rotate 90° Clockwise</option>
+        <option value="180">Rotate 180°</option>
+        <option value="270">Rotate 270° Clockwise</option>
+    </select>
+
+    <button class="green" onclick="rotatePDF()">
+        🔄 Rotate PDF
+    </button>
+
+    <button class="red" onclick="clearAll()">
+        🗑 Clear
+    </button>
+
+    <div id="status"></div>
+
+    <div class="info">
+        <b>How to use:</b><br>
+        1. Select your PDF file.<br>
+        2. Choose the rotation angle.<br>
+        3. Click <b>Rotate PDF</b>.<br>
+        4. The rotated PDF will be downloaded.
+    </div>
+
+</div>
+
+<div class="card">
+
+    <h2>ℹ️ About PDF Rotate</h2>
+
+    <p>
+        This tool rotates all pages of your PDF and creates
+        a new PDF file. Your PDF is processed in your browser
+        and is not uploaded to a server.
+    </p>
+
+</div>
+
+</div>
+
+<div class="footer">
+    © 2026 MyHelp India • Your Life • Our Support
+</div>
+
+<script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+
+<script>
+
+let selectedPDF = null;
+let totalPages = 0;
+
+document.getElementById("pdfInput").addEventListener(
+    "change",
+    async function(){
+
+        const file = this.files[0];
+
+        if(!file){
+            return;
+        }
+
+        selectedPDF = file;
+
+        try{
+
+            const arrayBuffer =
+                await file.arrayBuffer();
+
+            const pdf =
+                await PDFLib.PDFDocument.load(arrayBuffer);
+
+            totalPages =
+                pdf.getPageCount();
+
+            const info =
+                document.getElementById("fileInfo");
+
+            info.style.display = "block";
+
+            info.innerHTML =
+                "📄 <b>File:</b> " +
+                escapeHTML(file.name) +
+                "<br>📑 <b>Total Pages:</b> " +
+                totalPages +
+                "<br>💾 <b>File Size:</b> " +
+                formatSize(file.size);
+
+            showStatus(
+                "PDF loaded successfully."
+            );
+
+        }
+        catch(error){
+
+            selectedPDF = null;
+            totalPages = 0;
+
+            alert(
+                "Unable to open this PDF. Please select a valid PDF file."
+            );
+
+        }
+
+    }
+);
+
+
+async function rotatePDF(){
+
+    if(!selectedPDF){
+
+        alert("Please select a PDF file first.");
+
+        return;
+    }
+
+    try{
+
+        showStatus(
+            "⏳ Rotating PDF pages... Please wait."
+        );
+
+        const rotation =
+            Number(
+                document.getElementById("rotation").value
+            );
+
+        const arrayBuffer =
+            await selectedPDF.arrayBuffer();
+
+        const pdf =
+            await PDFLib.PDFDocument.load(arrayBuffer);
+
+        const pages =
+            pdf.getPages();
+
+        pages.forEach(function(page){
+
+            const currentRotation =
+                page.getRotation().angle;
+
+            page.setRotation(
+                PDFLib.degrees(
+                    currentRotation + rotation
+                )
+            );
+
+        });
+
+        const pdfBytes =
+            await pdf.save();
+
+        const blob =
+            new Blob(
+                [pdfBytes],
+                {type:"application/pdf"}
+            );
+
+        const url =
+            URL.createObjectURL(blob);
+
+        const link =
+            document.createElement("a");
+
+        link.href = url;
+
+        link.download =
+            "MyHelp-India-Rotated-PDF.pdf";
+
+        document.body.appendChild(link);
+
+        link.click();
+
+        link.remove();
+
+        setTimeout(function(){
+
+            URL.revokeObjectURL(url);
+
+        },1000);
+
+        showStatus(
+            "✅ PDF rotated successfully! Download started."
+        );
+
+    }
+    catch(error){
+
+        console.error(error);
+
+        showStatus(
+            "❌ Unable to rotate this PDF. Please try another PDF."
+        );
+
+    }
+
+}
+
+
+function clearAll(){
+
+    selectedPDF = null;
+    totalPages = 0;
+
+    document.getElementById("pdfInput").value = "";
+
+    document.getElementById("fileInfo").style.display =
+        "none";
+
+    document.getElementById("status").style.display =
+        "none";
+
+}
+
+
+function showStatus(message){
+
+    const status =
+        document.getElementById("status");
+
+    status.style.display = "block";
+
+    status.innerText = message;
+
+}
+
+
+function formatSize(bytes){
+
+    if(bytes < 1024){
+
+        return bytes + " B";
+
+    }
+
+    if(bytes < 1024 * 1024){
+
+        return (bytes / 1024).toFixed(1) + " KB";
+
+    }
+
+    return (bytes / (1024 * 1024)).toFixed(2) + " MB";
+
+}
+
+
+function escapeHTML(text){
+
+    return text
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+
+}
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>MyHelp India - PDF Merge</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    background:#f4f8ff;
+    color:#222;
+}
+
+header{
+    background:linear-gradient(135deg,#0d47a1,#1976d2,#42a5f5);
+    color:white;
+    text-align:center;
+    padding:28px 15px;
+}
+
+header h1{
+    font-size:30px;
+    margin-bottom:8px;
+}
+
+header p{
+    font-size:16px;
+}
+
+.container{
+    max-width:850px;
+    margin:25px auto;
+    padding:15px;
+}
+
+.card{
+    background:white;
+    border-radius:15px;
+    padding:25px;
+    margin-bottom:20px;
+    box-shadow:0 5px 18px rgba(0,0,0,.10);
+}
+
+h2{
+    color:#0d47a1;
+    margin-bottom:15px;
+}
+
+.file-box{
+    border:2px dashed #1976d2;
+    border-radius:12px;
+    padding:25px;
+    text-align:center;
+    background:#f8fbff;
+}
+
+input[type="file"]{
+    width:100%;
+    padding:12px;
+    margin-top:10px;
+    border:1px solid #ccc;
+    border-radius:8px;
+    background:white;
+}
+
+.file-list{
+    margin-top:20px;
+}
+
+.file-item{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    padding:13px;
+    margin-bottom:8px;
+    background:#eef5ff;
+    border-radius:9px;
+    border:1px solid #d5e5ff;
+}
+
+.file-name{
+    flex:1;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+}
+
+.file-size{
+    color:#666;
+    font-size:13px;
+}
+
+button{
+    border:none;
+    padding:13px 18px;
+    border-radius:8px;
+    font-size:16px;
+    cursor:pointer;
+    margin:8px 5px 0 0;
+    background:#1976d2;
+    color:white;
+}
+
+button:hover{
+    background:#0d47a1;
+}
+
+.green{
+    background:#2e7d32;
+}
+
+.green:hover{
+    background:#1b5e20;
+}
+
+.red{
+    background:#d32f2f;
+}
+
+.red:hover{
+    background:#b71c1c;
+}
+
+.gray{
+    background:#607d8b;
+}
+
+.gray:hover{
+    background:#455a64;
+}
+
+#status{
+    display:none;
+    margin-top:18px;
+    padding:13px;
+    background:#e3f2fd;
+    border-radius:8px;
+    color:#0d47a1;
+    line-height:1.5;
+}
+
+.info{
+    background:#f1f8e9;
+    padding:15px;
+    border-radius:10px;
+    margin-top:18px;
+    line-height:1.7;
+}
+
+.empty{
+    text-align:center;
+    color:#777;
+    padding:15px;
+}
+
+.footer{
+    text-align:center;
+    padding:25px;
+    color:#666;
+    font-size:14px;
+}
+
+.small-btn{
+    padding:7px 10px;
+    margin:0;
+    font-size:13px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>📑 PDF Merge</h1>
+    <p>Combine multiple PDF files into one PDF</p>
+</header>
+
+<div class="container">
+
+<div class="card">
+
+    <h2>📂 Select PDF Files</h2>
+
+    <div class="file-box">
+
+        <p><b>Select 2 or more PDF files</b></p>
+
+        <p style="margin-top:8px;color:#666;">
+            You can select multiple files at once.
+        </p>
+
+        <input
+            type="file"
+            id="pdfInput"
+            accept="application/pdf,.pdf"
+            multiple
+        >
+
+    </div>
+
+    <div class="file-list" id="fileList">
+        <div class="empty">
+            No PDF files selected.
+        </div>
+    </div>
+
+    <button class="green" onclick="mergePDFs()">
+        🔗 Merge PDF
+    </button>
+
+    <button class="red" onclick="clearFiles()">
+        🗑 Clear
+    </button>
+
+    <div id="status"></div>
+
+    <div class="info">
+        <b>How to use:</b><br>
+        1. Select two or more PDF files.<br>
+        2. Check the file list.<br>
+        3. Click <b>Merge PDF</b>.<br>
+        4. Your combined PDF will be downloaded.
+    </div>
+
+</div>
+
+<div class="card">
+
+    <h2>ℹ️ About PDF Merge</h2>
+
+    <p>
+        This tool combines multiple PDF files into a single PDF.
+        Your files are processed in your browser and are not uploaded
+        to a server.
+    </p>
+
+</div>
+
+</div>
+
+<div class="footer">
+    © 2026 MyHelp India • Your Life • Our Support
+</div>
+
+<!-- PDF-LIB -->
+<script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+
+<script>
+
+let selectedFiles = [];
+
+const pdfInput = document.getElementById("pdfInput");
+
+pdfInput.addEventListener("change", function(){
+
+    const newFiles = Array.from(pdfInput.files);
+
+    selectedFiles = newFiles;
+
+    showFiles();
+
+});
+
+
+function showFiles(){
+
+    const list = document.getElementById("fileList");
+
+    list.innerHTML = "";
+
+    if(selectedFiles.length === 0){
+
+        list.innerHTML =
+            '<div class="empty">No PDF files selected.</div>';
+
+        return;
+    }
+
+    selectedFiles.forEach(function(file,index){
+
+        const item = document.createElement("div");
+
+        item.className = "file-item";
+
+        item.innerHTML = `
+            <div class="file-name">
+                📄 <b>${index + 1}.</b> ${escapeHTML(file.name)}
+            </div>
+
+            <div class="file-size">
+                ${formatSize(file.size)}
+            </div>
+
+            <button
+                class="red small-btn"
+                onclick="removeFile(${index})">
+                Remove
+            </button>
+        `;
+
+        list.appendChild(item);
+
+    });
+
+}
+
+
+function removeFile(index){
+
+    selectedFiles.splice(index,1);
+
+    showFiles();
+
+}
+
+
+async function mergePDFs(){
+
+    if(selectedFiles.length < 2){
+
+        alert("Please select at least 2 PDF files.");
+
+        return;
+    }
+
+    if(typeof PDFLib === "undefined"){
+
+        alert(
+            "PDF library is not loaded. Please check your internet connection and try again."
+        );
+
+        return;
+    }
+
+    try{
+
+        showStatus(
+            "⏳ Merging PDF files... Please wait."
+        );
+
+        const mergedPdf = await PDFLib.PDFDocument.create();
+
+        for(let i=0;i<selectedFiles.length;i++){
+
+            const file = selectedFiles[i];
+
+            const arrayBuffer =
+                await file.arrayBuffer();
+
+            const pdf =
+                await PDFLib.PDFDocument.load(arrayBuffer);
+
+            const pages =
+                await mergedPdf.copyPages(
+                    pdf,
+                    pdf.getPageIndices()
+                );
+
+            pages.forEach(function(page){
+
+                mergedPdf.addPage(page);
+
+            });
+
+        }
+
+        const pdfBytes =
+            await mergedPdf.save();
+
+        const blob =
+            new Blob(
+                [pdfBytes],
+                {type:"application/pdf"}
+            );
+
+        const url =
+            URL.createObjectURL(blob);
+
+        const link =
+            document.createElement("a");
+
+        link.href = url;
+
+        link.download =
+            "MyHelp-India-Merged-PDF.pdf";
+
+        document.body.appendChild(link);
+
+        link.click();
+
+        link.remove();
+
+        setTimeout(function(){
+
+            URL.revokeObjectURL(url);
+
+        },1000);
+
+        showStatus(
+            "✅ PDF merged successfully! Download started."
+        );
+
+    }
+    catch(error){
+
+        console.error(error);
+
+        showStatus(
+            "❌ Unable to merge the PDF. Please check that the selected files are valid PDF files."
+        );
+
+    }
+
+}
+
+
+function clearFiles(){
+
+    selectedFiles = [];
+
+    pdfInput.value = "";
+
+    showFiles();
+
+    document.getElementById("status").style.display =
+        "none";
+
+}
+
+
+function showStatus(message){
+
+    const status =
+        document.getElementById("status");
+
+    status.style.display = "block";
+
+    status.innerText = message;
+
+}
+
+
+function formatSize(bytes){
+
+    if(bytes < 1024){
+
+        return bytes + " B";
+
+    }
+
+    if(bytes < 1024 * 1024){
+
+        return (bytes / 1024).toFixed(1) + " KB";
+
+    }
+
+    return (bytes / (1024 * 1024)).toFixed(2) + " MB";
+
+}
+
+
+function escapeHTML(text){
+
+    return text
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+
+}
+
+</script>
+
+</body>
+</html>

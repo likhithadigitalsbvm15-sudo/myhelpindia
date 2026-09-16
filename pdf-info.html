@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>PDF Information - MyHelp India</title>
+
+<meta name="description" content="Free PDF Information tool to check page count, file size and PDF metadata.">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:Arial,Helvetica,sans-serif;
+    background:#f4f8ff;
+    color:#172033;
+}
+
+header{
+    background:linear-gradient(135deg,#0d47a1,#1976d2,#42a5f5);
+    color:#fff;
+    text-align:center;
+    padding:25px 15px;
+}
+
+.logo{
+    font-size:30px;
+    font-weight:800;
+}
+
+.subtitle{
+    margin-top:7px;
+    font-size:15px;
+}
+
+.container{
+    max-width:900px;
+    margin:25px auto;
+    padding:0 15px;
+}
+
+.card{
+    background:#fff;
+    border-radius:18px;
+    padding:24px;
+    margin-bottom:20px;
+    box-shadow:0 8px 25px rgba(0,0,0,.08);
+}
+
+h2{
+    color:#0d47a1;
+    margin-bottom:18px;
+}
+
+.upload-box{
+    border:2px dashed #1976d2;
+    border-radius:15px;
+    padding:35px 20px;
+    text-align:center;
+    background:#f7fbff;
+    cursor:pointer;
+}
+
+.upload-icon{
+    font-size:45px;
+    margin-bottom:10px;
+}
+
+.upload-box strong{
+    display:block;
+    font-size:18px;
+    margin-bottom:7px;
+}
+
+.upload-box span{
+    color:#667085;
+    font-size:14px;
+}
+
+input[type="file"]{
+    display:none;
+}
+
+.file-name{
+    display:none;
+    margin-top:15px;
+    padding:12px;
+    border-radius:10px;
+    background:#eef7ff;
+    color:#0d47a1;
+    font-weight:700;
+    word-break:break-word;
+}
+
+.loading{
+    display:none;
+    text-align:center;
+    padding:25px;
+}
+
+.spinner{
+    width:38px;
+    height:38px;
+    border:4px solid #dbeaff;
+    border-top-color:#1976d2;
+    border-radius:50%;
+    animation:spin 1s linear infinite;
+    margin:0 auto 12px;
+}
+
+@keyframes spin{
+    to{
+        transform:rotate(360deg);
+    }
+}
+
+.info-grid{
+    display:none;
+    grid-template-columns:repeat(2,1fr);
+    gap:15px;
+}
+
+.info-box{
+    background:#f7fbff;
+    border:1px solid #e0e9f5;
+    border-radius:14px;
+    padding:18px;
+}
+
+.info-icon{
+    font-size:25px;
+    margin-bottom:8px;
+}
+
+.info-label{
+    color:#667085;
+    font-size:13px;
+    margin-bottom:5px;
+}
+
+.info-value{
+    color:#0d47a1;
+    font-size:20px;
+    font-weight:800;
+    word-break:break-word;
+}
+
+.metadata{
+    display:none;
+}
+
+.meta-row{
+    display:flex;
+    justify-content:space-between;
+    gap:20px;
+    padding:13px 0;
+    border-bottom:1px solid #edf1f7;
+}
+
+.meta-row:last-child{
+    border-bottom:none;
+}
+
+.meta-label{
+    color:#667085;
+    font-weight:600;
+}
+
+.meta-value{
+    font-weight:700;
+    text-align:right;
+    word-break:break-word;
+}
+
+.buttons{
+    display:none;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-top:20px;
+}
+
+button{
+    border:none;
+    border-radius:10px;
+    padding:13px 18px;
+    font-size:15px;
+    font-weight:700;
+    cursor:pointer;
+}
+
+.primary{
+    background:#1976d2;
+    color:white;
+}
+
+.primary:hover{
+    background:#0d47a1;
+}
+
+.secondary{
+    background:#eaf3ff;
+    color:#0d47a1;
+}
+
+.danger{
+    background:#ffebee;
+    color:#c62828;
+}
+
+.notice{
+    background:#fff8e1;
+    color:#795548;
+    padding:14px;
+    border-radius:10px;
+    font-size:13px;
+    line-height:1.5;
+}
+
+footer{
+    text-align:center;
+    padding:25px 15px;
+    color:#667085;
+    font-size:13px;
+}
+
+@media(max-width:600px){
+
+    .logo{
+        font-size:25px;
+    }
+
+    .card{
+        padding:18px;
+    }
+
+    .info-grid{
+        grid-template-columns:1fr;
+    }
+
+    .meta-row{
+        flex-direction:column;
+        gap:5px;
+    }
+
+    .meta-value{
+        text-align:left;
+    }
+
+    .buttons button{
+        width:100%;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">MyHelp India 🇮🇳</div>
+    <div class="subtitle">PDF Information & Page Counter</div>
+</header>
+
+<div class="container">
+
+    <!-- UPLOAD -->
+    <div class="card">
+
+        <h2>📄 Upload PDF</h2>
+
+        <label class="upload-box" for="pdfFile">
+
+            <div class="upload-icon">📑</div>
+
+            <strong>Choose PDF File</strong>
+
+            <span>
+                Click here to upload your PDF
+            </span>
+
+        </label>
+
+        <input
+            type="file"
+            id="pdfFile"
+            accept="application/pdf"
+        >
+
+        <div class="file-name" id="fileName"></div>
+
+        <div class="loading" id="loading">
+
+            <div class="spinner"></div>
+
+            <div id="loadingText">
+                Reading PDF...
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- BASIC INFORMATION -->
+    <div class="card" id="infoCard" style="display:none;">
+
+        <h2>📊 PDF Information</h2>
+
+        <div class="info-grid" id="infoGrid">
+
+            <div class="info-box">
+
+                <div class="info-icon">📄</div>
+
+                <div class="info-label">
+                    Total Pages
+                </div>
+
+                <div class="info-value" id="pageCount">
+                    0
+                </div>
+
+            </div>
+
+
+            <div class="info-box">
+
+                <div class="info-icon">💾</div>
+
+                <div class="info-label">
+                    File Size
+                </div>
+
+                <div class="info-value" id="fileSize">
+                    -
+                </div>
+
+            </div>
+
+
+            <div class="info-box">
+
+                <div class="info-icon">🔢</div>
+
+                <div class="info-label">
+                    PDF Version
+                </div>
+
+                <div class="info-value" id="pdfVersion">
+                    -
+                </div>
+
+            </div>
+
+
+            <div class="info-box">
+
+                <div class="info-icon">📝</div>
+
+                <div class="info-label">
+                    File Name
+                </div>
+
+                <div class="info-value" id="displayFileName">
+                    -
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- METADATA -->
+    <div class="card metadata" id="metadataCard">
+
+        <h2>🔍 PDF Metadata</h2>
+
+        <div class="meta-row">
+            <div class="meta-label">Title</div>
+            <div class="meta-value" id="metaTitle">Not available</div>
+        </div>
+
+        <div class="meta-row">
+            <div class="meta-label">Author</div>
+            <div class="meta-value" id="metaAuthor">Not available</div>
+        </div>
+
+        <div class="meta-row">
+            <div class="meta-label">Subject</div>
+            <div class="meta-value" id="metaSubject">Not available</div>
+        </div>
+
+        <div class="meta-row">
+            <div class="meta-label">Creator</div>
+            <div class="meta-value" id="metaCreator">Not available</div>
+        </div>
+
+        <div class="meta-row">
+            <div class="meta-label">Producer</div>
+            <div class="meta-value" id="metaProducer">Not available</div>
+        </div>
+
+        <div class="meta-row">
+            <div class="meta-label">Creation Date</div>
+            <div class="meta-value" id="metaCreation">Not available</div>
+        </div>
+
+        <div class="meta-row">
+            <div class="meta-label">Modification Date</div>
+            <div class="meta-value" id="metaModification">Not available</div>
+        </div>
+
+    </div>
+
+
+    <!-- ACTIONS -->
+    <div class="card">
+
+        <div class="buttons" id="buttons">
+
+            <button class="primary" id="copyBtn">
+                📋 Copy Information
+            </button>
+
+            <button class="secondary" id="downloadBtn">
+                ⬇️ Download Report
+            </button>
+
+            <button class="secondary" id="printBtn">
+                🖨️ Print
+            </button>
+
+            <button class="danger" id="clearBtn">
+                ✕ Clear
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <div class="card">
+
+        <div class="notice">
+            🔒 Your PDF is processed inside your browser.
+            The file is not uploaded to a server by this tool.
+        </div>
+
+    </div>
+
+</div>
+
+<footer>
+    © 2026 MyHelp India • Simple • Free • Useful
+</footer>
+
+
+<script>
+
+pdfjsLib.GlobalWorkerOptions.workerSrc =
+"https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+
+
+const pdfFile =
+document.getElementById("pdfFile");
+
+const fileName =
+document.getElementById("fileName");
+
+const loading =
+document.getElementById("loading");
+
+const loadingText =
+document.getElementById("loadingText");
+
+const infoCard =
+document.getElementById("infoCard");
+
+const infoGrid =
+document.getElementById("infoGrid");
+
+const metadataCard =
+document.getElementById("metadataCard");
+
+const buttons =
+document.getElementById("buttons");
+
+const pageCount =
+document.getElementById("pageCount");
+
+const fileSize =
+document.getElementById("fileSize");
+
+const pdfVersion =
+document.getElementById("pdfVersion");
+
+const displayFileName =
+document.getElementById("displayFileName");
+
+let reportText = "";
+
+
+/* =========================
+   FILE SIZE
+========================= */
+
+function formatFileSize(bytes){
+
+    if(bytes < 1024){
+        return bytes + " B";
+    }
+
+    if(bytes < 1024 * 1024){
+        return (bytes / 1024).toFixed(2) + " KB";
+    }
+
+    return (bytes / (1024 * 1024)).toFixed(2) + " MB";
+}
+
+
+/* =========================
+   DATE FORMAT
+========================= */
+
+function formatPdfDate(dateString){
+
+    if(!dateString){
+        return "Not available";
+    }
+
+    try{
+
+        const match =
+            dateString.match(
+                /D:(\d{4})(\d{2})?(\d{2})?/
+            );
+
+        if(match){
+
+            const year = match[1];
+
+            const month = match[2] || "01";
+
+            const day = match[3] || "01";
+
+            return year + "-" + month + "-" + day;
+
+        }
+
+        return dateString;
+
+    }catch(error){
+
+        return dateString;
+
+    }
+}
+
+
+/* =========================
+   GET PDF VERSION
+========================= */
+
+async function getPdfVersion(file){
+
+    try{
+
+        const buffer =
+            await file.slice(0,20).arrayBuffer();
+
+        const bytes =
+            new Uint8Array(buffer);
+
+        let text = "";
+
+        for(let i=0;i<bytes.length;i++){
+
+            text += String.fromCharCode(bytes[i]);
+
+        }
+
+        const match =
+            text.match(/%PDF-(\d\.\d)/);
+
+        return match
+            ? match[1]
+            : "Unknown";
+
+    }catch(error){
+
+        return "Unknown";
+
+    }
+}
+
+
+/* =========================
+   UPLOAD PDF
+========================= */
+
+pdfFile.addEventListener(
+"change",
+async function(){
+
+    const file =
+        pdfFile.files[0];
+
+    if(!file){
+        return;
+    }
+
+
+    if(file.type !== "application/pdf"){
+
+        alert(
+            "Please select a valid PDF file."
+        );
+
+        pdfFile.value = "";
+
+        return;
+    }
+
+
+    fileName.style.display = "block";
+
+    fileName.textContent =
+        "📄 " + file.name;
+
+
+    loading.style.display = "block";
+
+    loadingText.textContent =
+        "Opening PDF...";
+
+
+    infoCard.style.display = "none";
+
+    metadataCard.style.display = "none";
+
+    buttons.style.display = "none";
+
+
+    try{
+
+        const arrayBuffer =
+            await file.arrayBuffer();
+
+
+        loadingText.textContent =
+            "Analyzing PDF...";
+
+
+        const pdf =
+            await pdfjsLib
+                .getDocument({
+                    data: arrayBuffer
+                })
+                .promise;
+
+
+        /* BASIC INFORMATION */
+
+        pageCount.textContent =
+            pdf.numPages;
+
+        fileSize.textContent =
+            formatFileSize(file.size);
+
+        displayFileName.textContent =
+            file.name;
+
+        pdfVersion.textContent =
+            await getPdfVersion(file);
+
+
+        /* METADATA */
+
+        loadingText.textContent =
+            "Reading metadata...";
+
+
+        const metadata =
+            await pdf.getMetadata();
+
+
+        const info =
+            metadata.info || {};
+
+
+        document.getElementById(
+            "metaTitle"
+        ).textContent =
+            info.Title || "Not available";
+
+
+        document.getElementById(
+            "metaAuthor"
+        ).textContent =
+            info.Author || "Not available";
+
+
+        document.getElementById(
+            "metaSubject"
+        ).textContent =
+            info.Subject || "Not available";
+
+
+        document.getElementById(
+            "metaCreator"
+        ).textContent =
+            info.Creator || "Not available";
+
+
+        document.getElementById(
+            "metaProducer"
+        ).textContent =
+            info.Producer || "Not available";
+
+
+        document.getElementById(
+            "metaCreation"
+        ).textContent =
+            formatPdfDate(info.CreationDate);
+
+
+        document.getElementById(
+            "metaModification"
+        ).textContent =
+            formatPdfDate(info.ModDate);
+
+
+        /* SHOW RESULTS */
+
+        loading.style.display = "none";
+
+        infoCard.style.display = "block";
+
+        infoGrid.style.display = "grid";
+
+        metadataCard.style.display = "block";
+
+        buttons.style.display = "flex";
+
+
+        createReport(
+            file,
+            pdf.numPages,
+            info
+        );
+
+
+    }catch(error){
+
+        console.error(error);
+
+        loading.style.display = "none";
+
+        alert(
+            "Unable to read this PDF. " +
+            "The file may be damaged or unsupported."
+        );
+
+    }
+
+});
+
+
+/* =========================
+   CREATE REPORT
+========================= */
+
+function createReport(
+    file,
+    pages,
+    info
+){
+
+    reportText =
+`MYHELP INDIA
+PDF INFORMATION REPORT
+================================
+
+File Name:
+${file.name}
+
+File Size:
+${formatFileSize(file.size)}
+
+Total Pages:
+${pages}
+
+PDF Version:
+${pdfVersion.textContent}
+
+METADATA
+================================
+
+Title:
+${info.Title || "Not available"}
+
+Author:
+${info.Author || "Not available"}
+
+Subject:
+${info.Subject || "Not available"}
+
+Creator:
+${info.Creator || "Not available"}
+
+Producer:
+${info.Producer || "Not available"}
+
+Creation Date:
+${formatPdfDate(info.CreationDate)}
+
+Modification Date:
+${formatPdfDate(info.ModDate)}
+
+================================
+Generated by MyHelp India
+`;
+
+}
+
+
+/* =========================
+   COPY
+========================= */
+
+document.getElementById(
+"copyBtn"
+).addEventListener(
+"click",
+async function(){
+
+    if(!reportText){
+        return;
+    }
+
+    try{
+
+        await navigator.clipboard
+            .writeText(reportText);
+
+        alert(
+            "PDF information copied successfully."
+        );
+
+    }catch(error){
+
+        alert(
+            "Copy failed. Please download the report."
+        );
+
+    }
+
+});
+
+
+/* =========================
+   DOWNLOAD
+========================= */
+
+document.getElementById(
+"downloadBtn"
+).addEventListener(
+"click",
+function(){
+
+    if(!reportText){
+        return;
+    }
+
+    const blob =
+        new Blob(
+            [reportText],
+            {
+                type:
+                "text/plain;charset=utf-8"
+            }
+        );
+
+
+    const url =
+        URL.createObjectURL(blob);
+
+
+    const a =
+        document.createElement("a");
+
+
+    a.href = url;
+
+    a.download =
+        "pdf-information-report.txt";
+
+
+    document.body.appendChild(a);
+
+    a.click();
+
+    document.body.removeChild(a);
+
+    URL.revokeObjectURL(url);
+
+});
+
+
+/* =========================
+   PRINT
+========================= */
+
+document.getElementById(
+"printBtn"
+).addEventListener(
+"click",
+function(){
+
+    if(!reportText){
+        return;
+    }
+
+    const printWindow =
+        window.open(
+            "",
+            "_blank"
+        );
+
+
+    printWindow.document.write(`
+        <html>
+        <head>
+            <title>PDF Information Report</title>
+
+            <style>
+                body{
+                    font-family:Arial;
+                    padding:30px;
+                    white-space:pre-wrap;
+                    line-height:1.6;
+                }
+
+                h1{
+                    color:#0d47a1;
+                }
+            </style>
+        </head>
+
+        <body>
+
+        <h1>MyHelp India</h1>
+
+        <pre>${escapeHtml(reportText)}</pre>
+
+        </body>
+        </html>
+    `);
+
+
+    printWindow.document.close();
+
+    printWindow.focus();
+
+    setTimeout(
+        function(){
+            printWindow.print();
+        },
+        300
+    );
+
+});
+
+
+/* =========================
+   ESCAPE HTML
+========================= */
+
+function escapeHtml(text){
+
+    return text
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+
+}
+
+
+/* =========================
+   CLEAR
+========================= */
+
+document.getElementById(
+"clearBtn"
+).addEventListener(
+"click",
+function(){
+
+    pdfFile.value = "";
+
+    fileName.style.display = "none";
+
+    loading.style.display = "none";
+
+    infoCard.style.display = "none";
+
+    metadataCard.style.display = "none";
+
+    buttons.style.display = "none";
+
+    infoGrid.style.display = "none";
+
+    reportText = "";
+
+});
+
+
+</script>
+
+</body>
+</html>

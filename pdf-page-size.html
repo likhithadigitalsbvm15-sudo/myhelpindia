@@ -1,0 +1,1366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>PDF Page Size Checker - MyHelp India</title>
+
+<meta name="description" content="Check PDF page size, dimensions, orientation and standard paper size online for free with MyHelp India.">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:Arial,Helvetica,sans-serif;
+    background:#f4f8ff;
+    color:#172033;
+}
+
+header{
+    background:linear-gradient(135deg,#0d47a1,#1976d2,#42a5f5);
+    color:white;
+    text-align:center;
+    padding:25px 15px;
+}
+
+.logo{
+    font-size:30px;
+    font-weight:800;
+}
+
+.subtitle{
+    margin-top:7px;
+    font-size:15px;
+    opacity:.96;
+}
+
+.container{
+    max-width:1050px;
+    margin:25px auto;
+    padding:0 15px;
+}
+
+.card{
+    background:white;
+    border-radius:18px;
+    padding:24px;
+    margin-bottom:20px;
+    box-shadow:0 8px 25px rgba(0,0,0,.08);
+}
+
+h2{
+    color:#0d47a1;
+    margin-bottom:18px;
+    font-size:21px;
+}
+
+.upload-box{
+    border:2px dashed #1976d2;
+    border-radius:15px;
+    padding:35px 20px;
+    text-align:center;
+    background:#f7fbff;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.upload-box:hover{
+    background:#eef7ff;
+}
+
+.upload-icon{
+    font-size:45px;
+    margin-bottom:10px;
+}
+
+.upload-box strong{
+    display:block;
+    font-size:18px;
+    margin-bottom:7px;
+}
+
+.upload-box span{
+    color:#667085;
+    font-size:14px;
+}
+
+input[type="file"]{
+    display:none;
+}
+
+.file-name{
+    display:none;
+    margin-top:15px;
+    padding:12px;
+    border-radius:10px;
+    background:#eef7ff;
+    color:#0d47a1;
+    font-weight:700;
+    word-break:break-word;
+}
+
+.loading{
+    display:none;
+    text-align:center;
+    padding:25px;
+}
+
+.spinner{
+    width:38px;
+    height:38px;
+    border:4px solid #dbeaff;
+    border-top-color:#1976d2;
+    border-radius:50%;
+    animation:spin 1s linear infinite;
+    margin:0 auto 12px;
+}
+
+@keyframes spin{
+    to{
+        transform:rotate(360deg);
+    }
+}
+
+.stats{
+    display:none;
+    grid-template-columns:repeat(4,1fr);
+    gap:12px;
+}
+
+.stat{
+    background:#f7fbff;
+    border:1px solid #e1eaf5;
+    border-radius:13px;
+    padding:16px;
+    text-align:center;
+}
+
+.stat-number{
+    font-size:23px;
+    font-weight:800;
+    color:#1976d2;
+}
+
+.stat-label{
+    margin-top:5px;
+    color:#667085;
+    font-size:13px;
+}
+
+.table-wrap{
+    display:none;
+    overflow-x:auto;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    min-width:750px;
+}
+
+th{
+    background:#0d47a1;
+    color:white;
+    padding:13px 10px;
+    text-align:left;
+    font-size:14px;
+}
+
+td{
+    padding:12px 10px;
+    border-bottom:1px solid #e5eaf1;
+    font-size:14px;
+}
+
+tr:hover td{
+    background:#f7fbff;
+}
+
+.badge{
+    display:inline-block;
+    padding:5px 9px;
+    border-radius:20px;
+    background:#eaf3ff;
+    color:#0d47a1;
+    font-size:12px;
+    font-weight:700;
+}
+
+.orientation{
+    font-weight:700;
+}
+
+.report-actions{
+    display:none;
+    gap:10px;
+    flex-wrap:wrap;
+}
+
+button{
+    border:none;
+    border-radius:10px;
+    padding:13px 18px;
+    font-size:15px;
+    font-weight:700;
+    cursor:pointer;
+}
+
+.primary{
+    background:#1976d2;
+    color:white;
+}
+
+.primary:hover{
+    background:#0d47a1;
+}
+
+.secondary{
+    background:#eaf3ff;
+    color:#0d47a1;
+}
+
+.secondary:hover{
+    background:#dbeaff;
+}
+
+.danger{
+    background:#ffebee;
+    color:#c62828;
+}
+
+.notice{
+    background:#fff8e1;
+    color:#795548;
+    padding:14px;
+    border-radius:10px;
+    font-size:13px;
+    line-height:1.5;
+}
+
+.empty{
+    text-align:center;
+    padding:30px;
+    color:#667085;
+}
+
+footer{
+    text-align:center;
+    padding:25px 15px;
+    color:#667085;
+    font-size:13px;
+}
+
+@media(max-width:800px){
+
+    .stats{
+        grid-template-columns:repeat(2,1fr);
+    }
+}
+
+@media(max-width:550px){
+
+    .logo{
+        font-size:25px;
+    }
+
+    .card{
+        padding:18px;
+    }
+
+    .stats{
+        grid-template-columns:1fr;
+    }
+
+    .report-actions button{
+        width:100%;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">MyHelp India 🇮🇳</div>
+    <div class="subtitle">PDF Page Size Checker</div>
+</header>
+
+<div class="container">
+
+    <!-- UPLOAD -->
+    <div class="card">
+
+        <h2>📄 Upload PDF</h2>
+
+        <label class="upload-box" for="pdfFile">
+
+            <div class="upload-icon">📐</div>
+
+            <strong>Choose PDF File</strong>
+
+            <span>
+                Click here to check PDF page sizes
+            </span>
+
+        </label>
+
+        <input
+            type="file"
+            id="pdfFile"
+            accept="application/pdf"
+        >
+
+        <div class="file-name" id="fileName"></div>
+
+        <div class="loading" id="loading">
+
+            <div class="spinner"></div>
+
+            <div id="loadingText">
+                Reading PDF...
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- SUMMARY -->
+    <div class="card" id="summaryCard" style="display:none;">
+
+        <h2>📊 PDF Summary</h2>
+
+        <div class="stats" id="stats">
+
+            <div class="stat">
+                <div
+                    class="stat-number"
+                    id="totalPages"
+                >
+                    0
+                </div>
+
+                <div class="stat-label">
+                    Total Pages
+                </div>
+            </div>
+
+
+            <div class="stat">
+                <div
+                    class="stat-number"
+                    id="portraitPages"
+                >
+                    0
+                </div>
+
+                <div class="stat-label">
+                    Portrait
+                </div>
+            </div>
+
+
+            <div class="stat">
+                <div
+                    class="stat-number"
+                    id="landscapePages"
+                >
+                    0
+                </div>
+
+                <div class="stat-label">
+                    Landscape
+                </div>
+            </div>
+
+
+            <div class="stat">
+                <div
+                    class="stat-number"
+                    id="mixedPages"
+                >
+                    0
+                </div>
+
+                <div class="stat-label">
+                    Other / Square
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- PAGE DETAILS -->
+    <div class="card" id="detailsCard" style="display:none;">
+
+        <h2>📑 Page Size Details</h2>
+
+        <div class="table-wrap" id="tableWrap">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>Page</th>
+                        <th>Width</th>
+                        <th>Height</th>
+                        <th>Size</th>
+                        <th>Orientation</th>
+                        <th>Ratio</th>
+                    </tr>
+
+                </thead>
+
+                <tbody id="tableBody"></tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+    <!-- ACTIONS -->
+    <div class="card" id="actionCard" style="display:none;">
+
+        <h2>⚙️ Actions</h2>
+
+        <div class="report-actions" id="reportActions">
+
+            <button
+                class="primary"
+                id="copyBtn"
+            >
+                📋 Copy Report
+            </button>
+
+            <button
+                class="secondary"
+                id="downloadBtn"
+            >
+                ⬇️ Download TXT
+            </button>
+
+            <button
+                class="secondary"
+                id="printBtn"
+            >
+                🖨️ Print
+            </button>
+
+            <button
+                class="danger"
+                id="clearBtn"
+            >
+                ✕ Clear
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <div class="card">
+
+        <div class="notice">
+            📌 Page sizes are calculated from the PDF page dimensions.
+            Standard sizes such as A4, A3, A5, Letter and Legal are identified
+            approximately with a small tolerance.
+        </div>
+
+    </div>
+
+</div>
+
+
+<footer>
+    © 2026 MyHelp India • Simple • Free • Useful
+</footer>
+
+
+<script>
+
+pdfjsLib.GlobalWorkerOptions.workerSrc =
+"https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+
+
+const pdfFile =
+document.getElementById("pdfFile");
+
+const fileName =
+document.getElementById("fileName");
+
+const loading =
+document.getElementById("loading");
+
+const loadingText =
+document.getElementById("loadingText");
+
+const summaryCard =
+document.getElementById("summaryCard");
+
+const stats =
+document.getElementById("stats");
+
+const detailsCard =
+document.getElementById("detailsCard");
+
+const tableWrap =
+document.getElementById("tableWrap");
+
+const tableBody =
+document.getElementById("tableBody");
+
+const actionCard =
+document.getElementById("actionCard");
+
+const reportActions =
+document.getElementById("reportActions");
+
+let pageData = [];
+let reportText = "";
+let currentFileName = "";
+
+
+/* =========================
+   STANDARD PAGE SIZES
+   PDF points
+   72 points = 1 inch
+========================= */
+
+const standardSizes = [
+
+    {
+        name:"A3",
+        width:841.89,
+        height:1190.55
+    },
+
+    {
+        name:"A4",
+        width:595.28,
+        height:841.89
+    },
+
+    {
+        name:"A5",
+        width:419.53,
+        height:595.28
+    },
+
+    {
+        name:"A6",
+        width:297.64,
+        height:419.53
+    },
+
+    {
+        name:"Letter",
+        width:612,
+        height:792
+    },
+
+    {
+        name:"Legal",
+        width:612,
+        height:1008
+    },
+
+    {
+        name:"Tabloid",
+        width:792,
+        height:1224
+    }
+
+];
+
+
+/* =========================
+   FORMAT
+========================= */
+
+function roundNumber(value){
+
+    return Math.round(value * 100) / 100;
+
+}
+
+
+function pointsToMm(points){
+
+    return points * 25.4 / 72;
+
+}
+
+
+function pointsToInches(points){
+
+    return points / 72;
+
+}
+
+
+/* =========================
+   STANDARD SIZE DETECTION
+========================= */
+
+function detectStandardSize(width,height){
+
+    const tolerance = 3;
+
+    for(const size of standardSizes){
+
+        const normalMatch =
+            Math.abs(width - size.width) <= tolerance &&
+            Math.abs(height - size.height) <= tolerance;
+
+        const rotatedMatch =
+            Math.abs(width - size.height) <= tolerance &&
+            Math.abs(height - size.width) <= tolerance;
+
+        if(normalMatch || rotatedMatch){
+
+            return size.name;
+
+        }
+
+    }
+
+    return "Custom";
+
+}
+
+
+/* =========================
+   ORIENTATION
+========================= */
+
+function getOrientation(width,height){
+
+    const difference =
+        Math.abs(width - height);
+
+    if(difference < 3){
+
+        return "Square";
+
+    }
+
+    if(width > height){
+
+        return "Landscape";
+
+    }
+
+    return "Portrait";
+
+}
+
+
+/* =========================
+   RATIO
+========================= */
+
+function getRatio(width,height){
+
+    const ratio =
+        width / height;
+
+    return ratio.toFixed(3);
+
+}
+
+
+/* =========================
+   UPLOAD
+========================= */
+
+pdfFile.addEventListener(
+"change",
+async function(){
+
+    const file =
+        pdfFile.files[0];
+
+    if(!file){
+
+        return;
+
+    }
+
+
+    if(file.type !== "application/pdf"){
+
+        alert(
+            "Please select a valid PDF file."
+        );
+
+        pdfFile.value = "";
+
+        return;
+
+    }
+
+
+    currentFileName =
+        file.name;
+
+
+    fileName.style.display =
+        "block";
+
+    fileName.textContent =
+        "📄 " + file.name;
+
+
+    loading.style.display =
+        "block";
+
+    loadingText.textContent =
+        "Opening PDF...";
+
+
+    summaryCard.style.display =
+        "none";
+
+    detailsCard.style.display =
+        "none";
+
+    actionCard.style.display =
+        "none";
+
+    tableBody.innerHTML = "";
+
+    pageData = [];
+
+    reportText = "";
+
+
+    try{
+
+        const arrayBuffer =
+            await file.arrayBuffer();
+
+
+        const pdf =
+            await pdfjsLib
+                .getDocument({
+                    data:arrayBuffer
+                })
+                .promise;
+
+
+        for(
+            let pageNumber = 1;
+            pageNumber <= pdf.numPages;
+            pageNumber++
+        ){
+
+            loadingText.textContent =
+                "Checking page " +
+                pageNumber +
+                " of " +
+                pdf.numPages +
+                "...";
+
+
+            const page =
+                await pdf.getPage(
+                    pageNumber
+                );
+
+
+            const viewport =
+                page.getViewport({
+                    scale:1
+                });
+
+
+            const width =
+                viewport.width;
+
+            const height =
+                viewport.height;
+
+
+            const widthMm =
+                pointsToMm(width);
+
+            const heightMm =
+                pointsToMm(height);
+
+
+            const widthIn =
+                pointsToInches(width);
+
+            const heightIn =
+                pointsToInches(height);
+
+
+            const orientation =
+                getOrientation(
+                    width,
+                    height
+                );
+
+
+            const standard =
+                detectStandardSize(
+                    width,
+                    height
+                );
+
+
+            const ratio =
+                getRatio(
+                    width,
+                    height
+                );
+
+
+            pageData.push({
+
+                page:pageNumber,
+
+                width:width,
+
+                height:height,
+
+                widthMm:widthMm,
+
+                heightMm:heightMm,
+
+                widthIn:widthIn,
+
+                heightIn:heightIn,
+
+                orientation:orientation,
+
+                standard:standard,
+
+                ratio:ratio
+
+            });
+
+        }
+
+
+        loading.style.display =
+            "none";
+
+
+        displaySummary();
+
+        displayTable();
+
+        createReport();
+
+        summaryCard.style.display =
+            "block";
+
+        stats.style.display =
+            "grid";
+
+        detailsCard.style.display =
+            "block";
+
+        tableWrap.style.display =
+            "block";
+
+        actionCard.style.display =
+            "block";
+
+        reportActions.style.display =
+            "flex";
+
+
+    }catch(error){
+
+        console.error(error);
+
+        loading.style.display =
+            "none";
+
+        alert(
+            "Unable to read this PDF. " +
+            "The file may be damaged or unsupported."
+        );
+
+    }
+
+});
+
+
+/* =========================
+   SUMMARY
+========================= */
+
+function displaySummary(){
+
+    const total =
+        pageData.length;
+
+    const portrait =
+        pageData.filter(
+            p => p.orientation === "Portrait"
+        ).length;
+
+    const landscape =
+        pageData.filter(
+            p => p.orientation === "Landscape"
+        ).length;
+
+    const other =
+        pageData.filter(
+            p => p.orientation === "Square"
+        ).length;
+
+
+    document.getElementById(
+        "totalPages"
+    ).textContent =
+        total;
+
+
+    document.getElementById(
+        "portraitPages"
+    ).textContent =
+        portrait;
+
+
+    document.getElementById(
+        "landscapePages"
+    ).textContent =
+        landscape;
+
+
+    document.getElementById(
+        "mixedPages"
+    ).textContent =
+        other;
+
+}
+
+
+/* =========================
+   DISPLAY TABLE
+========================= */
+
+function displayTable(){
+
+    tableBody.innerHTML = "";
+
+
+    pageData.forEach(item => {
+
+        const row =
+            document.createElement("tr");
+
+
+        row.innerHTML = `
+
+            <td>
+                <strong>Page ${item.page}</strong>
+            </td>
+
+            <td>
+                ${roundNumber(item.widthMm)} mm
+                <br>
+                <small>
+                    ${roundNumber(item.widthIn)} in
+                </small>
+            </td>
+
+            <td>
+                ${roundNumber(item.heightMm)} mm
+                <br>
+                <small>
+                    ${roundNumber(item.heightIn)} in
+                </small>
+            </td>
+
+            <td>
+                <span class="badge">
+                    ${item.standard}
+                </span>
+            </td>
+
+            <td class="orientation">
+                ${getOrientationIcon(item.orientation)}
+                ${item.orientation}
+            </td>
+
+            <td>
+                ${item.ratio}
+            </td>
+
+        `;
+
+
+        tableBody.appendChild(row);
+
+    });
+
+}
+
+
+/* =========================
+   ORIENTATION ICON
+========================= */
+
+function getOrientationIcon(
+    orientation
+){
+
+    if(orientation === "Portrait"){
+
+        return "📱";
+
+    }
+
+    if(orientation === "Landscape"){
+
+        return "🖥️";
+
+    }
+
+    return "⬜";
+
+}
+
+
+/* =========================
+   CREATE REPORT
+========================= */
+
+function createReport(){
+
+    let output = "";
+
+    output +=
+        "MYHELP INDIA\n";
+
+    output +=
+        "PDF PAGE SIZE REPORT\n";
+
+    output +=
+        "================================\n\n";
+
+    output +=
+        "File Name: " +
+        currentFileName +
+        "\n";
+
+    output +=
+        "Total Pages: " +
+        pageData.length +
+        "\n\n";
+
+
+    pageData.forEach(item => {
+
+        output +=
+            "PAGE " +
+            item.page +
+            "\n";
+
+        output +=
+            "--------------------------------\n";
+
+        output +=
+            "Width: " +
+            roundNumber(item.widthMm) +
+            " mm (" +
+            roundNumber(item.widthIn) +
+            " in)\n";
+
+        output +=
+            "Height: " +
+            roundNumber(item.heightMm) +
+            " mm (" +
+            roundNumber(item.heightIn) +
+            " in)\n";
+
+        output +=
+            "Standard Size: " +
+            item.standard +
+            "\n";
+
+        output +=
+            "Orientation: " +
+            item.orientation +
+            "\n";
+
+        output +=
+            "Aspect Ratio: " +
+            item.ratio +
+            "\n\n";
+
+    });
+
+
+    output +=
+        "================================\n";
+
+    output +=
+        "Generated by MyHelp India\n";
+
+
+    reportText =
+        output;
+
+}
+
+
+/* =========================
+   COPY REPORT
+========================= */
+
+document.getElementById(
+"copyBtn"
+).addEventListener(
+"click",
+async function(){
+
+    if(!reportText){
+
+        return;
+
+    }
+
+
+    try{
+
+        await navigator.clipboard
+            .writeText(reportText);
+
+
+        alert(
+            "PDF page size report copied successfully."
+        );
+
+
+    }catch(error){
+
+        alert(
+            "Copy failed. Please download the report."
+        );
+
+    }
+
+});
+
+
+/* =========================
+   DOWNLOAD TXT
+========================= */
+
+document.getElementById(
+"downloadBtn"
+).addEventListener(
+"click",
+function(){
+
+    if(!reportText){
+
+        return;
+
+    }
+
+
+    const blob =
+        new Blob(
+            [reportText],
+            {
+                type:
+                "text/plain;charset=utf-8"
+            }
+        );
+
+
+    const url =
+        URL.createObjectURL(blob);
+
+
+    const link =
+        document.createElement("a");
+
+
+    link.href =
+        url;
+
+
+    link.download =
+        "pdf-page-size-report.txt";
+
+
+    document.body.appendChild(link);
+
+    link.click();
+
+    document.body.removeChild(link);
+
+
+    URL.revokeObjectURL(url);
+
+});
+
+
+/* =========================
+   PRINT
+========================= */
+
+document.getElementById(
+"printBtn"
+).addEventListener(
+"click",
+function(){
+
+    if(!reportText){
+
+        return;
+
+    }
+
+
+    const printWindow =
+        window.open(
+            "",
+            "_blank"
+        );
+
+
+    printWindow.document.write(`
+
+        <!DOCTYPE html>
+
+        <html>
+
+        <head>
+
+            <title>
+                PDF Page Size Report
+            </title>
+
+            <style>
+
+                body{
+                    font-family:Arial;
+                    padding:30px;
+                    color:#172033;
+                }
+
+                h1{
+                    color:#0d47a1;
+                }
+
+                pre{
+                    white-space:pre-wrap;
+                    line-height:1.6;
+                }
+
+            </style>
+
+        </head>
+
+        <body>
+
+            <h1>
+                MyHelp India
+            </h1>
+
+            <pre>
+${escapeHtml(reportText)}
+            </pre>
+
+        </body>
+
+        </html>
+
+    `);
+
+
+    printWindow.document.close();
+
+    printWindow.focus();
+
+
+    setTimeout(
+        function(){
+
+            printWindow.print();
+
+        },
+        300
+    );
+
+});
+
+
+/* =========================
+   ESCAPE HTML
+========================= */
+
+function escapeHtml(text){
+
+    return text
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+
+}
+
+
+/* =========================
+   CLEAR
+========================= */
+
+document.getElementById(
+"clearBtn"
+).addEventListener(
+"click",
+function(){
+
+    pdfFile.value = "";
+
+    fileName.style.display =
+        "none";
+
+    loading.style.display =
+        "none";
+
+    summaryCard.style.display =
+        "none";
+
+    detailsCard.style.display =
+        "none";
+
+    actionCard.style.display =
+        "none";
+
+    tableBody.innerHTML = "";
+
+    pageData = [];
+
+    reportText = "";
+
+    currentFileName = "";
+
+});
+
+</script>
+
+</body>
+</html>

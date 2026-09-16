@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Job Application Letter Generator - MyHelp India</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:Arial, sans-serif;
+    background:#f4f8ff;
+    color:#222;
+}
+
+header{
+    background:linear-gradient(135deg,#0d47a1,#1976d2,#42a5f5);
+    color:white;
+    text-align:center;
+    padding:25px 15px;
+}
+
+header h1{
+    font-size:30px;
+    margin-bottom:8px;
+}
+
+header p{
+    font-size:15px;
+}
+
+.container{
+    max-width:850px;
+    margin:30px auto;
+    padding:0 15px;
+}
+
+.card{
+    background:white;
+    padding:25px;
+    border-radius:15px;
+    box-shadow:0 5px 20px rgba(0,0,0,0.10);
+    margin-bottom:25px;
+}
+
+.card h2{
+    color:#0d47a1;
+    margin-bottom:20px;
+}
+
+label{
+    display:block;
+    font-weight:bold;
+    margin-top:15px;
+    margin-bottom:7px;
+}
+
+input, textarea{
+    width:100%;
+    padding:13px;
+    border:1px solid #ccc;
+    border-radius:8px;
+    font-size:16px;
+    outline:none;
+}
+
+input:focus, textarea:focus{
+    border-color:#1976d2;
+}
+
+textarea{
+    min-height:100px;
+    resize:vertical;
+}
+
+.button-area{
+    margin-top:25px;
+    display:flex;
+    gap:12px;
+    flex-wrap:wrap;
+}
+
+button{
+    border:none;
+    padding:13px 20px;
+    border-radius:8px;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.create-btn{
+    background:#1976d2;
+    color:white;
+}
+
+.clear-btn{
+    background:#e53935;
+    color:white;
+}
+
+.back-btn{
+    background:#555;
+    color:white;
+    text-decoration:none;
+    display:inline-block;
+    padding:13px 20px;
+    border-radius:8px;
+}
+
+.letter{
+    background:white;
+    padding:40px;
+    border-radius:10px;
+    box-shadow:0 5px 20px rgba(0,0,0,0.10);
+    line-height:1.8;
+}
+
+.letter-header{
+    text-align:center;
+    border-bottom:2px solid #1976d2;
+    padding-bottom:15px;
+    margin-bottom:25px;
+}
+
+.letter-header h2{
+    color:#0d47a1;
+}
+
+.subject{
+    font-weight:bold;
+    margin:20px 0;
+}
+
+.signature{
+    margin-top:40px;
+}
+
+.action-buttons{
+    text-align:center;
+    margin-top:20px;
+}
+
+.print-btn{
+    background:#2e7d32;
+    color:white;
+}
+
+.edit-btn{
+    background:#ff9800;
+    color:white;
+}
+
+#letterSection{
+    display:none;
+}
+
+@media(max-width:600px){
+
+    header h1{
+        font-size:23px;
+    }
+
+    .card{
+        padding:18px;
+    }
+
+    .letter{
+        padding:22px;
+    }
+
+    button,
+    .back-btn{
+        width:100%;
+        text-align:center;
+    }
+}
+
+@media print{
+
+    body{
+        background:white;
+    }
+
+    header,
+    #formSection,
+    .action-buttons{
+        display:none !important;
+    }
+
+    .container{
+        margin:0;
+        max-width:none;
+    }
+
+    .letter{
+        box-shadow:none;
+        border:none;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>MyHelp India</h1>
+    <p>Professional Job Application Letter Generator</p>
+</header>
+
+<div class="container">
+
+<!-- FORM -->
+
+<div class="card" id="formSection">
+
+    <h2>📝 Create Job Application Letter</h2>
+
+    <label>Applicant Name</label>
+    <input type="text" id="name" placeholder="Enter your full name">
+
+    <label>Job Position</label>
+    <input type="text" id="job" placeholder="Example: Office Assistant">
+
+    <label>Company Name</label>
+    <input type="text" id="company" placeholder="Enter company name">
+
+    <label>Company Address</label>
+    <input type="text" id="companyAddress" placeholder="Enter company address">
+
+    <label>Phone Number</label>
+    <input type="tel" id="phone" placeholder="Enter phone number">
+
+    <label>Email Address</label>
+    <input type="email" id="email" placeholder="Enter email address">
+
+    <label>Your Skills</label>
+    <textarea id="skills" placeholder="Example: Computer skills, communication, photography, MS Office"></textarea>
+
+    <label>Experience</label>
+    <textarea id="experience" placeholder="Example: I have 2 years of work experience."></textarea>
+
+    <label>Why do you want this job?</label>
+    <textarea id="reason" placeholder="Enter your reason"></textarea>
+
+    <div class="button-area">
+
+        <button class="create-btn" onclick="createLetter()">
+            ✉️ Create Professional Letter
+        </button>
+
+        <button class="clear-btn" onclick="clearForm()">
+            🗑️ Clear
+        </button>
+
+        <a href="index.html" class="back-btn">
+            ← Back to MyHelp India
+        </a>
+
+    </div>
+
+</div>
+
+
+<!-- LETTER -->
+
+<div id="letterSection">
+
+    <div class="letter" id="letter">
+
+        <div class="letter-header">
+            <h2>JOB APPLICATION LETTER</h2>
+        </div>
+
+        <p id="date"></p>
+
+        <br>
+
+        <p>
+            To,<br>
+            Hiring Manager<br>
+            <strong id="showCompany"></strong><br>
+            <span id="showCompanyAddress"></span>
+        </p>
+
+        <p class="subject">
+            Subject: Application for the position of <span id="showJob"></span>
+        </p>
+
+        <p>
+            Dear Sir/Madam,
+        </p>
+
+        <p>
+            I am writing to apply for the position of
+            <strong id="showJob2"></strong>
+            at <strong id="showCompany2"></strong>.
+            I am interested in this opportunity and would be grateful
+            for the chance to work with your organization.
+        </p>
+
+        <p>
+            I have the following skills and abilities:
+        </p>
+
+        <p id="showSkills"></p>
+
+        <p id="showExperience"></p>
+
+        <p id="showReason"></p>
+
+        <p>
+            I am a hardworking, responsible and sincere person.
+            I am willing to learn new skills and work with dedication.
+            I would be happy to attend an interview at your convenience.
+        </p>
+
+        <p>
+            Thank you for considering my application.
+            I look forward to hearing from you.
+        </p>
+
+        <div class="signature">
+
+            <p>
+                Yours faithfully,
+            </p>
+
+            <br>
+
+            <strong id="showName"></strong><br>
+            Phone: <span id="showPhone"></span><br>
+            Email: <span id="showEmail"></span>
+
+        </div>
+
+    </div>
+
+    <div class="action-buttons">
+
+        <button class="print-btn" onclick="window.print()">
+            🖨️ Print / Save as PDF
+        </button>
+
+        <button class="edit-btn" onclick="editLetter()">
+            ✏️ Edit Letter
+        </button>
+
+    </div>
+
+</div>
+
+</div>
+
+
+<script>
+
+function createLetter(){
+
+    let name = document.getElementById("name").value.trim();
+    let job = document.getElementById("job").value.trim();
+    let company = document.getElementById("company").value.trim();
+    let companyAddress = document.getElementById("companyAddress").value.trim();
+    let phone = document.getElementById("phone").value.trim();
+    let email = document.getElementById("email").value.trim();
+    let skills = document.getElementById("skills").value.trim();
+    let experience = document.getElementById("experience").value.trim();
+    let reason = document.getElementById("reason").value.trim();
+
+    if(!name || !job || !company || !phone || !email){
+
+        alert("Please fill Applicant Name, Job Position, Company Name, Phone and Email.");
+        return;
+    }
+
+    let today = new Date();
+
+    let formattedDate = today.toLocaleDateString("en-IN", {
+        day:"2-digit",
+        month:"2-digit",
+        year:"numeric"
+    });
+
+    document.getElementById("date").innerText = formattedDate;
+
+    document.getElementById("showName").innerText = name;
+    document.getElementById("showJob").innerText = job;
+    document.getElementById("showJob2").innerText = job;
+    document.getElementById("showCompany").innerText = company;
+    document.getElementById("showCompany2").innerText = company;
+    document.getElementById("showCompanyAddress").innerText = companyAddress;
+    document.getElementById("showPhone").innerText = phone;
+    document.getElementById("showEmail").innerText = email;
+
+    document.getElementById("showSkills").innerText =
+        skills || "I have good communication and basic professional skills.";
+
+    document.getElementById("showExperience").innerText =
+        experience || "I am ready to learn and develop my skills through this opportunity.";
+
+    document.getElementById("showReason").innerText =
+        reason || "I am interested in this job because it is a good opportunity for me to develop my career.";
+
+    document.getElementById("formSection").style.display = "none";
+    document.getElementById("letterSection").style.display = "block";
+
+    window.scrollTo(0,0);
+}
+
+
+function editLetter(){
+
+    document.getElementById("letterSection").style.display = "none";
+    document.getElementById("formSection").style.display = "block";
+
+    window.scrollTo(0,0);
+}
+
+
+function clearForm(){
+
+    document.getElementById("name").value = "";
+    document.getElementById("job").value = "";
+    document.getElementById("company").value = "";
+    document.getElementById("companyAddress").value = "";
+    document.getElementById("phone").value = "";
+    document.getElementById("email").value = "";
+    document.getElementById("skills").value = "";
+    document.getElementById("experience").value = "";
+    document.getElementById("reason").value = "";
+
+}
+
+</script>
+
+</body>
+</html>

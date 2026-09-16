@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>PDF Compressor - MyHelp India</title>
+<meta name="description" content="Free online PDF compressor. Reduce PDF file size easily in your browser.">
+
+<script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    background:#f4f8ff;
+    color:#222;
+}
+
+header{
+    background:linear-gradient(135deg,#0d47a1,#1976d2,#42a5f5);
+    color:white;
+    text-align:center;
+    padding:28px 15px;
+}
+
+header h1{
+    font-size:32px;
+    margin-bottom:8px;
+}
+
+header p{
+    font-size:16px;
+}
+
+.container{
+    max-width:850px;
+    margin:25px auto;
+    padding:0 15px;
+}
+
+.card{
+    background:white;
+    padding:25px;
+    border-radius:15px;
+    margin-bottom:20px;
+    box-shadow:0 4px 15px rgba(0,0,0,0.08);
+}
+
+.card h2{
+    color:#0d47a1;
+    margin-bottom:18px;
+}
+
+label{
+    display:block;
+    font-weight:bold;
+    margin-top:15px;
+    margin-bottom:7px;
+}
+
+input,select{
+    width:100%;
+    padding:13px;
+    border:1px solid #ccc;
+    border-radius:8px;
+    font-size:16px;
+}
+
+button{
+    border:none;
+    padding:14px 22px;
+    border-radius:8px;
+    background:#1976d2;
+    color:white;
+    font-size:16px;
+    cursor:pointer;
+    margin-top:20px;
+    margin-right:8px;
+}
+
+button:hover{
+    background:#0d47a1;
+}
+
+.clear{
+    background:#777;
+}
+
+.download{
+    display:none;
+    margin-top:22px;
+    text-align:center;
+}
+
+.download a{
+    display:inline-block;
+    background:#2e7d32;
+    color:white;
+    text-decoration:none;
+    padding:14px 25px;
+    border-radius:8px;
+    font-weight:bold;
+}
+
+.file-info{
+    background:#eef6ff;
+    padding:16px;
+    border-left:5px solid #1976d2;
+    border-radius:7px;
+    margin-top:18px;
+    line-height:1.7;
+}
+
+.status{
+    margin-top:18px;
+    font-weight:bold;
+    line-height:1.6;
+}
+
+.warning{
+    background:#fff8e1;
+    border-left:5px solid #ff9800;
+    padding:15px;
+    border-radius:7px;
+    margin-top:18px;
+    line-height:1.6;
+}
+
+.back{
+    display:block;
+    text-align:center;
+    color:#0d47a1;
+    text-decoration:none;
+    font-weight:bold;
+    margin:25px 0;
+}
+
+footer{
+    background:#0d47a1;
+    color:white;
+    text-align:center;
+    padding:18px;
+    margin-top:30px;
+}
+
+@media(max-width:600px){
+
+    header h1{
+        font-size:26px;
+    }
+
+    .card{
+        padding:18px;
+    }
+
+    button{
+        width:100%;
+        margin-right:0;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>🗜️ PDF Compressor</h1>
+    <p>Reduce PDF File Size • Free & Simple</p>
+</header>
+
+<div class="container">
+
+<div class="card">
+
+    <h2>📄 Select PDF</h2>
+
+    <label>Choose PDF File</label>
+
+    <input
+        type="file"
+        id="pdfInput"
+        accept="application/pdf"
+        onchange="showFileInfo()"
+    >
+
+    <div class="file-info" id="fileInfo" style="display:none;"></div>
+
+
+    <label>Compression Level</label>
+
+    <select id="compression">
+        <option value="low">
+            Low Compression - Better Quality
+        </option>
+
+        <option value="medium" selected>
+            Medium Compression - Recommended
+        </option>
+
+        <option value="high">
+            High Compression - Smaller Size
+        </option>
+    </select>
+
+
+    <button onclick="compressPDF()">
+        🗜️ Compress PDF
+    </button>
+
+    <button class="clear" onclick="clearAll()">
+        Clear
+    </button>
+
+
+    <div class="status" id="status"></div>
+
+
+    <div class="download" id="downloadBox">
+
+        <p id="resultInfo"></p>
+
+        <a id="downloadLink" download="MyHelp-India-Compressed.pdf">
+            ⬇️ Download Compressed PDF
+        </a>
+
+    </div>
+
+
+    <div class="warning">
+        <b>💡 Important:</b><br>
+        PDF compression works best for PDFs containing
+        images. Text-only PDFs may show little or no size reduction.
+    </div>
+
+
+    <div class="file-info">
+        <b>🔒 Privacy:</b><br>
+        Your PDF is processed directly in your browser.
+        This tool does not upload your PDF to a server.
+    </div>
+
+</div>
+
+
+<div class="card">
+
+    <h2>✨ About PDF Compression</h2>
+
+    <p>
+        PDF compression reduces unnecessary data inside a PDF
+        to make the file easier to store and share.
+    </p>
+
+    <br>
+
+    <p>✅ Useful for WhatsApp sharing</p>
+    <p>✅ Useful for email attachments</p>
+    <p>✅ Useful when a website has a file-size limit</p>
+    <p>✅ Free to use</p>
+    <p>✅ No registration required</p>
+
+</div>
+
+
+<a class="back" href="index.html">
+    ← Back to MyHelp India
+</a>
+
+</div>
+
+<footer>
+    <p>© 2026 MyHelp India • Your Life • Our Support</p>
+</footer>
+
+
+<script>
+
+let originalFile = null;
+
+
+function showFileInfo(){
+
+    const input =
+        document.getElementById("pdfInput");
+
+    const info =
+        document.getElementById("fileInfo");
+
+
+    if(!input.files.length){
+
+        info.style.display = "none";
+        return;
+
+    }
+
+
+    originalFile = input.files[0];
+
+
+    const size =
+        formatBytes(originalFile.size);
+
+
+    info.style.display = "block";
+
+    info.innerHTML =
+        "<b>Selected PDF:</b> " +
+        originalFile.name +
+        "<br>" +
+        "<b>Original Size:</b> " +
+        size;
+
+}
+
+
+function formatBytes(bytes){
+
+    if(bytes === 0){
+        return "0 Bytes";
+    }
+
+    const units =
+        ["Bytes","KB","MB","GB"];
+
+    const i =
+        Math.floor(
+            Math.log(bytes) /
+            Math.log(1024)
+        );
+
+    return (
+        bytes /
+        Math.pow(1024,i)
+    ).toFixed(2)
+    + " " +
+    units[i];
+
+}
+
+
+async function compressPDF(){
+
+    const input =
+        document.getElementById("pdfInput");
+
+    const status =
+        document.getElementById("status");
+
+    const downloadBox =
+        document.getElementById("downloadBox");
+
+    const resultInfo =
+        document.getElementById("resultInfo");
+
+
+    if(!input.files.length){
+
+        alert("Please select a PDF file first.");
+
+        return;
+
+    }
+
+
+    try{
+
+        status.innerHTML =
+            "⏳ Processing PDF... Please wait.";
+
+        downloadBox.style.display = "none";
+
+
+        const file =
+            input.files[0];
+
+
+        const arrayBuffer =
+            await file.arrayBuffer();
+
+
+        const sourcePdf =
+            await PDFLib.PDFDocument.load(
+                arrayBuffer
+            );
+
+
+        const newPdf =
+            await PDFLib.PDFDocument.create();
+
+
+        const pageCount =
+            sourcePdf.getPageCount();
+
+
+        status.innerHTML =
+            "⏳ Processing " +
+            pageCount +
+            " page(s)...";
+
+
+        const copiedPages =
+            await newPdf.copyPages(
+                sourcePdf,
+                sourcePdf.getPageIndices()
+            );
+
+
+        copiedPages.forEach(function(page){
+
+            newPdf.addPage(page);
+
+        });
+
+
+        const compression =
+            document.getElementById(
+                "compression"
+            ).value;
+
+
+        let options = {};
+
+
+        if(compression === "low"){
+
+            options = {
+                useObjectStreams:true,
+                addDefaultPage:false
+            };
+
+        }
+
+        else if(compression === "medium"){
+
+            options = {
+                useObjectStreams:true,
+                addDefaultPage:false,
+                objectsPerTick:50
+            };
+
+        }
+
+        else{
+
+            options = {
+                useObjectStreams:true,
+                addDefaultPage:false,
+                objectsPerTick:100
+            };
+
+        }
+
+
+        const pdfBytes =
+            await newPdf.save(options);
+
+
+        const blob =
+            new Blob(
+                [pdfBytes],
+                {type:"application/pdf"}
+            );
+
+
+        const url =
+            URL.createObjectURL(blob);
+
+
+        const newSize =
+            blob.size;
+
+
+        const oldSize =
+            file.size;
+
+
+        const saving =
+            oldSize > 0
+            ? ((oldSize-newSize)/oldSize)*100
+            : 0;
+
+
+        const link =
+            document.getElementById(
+                "downloadLink"
+            );
+
+
+        link.href = url;
+
+        link.download =
+            "MyHelp-India-Compressed.pdf";
+
+
+        if(newSize < oldSize){
+
+            resultInfo.innerHTML =
+                "✅ Compression completed!<br><br>" +
+
+                "<b>Original:</b> " +
+                formatBytes(oldSize) +
+                "<br>" +
+
+                "<b>New Size:</b> " +
+                formatBytes(newSize) +
+                "<br>" +
+
+                "<b>Reduced:</b> " +
+                saving.toFixed(1) +
+                "%";
+
+        }
+
+        else{
+
+            resultInfo.innerHTML =
+                "✅ PDF processed successfully.<br><br>" +
+
+                "<b>Original:</b> " +
+                formatBytes(oldSize) +
+                "<br>" +
+
+                "<b>New Size:</b> " +
+                formatBytes(newSize) +
+                "<br><br>" +
+
+                "This PDF was already optimized, " +
+                "so its size could not be reduced further.";
+
+        }
+
+
+        downloadBox.style.display = "block";
+
+
+        status.innerHTML =
+            "🎉 PDF processing completed!";
+
+
+    }
+    catch(error){
+
+        console.error(error);
+
+        status.innerHTML =
+            "❌ Unable to process this PDF.";
+
+        alert(
+            "PDF processing failed. Please try another PDF."
+        );
+
+    }
+
+}
+
+
+function clearAll(){
+
+    document.getElementById(
+        "pdfInput"
+    ).value = "";
+
+
+    document.getElementById(
+        "fileInfo"
+    ).style.display = "none";
+
+
+    document.getElementById(
+        "status"
+    ).innerHTML = "";
+
+
+    document.getElementById(
+        "downloadBox"
+    ).style.display = "none";
+
+
+    originalFile = null;
+
+}
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>PDF Sign - MyHelp India</title>
+<meta name="description" content="Free online PDF Signature tool by MyHelp India. Sign PDF documents easily in your browser.">
+
+<script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+
+<style>
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    font-family:Arial,Helvetica,sans-serif;
+    background:#f4f8ff;
+    color:#222;
+}
+
+.header{
+    background:linear-gradient(135deg,#0d47a1,#1976d2,#42a5f5);
+    color:white;
+    text-align:center;
+    padding:25px 15px;
+}
+
+.header h1{
+    margin:0;
+    font-size:30px;
+}
+
+.header p{
+    margin:8px 0 0;
+    font-size:15px;
+}
+
+.container{
+    max-width:900px;
+    margin:25px auto;
+    padding:0 15px;
+}
+
+.card{
+    background:white;
+    border-radius:15px;
+    padding:22px;
+    margin-bottom:20px;
+    box-shadow:0 5px 20px rgba(0,0,0,.08);
+}
+
+.card h2{
+    margin-top:0;
+    color:#0d47a1;
+    font-size:21px;
+}
+
+label{
+    display:block;
+    font-weight:bold;
+    margin:14px 0 7px;
+}
+
+input,select{
+    width:100%;
+    padding:12px;
+    border:1px solid #ccc;
+    border-radius:8px;
+    font-size:15px;
+    background:white;
+}
+
+input:focus,select:focus{
+    outline:none;
+    border-color:#1976d2;
+}
+
+.signature-box{
+    border:2px dashed #1976d2;
+    border-radius:12px;
+    background:#fafcff;
+    padding:10px;
+}
+
+#signaturePad{
+    width:100%;
+    height:220px;
+    display:block;
+    background:white;
+    border-radius:8px;
+    cursor:crosshair;
+    touch-action:none;
+}
+
+.signature-buttons{
+    display:flex;
+    gap:10px;
+    margin-top:10px;
+    flex-wrap:wrap;
+}
+
+button{
+    border:none;
+    border-radius:8px;
+    padding:12px 18px;
+    font-size:15px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.clear-btn{
+    background:#e53935;
+    color:white;
+}
+
+.sign-btn{
+    width:100%;
+    background:#1976d2;
+    color:white;
+    margin-top:20px;
+    font-size:17px;
+}
+
+.sign-btn:hover{
+    background:#0d47a1;
+}
+
+.info{
+    background:#e8f5e9;
+    border-left:5px solid #2e7d32;
+    padding:13px;
+    border-radius:8px;
+    margin-top:15px;
+    line-height:1.6;
+}
+
+.warning{
+    background:#fff3cd;
+    border-left:5px solid #ff9800;
+    padding:13px;
+    border-radius:8px;
+    margin-top:15px;
+    line-height:1.6;
+}
+
+.file-info{
+    margin-top:10px;
+    padding:12px;
+    background:#f1f5f9;
+    border-radius:8px;
+    display:none;
+}
+
+.result{
+    display:none;
+    background:#e3f2fd;
+    border-left:5px solid #1976d2;
+    padding:15px;
+    border-radius:8px;
+    margin-top:20px;
+}
+
+.footer{
+    text-align:center;
+    padding:25px;
+    color:#666;
+    font-size:14px;
+}
+
+.back-btn{
+    display:inline-block;
+    text-decoration:none;
+    background:#2e7d32;
+    color:white;
+    padding:11px 18px;
+    border-radius:8px;
+    font-weight:bold;
+    margin-top:10px;
+}
+
+.row{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:15px;
+}
+
+@media(max-width:650px){
+    .row{
+        grid-template-columns:1fr;
+    }
+
+    .header h1{
+        font-size:25px;
+    }
+
+    .card{
+        padding:17px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+    <h1>✍️ PDF Signature</h1>
+    <p>Sign your PDF documents easily and professionally</p>
+</div>
+
+<div class="container">
+
+    <div class="card">
+        <h2>1. Select PDF</h2>
+
+        <label>Select PDF File</label>
+        <input type="file" id="pdfFile" accept="application/pdf">
+
+        <div class="file-info" id="fileInfo"></div>
+
+        <div class="info">
+            🔒 Your PDF is processed inside your browser.
+            It is not uploaded to a server.
+        </div>
+    </div>
+
+
+    <div class="card">
+        <h2>2. Create Your Signature</h2>
+
+        <div class="signature-box">
+            <canvas id="signaturePad"></canvas>
+        </div>
+
+        <div class="signature-buttons">
+            <button class="clear-btn" onclick="clearSignature()">
+                🗑️ Clear Signature
+            </button>
+        </div>
+
+        <div class="info">
+            ✍️ Use your mouse on computer or finger on mobile to draw your signature.
+        </div>
+    </div>
+
+
+    <div class="card">
+        <h2>3. Signature Settings</h2>
+
+        <label>Apply Signature To</label>
+        <select id="pageOption">
+            <option value="all">All Pages</option>
+            <option value="first">First Page</option>
+            <option value="last">Last Page</option>
+            <option value="specific">Specific Page</option>
+        </select>
+
+        <div id="specificPageBox" style="display:none;">
+            <label>Page Number</label>
+            <input type="number" id="specificPage" min="1" placeholder="Example: 2">
+        </div>
+
+        <div class="row">
+
+            <div>
+                <label>Signature Position</label>
+                <select id="position">
+                    <option value="bottom-left">Bottom Left</option>
+                    <option value="bottom-center">Bottom Center</option>
+                    <option value="bottom-right">Bottom Right</option>
+                    <option value="center">Center</option>
+                    <option value="top-left">Top Left</option>
+                    <option value="top-center">Top Center</option>
+                    <option value="top-right">Top Right</option>
+                </select>
+            </div>
+
+            <div>
+                <label>Signature Width</label>
+                <select id="signatureWidth">
+                    <option value="120">120 pt - Small</option>
+                    <option value="160">160 pt</option>
+                    <option value="200" selected>200 pt - Medium</option>
+                    <option value="240">240 pt</option>
+                    <option value="280">280 pt - Large</option>
+                    <option value="320">320 pt - Extra Large</option>
+                </select>
+            </div>
+
+        </div>
+
+
+        <label>Signature Opacity</label>
+        <select id="opacity">
+            <option value="1">100%</option>
+            <option value="0.9">90%</option>
+            <option value="0.8">80%</option>
+            <option value="0.7">70%</option>
+        </select>
+
+
+        <button class="sign-btn" onclick="signPDF()">
+            ✍️ Sign PDF & Download
+        </button>
+
+        <div class="result" id="result"></div>
+
+        <div class="warning">
+            ⚠️ This tool creates a visible image-based signature.
+            It is not a cryptographic/digital certificate signature.
+        </div>
+
+    </div>
+
+
+    <div class="card">
+        <h2>How It Works</h2>
+
+        <p>1️⃣ Select your PDF file.</p>
+        <p>2️⃣ Draw your signature above.</p>
+        <p>3️⃣ Select the page and signature position.</p>
+        <p>4️⃣ Choose the signature size and opacity.</p>
+        <p>5️⃣ Click <b>Sign PDF & Download</b>.</p>
+
+        <div class="info">
+            💡 The signed PDF will be downloaded automatically.
+        </div>
+    </div>
+
+</div>
+
+
+<div class="footer">
+    <p>© 2026 MyHelp India • Simple • Useful • Free</p>
+
+    <a href="index.html" class="back-btn">
+        ← Back to MyHelp India
+    </a>
+</div>
+
+
+<script>
+
+const canvas = document.getElementById("signaturePad");
+const ctx = canvas.getContext("2d");
+
+let drawing = false;
+let hasSignature = false;
+
+
+/* Canvas Size */
+function resizeCanvas(){
+
+    const ratio = Math.max(window.devicePixelRatio || 1,1);
+
+    const rect = canvas.getBoundingClientRect();
+
+    canvas.width = rect.width * ratio;
+    canvas.height = rect.height * ratio;
+
+    ctx.setTransform(ratio,0,0,ratio,0,0);
+
+    ctx.lineWidth = 2.5;
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+    ctx.strokeStyle = "#111";
+
+}
+
+resizeCanvas();
+
+window.addEventListener("resize",resizeCanvas);
+
+
+/* Mouse / Touch Position */
+function getPosition(event){
+
+    const rect = canvas.getBoundingClientRect();
+
+    let x;
+    let y;
+
+    if(event.touches && event.touches.length > 0){
+
+        x = event.touches[0].clientX - rect.left;
+        y = event.touches[0].clientY - rect.top;
+
+    }else{
+
+        x = event.clientX - rect.left;
+        y = event.clientY - rect.top;
+
+    }
+
+    return {x,y};
+}
+
+
+/* Start Drawing */
+function startDrawing(event){
+
+    event.preventDefault();
+
+    drawing = true;
+    hasSignature = true;
+
+    const pos = getPosition(event);
+
+    ctx.beginPath();
+    ctx.moveTo(pos.x,pos.y);
+}
+
+
+/* Drawing */
+function draw(event){
+
+    if(!drawing) return;
+
+    event.preventDefault();
+
+    const pos = getPosition(event);
+
+    ctx.lineTo(pos.x,pos.y);
+    ctx.stroke();
+}
+
+
+/* Stop Drawing */
+function stopDrawing(event){
+
+    if(event) event.preventDefault();
+
+    drawing = false;
+}
+
+
+/* Mouse Events */
+canvas.addEventListener("mousedown",startDrawing);
+canvas.addEventListener("mousemove",draw);
+canvas.addEventListener("mouseup",stopDrawing);
+canvas.addEventListener("mouseleave",stopDrawing);
+
+
+/* Touch Events */
+canvas.addEventListener("touchstart",startDrawing,{passive:false});
+canvas.addEventListener("touchmove",draw,{passive:false});
+canvas.addEventListener("touchend",stopDrawing,{passive:false});
+
+
+/* Clear Signature */
+function clearSignature(){
+
+    ctx.clearRect(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+    );
+
+    hasSignature = false;
+}
+
+
+/* PDF File Information */
+document.getElementById("pdfFile").addEventListener("change",function(){
+
+    const file = this.files[0];
+
+    if(!file) return;
+
+    const info = document.getElementById("fileInfo");
+
+    info.style.display = "block";
+
+    info.innerHTML =
+        "<b>File:</b> " + file.name +
+        "<br><b>Size:</b> " + formatBytes(file.size);
+
+});
+
+
+/* Page Option */
+document.getElementById("pageOption").addEventListener("change",function(){
+
+    const box = document.getElementById("specificPageBox");
+
+    if(this.value === "specific"){
+        box.style.display = "block";
+    }else{
+        box.style.display = "none";
+    }
+
+});
+
+
+/* File Size */
+function formatBytes(bytes){
+
+    if(bytes === 0) return "0 Bytes";
+
+    const sizes = [
+        "Bytes",
+        "KB",
+        "MB",
+        "GB"
+    ];
+
+    const i = Math.floor(
+        Math.log(bytes) / Math.log(1024)
+    );
+
+    return (
+        parseFloat(
+            (bytes / Math.pow(1024,i)).toFixed(2)
+        )
+        + " "
+        + sizes[i]
+    );
+}
+
+
+/* Get Signature Image */
+function getSignatureData(){
+
+    if(!hasSignature){
+        return null;
+    }
+
+    return canvas.toDataURL("image/png");
+}
+
+
+/* Sign PDF */
+async function signPDF(){
+
+    const fileInput = document.getElementById("pdfFile");
+    const result = document.getElementById("result");
+
+    result.style.display = "none";
+
+    if(!fileInput.files.length){
+
+        alert("Please select a PDF file first.");
+        return;
+    }
+
+    if(!hasSignature){
+
+        alert("Please draw your signature first.");
+        return;
+    }
+
+
+    const file = fileInput.files[0];
+
+    const pageOption =
+        document.getElementById("pageOption").value;
+
+    const position =
+        document.getElementById("position").value;
+
+    const signatureWidth =
+        Number(
+            document.getElementById("signatureWidth").value
+        );
+
+    const opacity =
+        Number(
+            document.getElementById("opacity").value
+        );
+
+
+    try{
+
+        result.style.display = "block";
+
+        result.innerHTML =
+            "⏳ Preparing your signed PDF...";
+
+
+        /* Read PDF */
+        const pdfBytes =
+            await file.arrayBuffer();
+
+
+        /* Load PDF */
+        const pdfDoc =
+            await PDFLib.PDFDocument.load(pdfBytes);
+
+
+        const pages =
+            pdfDoc.getPages();
+
+
+        if(pages.length === 0){
+
+            throw new Error("PDF contains no pages.");
+
+        }
+
+
+        /* Signature Image */
+        const signatureData =
+            getSignatureData();
+
+
+        const signatureImage =
+            await pdfDoc.embedPng(signatureData);
+
+
+        /* Signature ratio */
+        const originalWidth =
+            canvas.width;
+
+        const originalHeight =
+            canvas.height;
+
+
+        const ratio =
+            originalHeight / originalWidth;
+
+
+        const signatureHeight =
+            signatureWidth * ratio;
+
+
+        /* Determine Pages */
+        let selectedPages = [];
+
+
+        if(pageOption === "all"){
+
+            for(let i=0;i<pages.length;i++){
+                selectedPages.push(i);
+            }
+
+        }
+
+        else if(pageOption === "first"){
+
+            selectedPages.push(0);
+
+        }
+
+        else if(pageOption === "last"){
+
+            selectedPages.push(
+                pages.length - 1
+            );
+
+        }
+
+        else if(pageOption === "specific"){
+
+            const pageNumber =
+                Number(
+                    document.getElementById(
+                        "specificPage"
+                    ).value
+                );
+
+
+            if(
+                !pageNumber ||
+                pageNumber < 1 ||
+                pageNumber > pages.length
+            ){
+
+                alert(
+                    "Please enter a valid page number from 1 to "
+                    + pages.length
+                    + "."
+                );
+
+                result.style.display = "none";
+
+                return;
+            }
+
+
+            selectedPages.push(
+                pageNumber - 1
+            );
+
+        }
+
+
+        /* Place Signature */
+        for(const pageIndex of selectedPages){
+
+            const page =
+                pages[pageIndex];
+
+
+            const pageWidth =
+                page.getWidth();
+
+            const pageHeight =
+                page.getHeight();
+
+
+            const margin = 25;
+
+
+            let x = margin;
+            let y = margin;
+
+
+            /* Horizontal */
+            if(position.includes("center")){
+
+                x =
+                    (pageWidth - signatureWidth) / 2;
+
+            }
+
+            else if(position.includes("right")){
+
+                x =
+                    pageWidth
+                    - signatureWidth
+                    - margin;
+
+            }
+
+
+            /* Vertical */
+            if(position.startsWith("top")){
+
+                y =
+                    pageHeight
+                    - signatureHeight
+                    - margin;
+
+            }
+
+            else if(position === "center"){
+
+                y =
+                    (pageHeight - signatureHeight) / 2;
+
+            }
+
+            else{
+
+                y = margin;
+
+            }
+
+
+            /* Draw Signature */
+            page.drawImage(
+                signatureImage,
+                {
+                    x:x,
+                    y:y,
+                    width:signatureWidth,
+                    height:signatureHeight,
+                    opacity:opacity
+                }
+            );
+
+        }
+
+
+        /* Save PDF */
+        const outputBytes =
+            await pdfDoc.save();
+
+
+        /* Download */
+        const blob =
+            new Blob(
+                [outputBytes],
+                {
+                    type:"application/pdf"
+                }
+            );
+
+
+        const url =
+            URL.createObjectURL(blob);
+
+
+        const link =
+            document.createElement("a");
+
+
+        link.href = url;
+
+        link.download =
+            "MyHelp-India-Signed-PDF.pdf";
+
+
+        document.body.appendChild(link);
+
+        link.click();
+
+        document.body.removeChild(link);
+
+
+        setTimeout(
+            () => URL.revokeObjectURL(url),
+            1000
+        );
+
+
+        result.innerHTML =
+            "✅ <b>PDF Signed Successfully!</b><br><br>" +
+            "Your signed PDF has been downloaded.<br>" +
+            "File name: <b>MyHelp-India-Signed-PDF.pdf</b>";
+
+
+    }
+
+    catch(error){
+
+        console.error(error);
+
+        result.style.display = "block";
+
+        result.innerHTML =
+            "❌ <b>Something went wrong.</b><br><br>" +
+            error.message +
+            "<br><br>" +
+            "Please make sure the selected file is a valid PDF.";
+
+    }
+
+}
+
+</script>
+
+</body>
+</html>

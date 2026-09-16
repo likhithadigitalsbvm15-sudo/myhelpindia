@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>MyHelp India - QR Code Scanner</title>
+
+<style>
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    font-family:Arial,sans-serif;
+    background:#f4f8ff;
+    color:#222;
+}
+
+header{
+    background:linear-gradient(135deg,#0d47a1,#1976d2,#42a5f5);
+    color:white;
+    text-align:center;
+    padding:28px 15px;
+}
+
+header h1{
+    margin:0;
+    font-size:30px;
+}
+
+header p{
+    margin:8px 0 0;
+    font-size:15px;
+}
+
+.container{
+    max-width:700px;
+    margin:30px auto;
+    padding:0 15px;
+}
+
+.card{
+    background:white;
+    border-radius:18px;
+    padding:25px;
+    box-shadow:0 5px 20px rgba(0,0,0,.10);
+}
+
+h2{
+    text-align:center;
+    color:#0d47a1;
+    margin-top:0;
+}
+
+.upload-box{
+    border:2px dashed #90caf9;
+    background:#f8fbff;
+    padding:30px 15px;
+    border-radius:15px;
+    text-align:center;
+    margin-top:20px;
+}
+
+.upload-icon{
+    font-size:55px;
+}
+
+input[type="file"]{
+    width:100%;
+    margin-top:20px;
+    padding:12px;
+    border:1px solid #ccc;
+    border-radius:10px;
+    background:white;
+}
+
+button{
+    width:100%;
+    border:none;
+    padding:14px;
+    margin-top:18px;
+    border-radius:10px;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.scan-btn{
+    background:#1976d2;
+    color:white;
+}
+
+.scan-btn:hover{
+    background:#0d47a1;
+}
+
+.clear-btn{
+    background:#eeeeee;
+    color:#333;
+}
+
+.result{
+    display:none;
+    margin-top:25px;
+    padding:20px;
+    background:#f1f8e9;
+    border:2px solid #81c784;
+    border-radius:15px;
+}
+
+.result h3{
+    color:#2e7d32;
+    margin-top:0;
+}
+
+.result-text{
+    background:white;
+    padding:15px;
+    border-radius:10px;
+    word-break:break-word;
+    border:1px solid #ddd;
+    font-size:16px;
+}
+
+.open-btn{
+    background:#2e7d32;
+    color:white;
+    text-decoration:none;
+    display:none;
+    text-align:center;
+    padding:14px;
+    margin-top:15px;
+    border-radius:10px;
+    font-weight:bold;
+}
+
+.copy-btn{
+    background:#1976d2;
+    color:white;
+}
+
+.info{
+    margin-top:18px;
+    padding:12px;
+    background:#e3f2fd;
+    color:#0d47a1;
+    border-radius:10px;
+    font-size:14px;
+}
+
+.status{
+    text-align:center;
+    margin-top:15px;
+    color:#666;
+    font-size:14px;
+}
+
+footer{
+    text-align:center;
+    color:#777;
+    font-size:13px;
+    padding:25px 10px;
+}
+
+canvas{
+    display:none;
+}
+
+@media(max-width:600px){
+
+    header h1{
+        font-size:25px;
+    }
+
+    .card{
+        padding:18px;
+    }
+}
+</style>
+
+<!-- QR Scanner Library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jsQR/1.4.0/jsQR.min.js"></script>
+
+</head>
+
+<body>
+
+<header>
+    <h1>📷 QR Code Scanner</h1>
+    <p>Scan QR Codes Easily with MyHelp India</p>
+</header>
+
+
+<div class="container">
+
+<div class="card">
+
+<h2>Scan Your QR Code</h2>
+
+<div class="upload-box">
+
+<div class="upload-icon">📱</div>
+
+<h3>Upload QR Code Image</h3>
+
+<p>Select a QR Code image from your computer or mobile.</p>
+
+<input
+type="file"
+id="qrImage"
+accept="image/*"
+>
+
+</div>
+
+
+<button class="scan-btn" onclick="scanQR()">
+🔍 Scan QR Code
+</button>
+
+
+<div class="status" id="status">
+Please upload a QR Code image.
+</div>
+
+
+<div class="result" id="result">
+
+<h3>✅ QR Code Found</h3>
+
+<div class="result-text" id="resultText"></div>
+
+<button class="copy-btn" onclick="copyResult()">
+📋 Copy Result
+</button>
+
+<a
+id="openBtn"
+class="open-btn"
+target="_blank"
+rel="noopener noreferrer"
+>
+🌐 Open Link
+</a>
+
+</div>
+
+
+<button class="clear-btn" onclick="clearScanner()">
+🗑️ Clear
+</button>
+
+
+<div class="info">
+💡 You can upload a screenshot or photo of any QR Code and scan it here.
+</div>
+
+</div>
+
+</div>
+
+
+<footer>
+© 2026 MyHelp India • Simple • Useful • Free
+</footer>
+
+
+<canvas id="canvas"></canvas>
+
+
+<script>
+
+function scanQR(){
+
+    const fileInput=document.getElementById("qrImage");
+
+    const status=document.getElementById("status");
+
+    const result=document.getElementById("result");
+
+    const resultText=document.getElementById("resultText");
+
+    const openBtn=document.getElementById("openBtn");
+
+    if(fileInput.files.length===0){
+
+        alert("Please select a QR Code image first.");
+
+        return;
+    }
+
+
+    const file=fileInput.files[0];
+
+    const reader=new FileReader();
+
+
+    status.innerText="🔍 Scanning QR Code...";
+
+    result.style.display="none";
+
+    openBtn.style.display="none";
+
+
+    reader.onload=function(event){
+
+        const img=new Image();
+
+
+        img.onload=function(){
+
+            const canvas=document.getElementById("canvas");
+
+            const ctx=canvas.getContext("2d");
+
+
+            canvas.width=img.width;
+
+            canvas.height=img.height;
+
+
+            ctx.drawImage(
+                img,
+                0,
+                0,
+                img.width,
+                img.height
+            );
+
+
+            const imageData=ctx.getImageData(
+                0,
+                0,
+                canvas.width,
+                canvas.height
+            );
+
+
+            const code=jsQR(
+                imageData.data,
+                imageData.width,
+                imageData.height
+            );
+
+
+            if(code){
+
+                resultText.innerText=code.data;
+
+                result.style.display="block";
+
+                status.innerText="✅ QR Code scanned successfully!";
+
+
+                if(
+                    code.data.startsWith("http://") ||
+                    code.data.startsWith("https://")
+                ){
+
+                    openBtn.href=code.data;
+
+                    openBtn.style.display="block";
+
+                }
+
+            }else{
+
+                status.innerText=
+                "❌ QR Code not detected. Please upload a clear QR image.";
+
+                alert(
+                    "QR Code not detected. Please try a clear QR Code image."
+                );
+
+            }
+
+        };
+
+
+        img.onerror=function(){
+
+            status.innerText="❌ Unable to read the image.";
+
+        };
+
+
+        img.src=event.target.result;
+
+    };
+
+
+    reader.readAsDataURL(file);
+
+}
+
+
+function copyResult(){
+
+    const text=document.getElementById("resultText").innerText;
+
+    navigator.clipboard.writeText(text)
+    .then(function(){
+
+        alert("✅ QR result copied!");
+
+    })
+    .catch(function(){
+
+        alert("Unable to copy. Please select and copy the text manually.");
+
+    });
+
+}
+
+
+function clearScanner(){
+
+    document.getElementById("qrImage").value="";
+
+    document.getElementById("result").style.display="none";
+
+    document.getElementById("resultText").innerText="";
+
+    document.getElementById("openBtn").style.display="none";
+
+    document.getElementById("status").innerText=
+    "Please upload a QR Code image.";
+
+}
+
+</script>
+
+</body>
+</html>

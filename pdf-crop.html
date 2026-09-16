@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>PDF Crop - MyHelp India</title>
+<meta name="description" content="Crop PDF pages easily online for free with MyHelp India.">
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:Arial, sans-serif;
+    background:linear-gradient(135deg,#eef7ff,#f5fff9);
+    color:#222;
+    min-height:100vh;
+}
+
+.header{
+    background:linear-gradient(135deg,#0d47a1,#1976d2,#2e7d32);
+    color:white;
+    text-align:center;
+    padding:25px 15px;
+    box-shadow:0 4px 15px rgba(0,0,0,.15);
+}
+
+.header h1{
+    font-size:30px;
+    margin-bottom:8px;
+}
+
+.header p{
+    font-size:15px;
+}
+
+.container{
+    max-width:850px;
+    margin:30px auto;
+    padding:0 15px;
+}
+
+.card{
+    background:white;
+    border-radius:18px;
+    padding:25px;
+    box-shadow:0 8px 30px rgba(0,0,0,.10);
+    margin-bottom:20px;
+}
+
+.card h2{
+    color:#0d47a1;
+    margin-bottom:18px;
+    font-size:22px;
+}
+
+.upload-box{
+    border:2px dashed #1976d2;
+    border-radius:15px;
+    padding:35px 20px;
+    text-align:center;
+    background:#f8fbff;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.upload-box:hover{
+    background:#eef7ff;
+}
+
+.upload-box input{
+    margin-top:15px;
+    width:100%;
+}
+
+.file-info{
+    margin-top:15px;
+    padding:12px;
+    background:#f1f8e9;
+    border-radius:10px;
+    display:none;
+}
+
+.controls{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:15px;
+    margin-top:20px;
+}
+
+.field label{
+    display:block;
+    font-weight:bold;
+    margin-bottom:7px;
+    color:#333;
+}
+
+.field input,
+.field select{
+    width:100%;
+    padding:12px;
+    border:1px solid #bbb;
+    border-radius:9px;
+    font-size:16px;
+    background:white;
+}
+
+.info{
+    margin-top:18px;
+    padding:15px;
+    background:#fff8e1;
+    border-left:5px solid #ff9800;
+    border-radius:8px;
+    line-height:1.6;
+}
+
+.buttons{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-top:22px;
+}
+
+button{
+    border:none;
+    border-radius:10px;
+    padding:13px 20px;
+    font-size:15px;
+    font-weight:bold;
+    cursor:pointer;
+    transition:.2s;
+}
+
+button:hover{
+    transform:translateY(-1px);
+}
+
+.primary{
+    background:#1976d2;
+    color:white;
+}
+
+.green{
+    background:#2e7d32;
+    color:white;
+}
+
+.gray{
+    background:#757575;
+    color:white;
+}
+
+.red{
+    background:#d32f2f;
+    color:white;
+}
+
+.status{
+    display:none;
+    margin-top:20px;
+    padding:15px;
+    border-radius:10px;
+    background:#e3f2fd;
+    color:#0d47a1;
+    font-weight:bold;
+}
+
+.footer{
+    text-align:center;
+    padding:25px;
+    color:#666;
+    font-size:14px;
+}
+
+@media(max-width:600px){
+    .controls{
+        grid-template-columns:1fr;
+    }
+
+    .header h1{
+        font-size:24px;
+    }
+
+    .card{
+        padding:18px;
+    }
+
+    .buttons button{
+        width:100%;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+    <h1>📄 PDF Crop</h1>
+    <p>Crop PDF pages easily with MyHelp India</p>
+</div>
+
+<div class="container">
+
+<div class="card">
+
+    <h2>✂️ Crop Your PDF</h2>
+
+    <div class="upload-box">
+        <strong>📁 Select PDF File</strong>
+        <p style="margin-top:8px;color:#666;">
+            Choose a PDF from your computer
+        </p>
+
+        <input type="file" id="pdfFile" accept="application/pdf">
+    </div>
+
+    <div class="file-info" id="fileInfo"></div>
+
+    <div class="controls">
+
+        <div class="field">
+            <label>Crop Left (points)</label>
+            <input type="number" id="left" value="0" min="0">
+        </div>
+
+        <div class="field">
+            <label>Crop Right (points)</label>
+            <input type="number" id="right" value="0" min="0">
+        </div>
+
+        <div class="field">
+            <label>Crop Top (points)</label>
+            <input type="number" id="top" value="0" min="0">
+        </div>
+
+        <div class="field">
+            <label>Crop Bottom (points)</label>
+            <input type="number" id="bottom" value="0" min="0">
+        </div>
+
+    </div>
+
+    <div class="info">
+        <strong>💡 How it works:</strong><br>
+        PDF crop values are measured in points.
+        <br>
+        72 points = approximately 1 inch.
+        <br><br>
+        Example: Enter <strong>20</strong> to crop approximately
+        20 points from that side.
+    </div>
+
+    <div class="buttons">
+
+        <button class="primary" onclick="cropPDF()">
+            ✂️ Crop PDF
+        </button>
+
+        <button class="gray" onclick="resetForm()">
+            🔄 Clear
+        </button>
+
+        <button class="green" onclick="goBack()">
+            🏠 Back to MyHelp India
+        </button>
+
+    </div>
+
+    <div class="status" id="status"></div>
+
+</div>
+
+<div class="card">
+    <h2>📌 Important</h2>
+
+    <p style="line-height:1.7;">
+        Your PDF is processed directly in your browser.
+        The file is not uploaded to a server by this page.
+        <br><br>
+        For best results, use a normal PDF file with standard page sizes.
+    </p>
+</div>
+
+</div>
+
+<div class="footer">
+    © 2026 MyHelp India • Your Life • Our Support
+</div>
+
+
+<script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+
+<script>
+
+let selectedFile = null;
+
+const pdfFile = document.getElementById("pdfFile");
+const fileInfo = document.getElementById("fileInfo");
+const statusBox = document.getElementById("status");
+
+pdfFile.addEventListener("change", function(){
+
+    selectedFile = this.files[0];
+
+    if(!selectedFile){
+        fileInfo.style.display = "none";
+        return;
+    }
+
+    if(selectedFile.type !== "application/pdf"){
+        alert("Please select a PDF file.");
+        this.value = "";
+        return;
+    }
+
+    const sizeMB = (selectedFile.size / 1024 / 1024).toFixed(2);
+
+    fileInfo.innerHTML =
+        "📄 <strong>File:</strong> " + selectedFile.name +
+        "<br>📦 <strong>Size:</strong> " + sizeMB + " MB";
+
+    fileInfo.style.display = "block";
+
+});
+
+
+async function cropPDF(){
+
+    if(!selectedFile){
+        alert("Please select a PDF file first.");
+        return;
+    }
+
+    const left = Number(document.getElementById("left").value) || 0;
+    const right = Number(document.getElementById("right").value) || 0;
+    const top = Number(document.getElementById("top").value) || 0;
+    const bottom = Number(document.getElementById("bottom").value) || 0;
+
+    if(left < 0 || right < 0 || top < 0 || bottom < 0){
+        alert("Crop values cannot be negative.");
+        return;
+    }
+
+    try{
+
+        showStatus("⏳ Processing PDF... Please wait.");
+
+        const arrayBuffer = await selectedFile.arrayBuffer();
+
+        const pdfDoc = await PDFLib.PDFDocument.load(arrayBuffer);
+
+        const pages = pdfDoc.getPages();
+
+        if(pages.length === 0){
+            throw new Error("No pages found in PDF.");
+        }
+
+        for(const page of pages){
+
+            const pageSize = page.getSize();
+
+            const width = pageSize.width;
+            const height = pageSize.height;
+
+            const newWidth = width - left - right;
+            const newHeight = height - top - bottom;
+
+            if(newWidth <= 20 || newHeight <= 20){
+                throw new Error(
+                    "Crop values are too large for one or more pages."
+                );
+            }
+
+            page.setCropBox(
+                left,
+                bottom,
+                newWidth,
+                newHeight
+            );
+
+        }
+
+        const pdfBytes = await pdfDoc.save({
+            useObjectStreams:true
+        });
+
+        const blob = new Blob(
+            [pdfBytes],
+            {type:"application/pdf"}
+        );
+
+        const url = URL.createObjectURL(blob);
+
+        const link = document.createElement("a");
+
+        link.href = url;
+        link.download = "MyHelp-India-Cropped-PDF.pdf";
+
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+
+        URL.revokeObjectURL(url);
+
+        showStatus(
+            "✅ PDF cropped successfully! Your download has started."
+        );
+
+    }catch(error){
+
+        console.error(error);
+
+        showStatus("");
+
+        alert(
+            "Unable to crop this PDF.\n\n" +
+            (error.message || "Unknown error")
+        );
+
+    }
+
+}
+
+
+function showStatus(message){
+
+    if(message){
+
+        statusBox.textContent = message;
+        statusBox.style.display = "block";
+
+    }else{
+
+        statusBox.style.display = "none";
+
+    }
+
+}
+
+
+function resetForm(){
+
+    selectedFile = null;
+
+    pdfFile.value = "";
+
+    fileInfo.style.display = "none";
+
+    document.getElementById("left").value = 0;
+    document.getElementById("right").value = 0;
+    document.getElementById("top").value = 0;
+    document.getElementById("bottom").value = 0;
+
+    showStatus("");
+
+}
+
+
+function goBack(){
+
+    window.location.href = "index.html";
+
+}
+
+</script>
+
+</body>
+</html>

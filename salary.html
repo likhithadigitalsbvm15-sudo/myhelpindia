@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Salary Calculator - MyHelp India</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:Arial,sans-serif;
+    background:#f4f8ff;
+    color:#222;
+}
+
+header{
+    background:linear-gradient(135deg,#0d47a1,#1976d2,#42a5f5);
+    color:white;
+    text-align:center;
+    padding:25px 15px;
+}
+
+header h1{
+    font-size:30px;
+    margin-bottom:8px;
+}
+
+header p{
+    font-size:15px;
+}
+
+.container{
+    max-width:850px;
+    margin:30px auto;
+    padding:0 15px;
+}
+
+.card{
+    background:white;
+    padding:25px;
+    border-radius:15px;
+    box-shadow:0 5px 20px rgba(0,0,0,.10);
+    margin-bottom:25px;
+}
+
+h2{
+    color:#0d47a1;
+    margin-bottom:20px;
+}
+
+label{
+    display:block;
+    font-weight:bold;
+    margin:15px 0 7px;
+}
+
+input{
+    width:100%;
+    padding:13px;
+    border:1px solid #ccc;
+    border-radius:8px;
+    font-size:16px;
+}
+
+input:focus{
+    outline:none;
+    border-color:#1976d2;
+}
+
+button,.back-btn{
+    border:none;
+    padding:13px 20px;
+    border-radius:8px;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.calculate{
+    background:#1976d2;
+    color:white;
+    margin-top:22px;
+}
+
+.clear{
+    background:#e53935;
+    color:white;
+    margin-top:22px;
+}
+
+.back-btn{
+    background:#555;
+    color:white;
+    text-decoration:none;
+    display:inline-block;
+    margin-top:22px;
+}
+
+.results{
+    display:none;
+}
+
+.result-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:15px;
+}
+
+.result-box{
+    background:#f4f8ff;
+    border:1px solid #dbe7f5;
+    border-radius:12px;
+    padding:20px;
+    text-align:center;
+}
+
+.result-box h3{
+    color:#555;
+    font-size:15px;
+    margin-bottom:10px;
+}
+
+.result-box p{
+    color:#0d47a1;
+    font-size:24px;
+    font-weight:bold;
+}
+
+.savings{
+    margin-top:18px;
+    background:#e8f5e9;
+    border-radius:12px;
+    padding:20px;
+    text-align:center;
+}
+
+.savings h3{
+    margin-bottom:8px;
+}
+
+.savings p{
+    font-size:28px;
+    font-weight:bold;
+    color:#2e7d32;
+}
+
+.info{
+    margin-top:20px;
+    padding:15px;
+    background:#fff8e1;
+    border-radius:10px;
+    line-height:1.6;
+}
+
+@media(max-width:600px){
+    header h1{
+        font-size:24px;
+    }
+
+    .card{
+        padding:18px;
+    }
+
+    .result-grid{
+        grid-template-columns:1fr;
+    }
+
+    button,.back-btn{
+        width:100%;
+        text-align:center;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>MyHelp India</h1>
+    <p>Professional Salary Calculator</p>
+</header>
+
+<div class="container">
+
+    <div class="card">
+
+        <h2>💰 Salary Calculator</h2>
+
+        <label>Monthly Salary (₹)</label>
+        <input type="number" id="salary" placeholder="Example: 30000">
+
+        <label>Monthly Expenses (₹)</label>
+        <input type="number" id="expenses" placeholder="Example: 15000">
+
+        <label>Other Monthly Income (₹)</label>
+        <input type="number" id="otherIncome" placeholder="Example: 5000">
+
+        <button class="calculate" onclick="calculateSalary()">
+            🧮 Calculate Salary
+        </button>
+
+        <button class="clear" onclick="clearCalculator()">
+            🗑️ Clear
+        </button>
+
+        <a href="index.html" class="back-btn">
+            ← Back to MyHelp India
+        </a>
+
+    </div>
+
+    <div class="card results" id="results">
+
+        <h2>📊 Your Salary Summary</h2>
+
+        <div class="result-grid">
+
+            <div class="result-box">
+                <h3>Monthly Income</h3>
+                <p id="monthlyResult">₹0</p>
+            </div>
+
+            <div class="result-box">
+                <h3>Yearly Salary</h3>
+                <p id="yearlyResult">₹0</p>
+            </div>
+
+            <div class="result-box">
+                <h3>Monthly Expenses</h3>
+                <p id="expenseResult">₹0</p>
+            </div>
+
+            <div class="result-box">
+                <h3>Yearly Expenses</h3>
+                <p id="yearExpenseResult">₹0</p>
+            </div>
+
+        </div>
+
+        <div class="savings">
+            <h3>💚 Monthly Savings</h3>
+            <p id="savingResult">₹0</p>
+        </div>
+
+        <div class="savings">
+            <h3>💚 Yearly Savings</h3>
+            <p id="yearSavingResult">₹0</p>
+        </div>
+
+        <div class="info">
+            <strong>💡 Note:</strong>
+            This calculator gives an estimate based on the salary,
+            other income and expenses you enter.
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+function formatRupee(amount){
+
+    return "₹" + amount.toLocaleString("en-IN",{
+        maximumFractionDigits:0
+    });
+
+}
+
+function calculateSalary(){
+
+    let salary =
+        Number(document.getElementById("salary").value) || 0;
+
+    let expenses =
+        Number(document.getElementById("expenses").value) || 0;
+
+    let otherIncome =
+        Number(document.getElementById("otherIncome").value) || 0;
+
+    if(salary <= 0){
+
+        alert("Please enter your monthly salary.");
+
+        return;
+    }
+
+    let monthlyIncome = salary + otherIncome;
+
+    let yearlySalary = salary * 12;
+
+    let yearlyOtherIncome = otherIncome * 12;
+
+    let totalYearlyIncome =
+        yearlySalary + yearlyOtherIncome;
+
+    let yearlyExpenses = expenses * 12;
+
+    let monthlySavings =
+        monthlyIncome - expenses;
+
+    let yearlySavings =
+        totalYearlyIncome - yearlyExpenses;
+
+    document.getElementById("monthlyResult").innerText =
+        formatRupee(monthlyIncome);
+
+    document.getElementById("yearlyResult").innerText =
+        formatRupee(totalYearlyIncome);
+
+    document.getElementById("expenseResult").innerText =
+        formatRupee(expenses);
+
+    document.getElementById("yearExpenseResult").innerText =
+        formatRupee(yearlyExpenses);
+
+    document.getElementById("savingResult").innerText =
+        formatRupee(monthlySavings);
+
+    document.getElementById("yearSavingResult").innerText =
+        formatRupee(yearlySavings);
+
+    document.getElementById("results").style.display =
+        "block";
+
+    document.getElementById("results").scrollIntoView({
+        behavior:"smooth"
+    });
+
+}
+
+function clearCalculator(){
+
+    document.getElementById("salary").value = "";
+
+    document.getElementById("expenses").value = "";
+
+    document.getElementById("otherIncome").value = "";
+
+    document.getElementById("results").style.display =
+        "none";
+
+}
+
+</script>
+
+</body>
+</html>

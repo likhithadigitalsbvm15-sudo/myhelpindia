@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>PDF Metadata Viewer - MyHelp India</title>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+
+<style>
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    font-family:Arial,sans-serif;
+    background:#f4f8ff;
+    color:#222;
+}
+
+.header{
+    background:linear-gradient(135deg,#0d47a1,#1976d2,#42a5f5);
+    color:white;
+    text-align:center;
+    padding:25px 15px;
+}
+
+.header h1{
+    margin:0;
+    font-size:30px;
+}
+
+.header p{
+    margin:8px 0 0;
+    font-size:15px;
+}
+
+.container{
+    max-width:750px;
+    margin:25px auto;
+    padding:15px;
+}
+
+.card{
+    background:white;
+    padding:25px;
+    border-radius:16px;
+    box-shadow:0 5px 20px rgba(0,0,0,.10);
+}
+
+label{
+    display:block;
+    margin-bottom:8px;
+    font-weight:bold;
+}
+
+input[type="file"]{
+    width:100%;
+    padding:13px;
+    border:1px solid #ccc;
+    border-radius:9px;
+    font-size:15px;
+    background:white;
+}
+
+.file-info{
+    display:none;
+    margin-top:15px;
+    padding:13px;
+    background:#f8f9fa;
+    border-radius:8px;
+}
+
+.status{
+    display:none;
+    margin-top:20px;
+    padding:14px;
+    background:#eef6ff;
+    border-left:5px solid #1976d2;
+    border-radius:8px;
+}
+
+.metadata{
+    display:none;
+    margin-top:20px;
+    overflow:hidden;
+    border-radius:10px;
+    border:1px solid #ddd;
+}
+
+.row{
+    display:flex;
+    border-bottom:1px solid #ddd;
+}
+
+.row:last-child{
+    border-bottom:none;
+}
+
+.name{
+    width:40%;
+    padding:13px;
+    background:#f1f5f9;
+    font-weight:bold;
+}
+
+.value{
+    width:60%;
+    padding:13px;
+    word-break:break-word;
+}
+
+button{
+    width:100%;
+    padding:14px;
+    margin-top:20px;
+    border:0;
+    border-radius:9px;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.clear{
+    background:#e9ecef;
+    color:#333;
+}
+
+.back{
+    background:#0d47a1;
+    color:white;
+}
+
+.success{
+    color:#198754;
+    font-weight:bold;
+}
+
+.info{
+    margin-top:20px;
+    padding:13px;
+    background:#fff8e1;
+    border-left:5px solid #ffb300;
+    border-radius:8px;
+    font-size:14px;
+    line-height:1.6;
+}
+
+.footer{
+    text-align:center;
+    padding:25px;
+    color:#666;
+    font-size:13px;
+}
+
+@media(max-width:600px){
+
+    .header h1{
+        font-size:25px;
+    }
+
+    .card{
+        padding:18px;
+    }
+
+    .row{
+        display:block;
+    }
+
+    .name,
+    .value{
+        width:100%;
+    }
+
+    .name{
+        padding-bottom:6px;
+    }
+
+    .value{
+        padding-top:6px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+    <h1>🔍 PDF Metadata Viewer</h1>
+    <p>View PDF file information and document properties</p>
+</div>
+
+<div class="container">
+
+<div class="card">
+
+    <label>Select PDF File</label>
+
+    <input
+        type="file"
+        id="pdfFile"
+        accept=".pdf,application/pdf"
+    >
+
+    <div class="file-info" id="fileInfo"></div>
+
+    <div class="status" id="status">
+        ⏳ Reading PDF information...
+    </div>
+
+    <div class="metadata" id="metadata">
+
+        <div class="row">
+            <div class="name">📄 File Name</div>
+            <div class="value" id="fileName">-</div>
+        </div>
+
+        <div class="row">
+            <div class="name">📦 File Size</div>
+            <div class="value" id="fileSize">-</div>
+        </div>
+
+        <div class="row">
+            <div class="name">📑 Total Pages</div>
+            <div class="value" id="totalPages">-</div>
+        </div>
+
+        <div class="row">
+            <div class="name">📐 Page Size</div>
+            <div class="value" id="pageSize">-</div>
+        </div>
+
+        <div class="row">
+            <div class="name">📝 PDF Title</div>
+            <div class="value" id="title">-</div>
+        </div>
+
+        <div class="row">
+            <div class="name">👤 Author</div>
+            <div class="value" id="author">-</div>
+        </div>
+
+        <div class="row">
+            <div class="name">📋 Subject</div>
+            <div class="value" id="subject">-</div>
+        </div>
+
+        <div class="row">
+            <div class="name">🏷️ Keywords</div>
+            <div class="value" id="keywords">-</div>
+        </div>
+
+        <div class="row">
+            <div class="name">🛠️ Creator</div>
+            <div class="value" id="creator">-</div>
+        </div>
+
+        <div class="row">
+            <div class="name">⚙️ Producer</div>
+            <div class="value" id="producer">-</div>
+        </div>
+
+        <div class="row">
+            <div class="name">📅 Creation Date</div>
+            <div class="value" id="creationDate">-</div>
+        </div>
+
+        <div class="row">
+            <div class="name">✏️ Modification Date</div>
+            <div class="value" id="modDate">-</div>
+        </div>
+
+        <div class="row">
+            <div class="name">🔐 PDF Encrypted</div>
+            <div class="value" id="encrypted">-</div>
+        </div>
+
+    </div>
+
+    <button class="clear" onclick="clearAll()">
+        🗑️ Clear
+    </button>
+
+    <button class="back" onclick="goBack()">
+        ← Back to MyHelp India
+    </button>
+
+    <div class="info">
+        <b>ℹ️ Privacy:</b><br>
+        Your PDF is read directly in your browser.
+        The file is not uploaded to a server by this page.
+        <br><br>
+        Some PDFs may not contain title, author, keywords or date information.
+    </div>
+
+</div>
+
+</div>
+
+<div class="footer">
+    © 2026 MyHelp India • Simple & Helpful Tools
+</div>
+
+<script>
+
+pdfjsLib.GlobalWorkerOptions.workerSrc =
+"https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+
+document.getElementById("pdfFile").addEventListener(
+    "change",
+    readMetadata
+);
+
+async function readMetadata(){
+
+    const file =
+        document.getElementById("pdfFile").files[0];
+
+    if(!file){
+        return;
+    }
+
+    const fileInfo =
+        document.getElementById("fileInfo");
+
+    const status =
+        document.getElementById("status");
+
+    const metadata =
+        document.getElementById("metadata");
+
+    fileInfo.style.display = "block";
+
+    fileInfo.innerHTML =
+        "<b>Selected:</b> " +
+        escapeHTML(file.name) +
+        "<br><b>Size:</b> " +
+        formatBytes(file.size);
+
+    status.style.display = "block";
+
+    status.innerHTML =
+        "⏳ Reading PDF metadata...";
+
+    metadata.style.display = "none";
+
+    try{
+
+        const arrayBuffer =
+            await file.arrayBuffer();
+
+        const pdf =
+            await pdfjsLib.getDocument({
+                data:arrayBuffer
+            }).promise;
+
+        const firstPage =
+            await pdf.getPage(1);
+
+        const viewport =
+            firstPage.getViewport({
+                scale:1
+            });
+
+        const width =
+            viewport.viewBox[2] -
+            viewport.viewBox[0];
+
+        const height =
+            viewport.viewBox[3] -
+            viewport.viewBox[1];
+
+        const pageWidth =
+            (width / 72).toFixed(2);
+
+        const pageHeight =
+            (height / 72).toFixed(2);
+
+        let pageSize =
+            width.toFixed(0) +
+            " × " +
+            height.toFixed(0) +
+            " points";
+
+        pageSize +=
+            " (" +
+            pageWidth +
+            " × " +
+            pageHeight +
+            " inches)";
+
+        const meta =
+            await pdf.getMetadata()
+            .catch(function(){
+                return {
+                    info:{}
+                };
+            });
+
+        const info =
+            meta.info || {};
+
+        document.getElementById("fileName")
+            .textContent = file.name;
+
+        document.getElementById("fileSize")
+            .textContent = formatBytes(file.size);
+
+        document.getElementById("totalPages")
+            .textContent = pdf.numPages;
+
+        document.getElementById("pageSize")
+            .textContent = pageSize;
+
+        document.getElementById("title")
+            .textContent = valueOrDash(info.Title);
+
+        document.getElementById("author")
+            .textContent = valueOrDash(info.Author);
+
+        document.getElementById("subject")
+            .textContent = valueOrDash(info.Subject);
+
+        document.getElementById("keywords")
+            .textContent = valueOrDash(info.Keywords);
+
+        document.getElementById("creator")
+            .textContent = valueOrDash(info.Creator);
+
+        document.getElementById("producer")
+            .textContent = valueOrDash(info.Producer);
+
+        document.getElementById("creationDate")
+            .textContent =
+            formatPDFDate(info.CreationDate);
+
+        document.getElementById("modDate")
+            .textContent =
+            formatPDFDate(info.ModDate);
+
+        document.getElementById("encrypted")
+            .textContent =
+            pdf._pdfInfo &&
+            pdf._pdfInfo.info &&
+            pdf._pdfInfo.info.IsEncrypted
+            ? "Yes"
+            : "No / Not detected";
+
+        status.innerHTML =
+            "✅ <span class='success'>PDF information loaded successfully!</span>";
+
+        metadata.style.display = "block";
+
+    }
+    catch(error){
+
+        console.error(error);
+
+        status.innerHTML =
+            "❌ Unable to read this PDF. " +
+            "Please select a valid PDF file.";
+
+        metadata.style.display = "none";
+    }
+
+}
+
+function valueOrDash(value){
+
+    if(
+        value === undefined ||
+        value === null ||
+        String(value).trim() === ""
+    ){
+        return "-";
+    }
+
+    return String(value);
+}
+
+function formatPDFDate(value){
+
+    if(!value){
+        return "-";
+    }
+
+    const text =
+        String(value);
+
+    if(text.startsWith("D:")){
+
+        const year =
+            text.substring(2,6);
+
+        const month =
+            text.substring(6,8);
+
+        const day =
+            text.substring(8,10);
+
+        const hour =
+            text.substring(10,12);
+
+        const minute =
+            text.substring(12,14);
+
+        if(
+            year &&
+            month &&
+            day
+        ){
+
+            return (
+                year +
+                "-" +
+                month +
+                "-" +
+                day +
+                (
+                    hour
+                    ? " " + hour + ":" + minute
+                    : ""
+                )
+            );
+        }
+    }
+
+    return text;
+}
+
+function clearAll(){
+
+    document.getElementById("pdfFile").value = "";
+
+    document.getElementById("fileInfo").style.display =
+        "none";
+
+    document.getElementById("status").style.display =
+        "none";
+
+    document.getElementById("metadata").style.display =
+        "none";
+
+}
+
+function goBack(){
+
+    window.location.href =
+        "index.html";
+
+}
+
+function formatBytes(bytes){
+
+    if(bytes === 0){
+        return "0 Bytes";
+    }
+
+    const sizes =
+        ["Bytes","KB","MB","GB"];
+
+    const i =
+        Math.floor(
+            Math.log(bytes) /
+            Math.log(1024)
+        );
+
+    return (
+        Math.round(
+            bytes /
+            Math.pow(1024,i) *
+            100
+        ) / 100
+    ) +
+    " " +
+    sizes[i];
+}
+
+function escapeHTML(text){
+
+    return text.replace(
+        /[&<>"']/g,
+        function(char){
+
+            return {
+                "&":"&amp;",
+                "<":"&lt;",
+                ">":"&gt;",
+                '"':"&quot;",
+                "'":"&#039;"
+            }[char];
+
+        }
+    );
+
+}
+
+</script>
+
+</body>
+</html>

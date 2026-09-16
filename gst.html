@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>GST Calculator - MyHelp India</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:Arial,sans-serif;
+    background:#f4f8ff;
+    color:#222;
+}
+
+header{
+    background:linear-gradient(135deg,#0d47a1,#1976d2,#42a5f5);
+    color:white;
+    text-align:center;
+    padding:25px 15px;
+}
+
+header h1{
+    font-size:30px;
+    margin-bottom:8px;
+}
+
+header p{
+    font-size:15px;
+}
+
+.container{
+    max-width:850px;
+    margin:30px auto;
+    padding:0 15px;
+}
+
+.card{
+    background:white;
+    padding:25px;
+    border-radius:15px;
+    box-shadow:0 5px 20px rgba(0,0,0,.10);
+    margin-bottom:25px;
+}
+
+h2{
+    color:#0d47a1;
+    margin-bottom:20px;
+}
+
+label{
+    display:block;
+    font-weight:bold;
+    margin:15px 0 7px;
+}
+
+input,select{
+    width:100%;
+    padding:14px;
+    border:1px solid #ccc;
+    border-radius:8px;
+    font-size:16px;
+    background:white;
+}
+
+input:focus,select:focus{
+    outline:none;
+    border-color:#1976d2;
+}
+
+.button-area{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-top:22px;
+}
+
+button,.back-btn{
+    border:none;
+    padding:13px 20px;
+    border-radius:8px;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.calculate{
+    background:#1976d2;
+    color:white;
+}
+
+.clear{
+    background:#e53935;
+    color:white;
+}
+
+.back-btn{
+    background:#555;
+    color:white;
+    text-decoration:none;
+    display:inline-block;
+}
+
+.results{
+    display:none;
+}
+
+.gst-main{
+    text-align:center;
+    background:#e8f5e9;
+    border-radius:14px;
+    padding:25px;
+    margin-bottom:20px;
+}
+
+.gst-main h3{
+    color:#2e7d32;
+    margin-bottom:10px;
+}
+
+.gst-main p{
+    font-size:34px;
+    font-weight:bold;
+    color:#1b5e20;
+}
+
+.result-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:15px;
+}
+
+.result-box{
+    background:#f4f8ff;
+    border:1px solid #dbe7f5;
+    border-radius:12px;
+    padding:20px;
+    text-align:center;
+}
+
+.result-box h3{
+    color:#555;
+    font-size:15px;
+    margin-bottom:10px;
+}
+
+.result-box p{
+    color:#0d47a1;
+    font-size:23px;
+    font-weight:bold;
+}
+
+.mode-box{
+    display:flex;
+    gap:15px;
+    margin-top:15px;
+}
+
+.mode-box label{
+    display:flex;
+    align-items:center;
+    gap:7px;
+    font-weight:normal;
+    margin:0;
+}
+
+.mode-box input{
+    width:auto;
+}
+
+.info{
+    margin-top:20px;
+    background:#fff8e1;
+    padding:15px;
+    border-radius:10px;
+    line-height:1.6;
+}
+
+@media(max-width:600px){
+
+    header h1{
+        font-size:24px;
+    }
+
+    .card{
+        padding:18px;
+    }
+
+    .result-grid{
+        grid-template-columns:1fr;
+    }
+
+    .button-area{
+        flex-direction:column;
+    }
+
+    button,.back-btn{
+        width:100%;
+        text-align:center;
+    }
+
+    .gst-main p{
+        font-size:28px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>MyHelp India</h1>
+    <p>Professional GST Calculator</p>
+</header>
+
+<div class="container">
+
+    <div class="card">
+
+        <h2>🧾 GST Calculator</h2>
+
+        <label>Amount (₹)</label>
+
+        <input
+            type="number"
+            id="amount"
+            placeholder="Example: 10000"
+            min="0"
+            step="0.01"
+        >
+
+        <label>GST Rate (%)</label>
+
+        <select id="gstRate">
+            <option value="0">0%</option>
+            <option value="3">3%</option>
+            <option value="5">5%</option>
+            <option value="12">12%</option>
+            <option value="18" selected>18%</option>
+            <option value="28">28%</option>
+        </select>
+
+        <label>Calculation Type</label>
+
+        <div class="mode-box">
+
+            <label>
+                <input
+                    type="radio"
+                    name="mode"
+                    value="add"
+                    checked
+                >
+                Add GST
+            </label>
+
+            <label>
+                <input
+                    type="radio"
+                    name="mode"
+                    value="remove"
+                >
+                Remove GST
+            </label>
+
+        </div>
+
+        <div class="button-area">
+
+            <button
+                class="calculate"
+                onclick="calculateGST()"
+            >
+                🧮 Calculate GST
+            </button>
+
+            <button
+                class="clear"
+                onclick="clearCalculator()"
+            >
+                🗑️ Clear
+            </button>
+
+            <a
+                href="index.html"
+                class="back-btn"
+            >
+                ← Back to MyHelp India
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <div class="card results" id="results">
+
+        <h2>📊 GST Summary</h2>
+
+        <div class="gst-main">
+
+            <h3>Final Amount</h3>
+
+            <p id="finalAmount">₹0</p>
+
+        </div>
+
+        <div class="result-grid">
+
+            <div class="result-box">
+
+                <h3>Original Amount</h3>
+
+                <p id="originalAmount">₹0</p>
+
+            </div>
+
+            <div class="result-box">
+
+                <h3>GST Amount</h3>
+
+                <p id="gstAmount">₹0</p>
+
+            </div>
+
+            <div class="result-box">
+
+                <h3>GST Rate</h3>
+
+                <p id="showRate">0%</p>
+
+            </div>
+
+            <div class="result-box">
+
+                <h3>Calculation</h3>
+
+                <p id="showType">Add GST</p>
+
+            </div>
+
+        </div>
+
+        <div class="info">
+
+            <strong>💡 Note:</strong>
+            This calculator is for general GST calculation.
+            Actual tax treatment may vary depending on the
+            product, service and applicable tax rules.
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+function formatRupee(amount){
+
+    return "₹" + amount.toLocaleString("en-IN",{
+        minimumFractionDigits:2,
+        maximumFractionDigits:2
+    });
+
+}
+
+
+function calculateGST(){
+
+    let amount =
+        Number(document.getElementById("amount").value);
+
+    let rate =
+        Number(document.getElementById("gstRate").value);
+
+    let mode =
+        document.querySelector(
+            'input[name="mode"]:checked'
+        ).value;
+
+
+    if(amount <= 0){
+
+        alert("Please enter a valid amount.");
+
+        return;
+    }
+
+
+    let gstAmount;
+    let finalAmount;
+    let originalAmount;
+
+
+    if(mode === "add"){
+
+        originalAmount = amount;
+
+        gstAmount =
+            amount * rate / 100;
+
+        finalAmount =
+            amount + gstAmount;
+
+    }else{
+
+        finalAmount = amount;
+
+        originalAmount =
+            amount / (1 + rate / 100);
+
+        gstAmount =
+            amount - originalAmount;
+
+    }
+
+
+    document.getElementById("originalAmount").innerText =
+        formatRupee(originalAmount);
+
+
+    document.getElementById("gstAmount").innerText =
+        formatRupee(gstAmount);
+
+
+    document.getElementById("finalAmount").innerText =
+        formatRupee(finalAmount);
+
+
+    document.getElementById("showRate").innerText =
+        rate + "%";
+
+
+    document.getElementById("showType").innerText =
+        mode === "add" ? "Add GST" : "Remove GST";
+
+
+    document.getElementById("results").style.display =
+        "block";
+
+
+    document.getElementById("results").scrollIntoView({
+        behavior:"smooth"
+    });
+
+}
+
+
+function clearCalculator(){
+
+    document.getElementById("amount").value = "";
+
+    document.getElementById("gstRate").value = "18";
+
+    document.querySelector(
+        'input[name="mode"][value="add"]'
+    ).checked = true;
+
+    document.getElementById("results").style.display =
+        "none";
+
+}
+
+</script>
+
+</body>
+</html>

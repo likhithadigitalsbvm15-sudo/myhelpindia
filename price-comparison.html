@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Price Comparison - MyHelp India</title>
+<meta name="description" content="Compare product prices from different shops and find the lowest price easily.">
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f8ff;
+    color: #222;
+}
+
+.header {
+    background: linear-gradient(135deg, #0d47a1, #1976d2, #42a5f5);
+    color: white;
+    text-align: center;
+    padding: 22px 15px;
+}
+
+.header h1 {
+    font-size: 28px;
+    margin-bottom: 6px;
+}
+
+.header p {
+    font-size: 15px;
+}
+
+.container {
+    max-width: 700px;
+    margin: 30px auto;
+    padding: 0 15px;
+}
+
+.card {
+    background: white;
+    padding: 25px;
+    border-radius: 18px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.10);
+}
+
+.title {
+    text-align: center;
+    margin-bottom: 22px;
+}
+
+.title h2 {
+    color: #0d47a1;
+    margin-bottom: 6px;
+}
+
+.title p {
+    color: #666;
+    font-size: 14px;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    margin: 15px 0 7px;
+}
+
+input {
+    width: 100%;
+    padding: 13px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    font-size: 16px;
+}
+
+.shop {
+    background: #f8fbff;
+    border: 1px solid #dce8f5;
+    padding: 15px;
+    border-radius: 12px;
+    margin-top: 15px;
+}
+
+.shop h3 {
+    color: #1976d2;
+    margin-bottom: 10px;
+}
+
+.compare-btn {
+    width: 100%;
+    margin-top: 22px;
+    padding: 14px;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #1976d2, #0d47a1);
+    color: white;
+    font-size: 17px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.compare-btn:hover {
+    opacity: 0.9;
+}
+
+.result {
+    display: none;
+    margin-top: 25px;
+    padding: 20px;
+    background: #eef6ff;
+    border-radius: 14px;
+}
+
+.result h3 {
+    text-align: center;
+    color: #0d47a1;
+    margin-bottom: 18px;
+}
+
+.price-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.price-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 13px;
+    background: white;
+    border-radius: 9px;
+    border: 1px solid #ddd;
+}
+
+.lowest {
+    border: 2px solid #2e7d32;
+    background: #e8f5e9;
+}
+
+.lowest-badge {
+    color: #2e7d32;
+    font-weight: bold;
+    font-size: 13px;
+}
+
+.best {
+    text-align: center;
+    margin-top: 18px;
+    padding: 15px;
+    background: #e8f5e9;
+    border-radius: 10px;
+    color: #1b5e20;
+}
+
+.best strong {
+    font-size: 20px;
+}
+
+.saving {
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+.info {
+    margin-top: 20px;
+    padding: 13px;
+    background: #fff8e1;
+    border-left: 4px solid #ffb300;
+    border-radius: 8px;
+    font-size: 13px;
+    color: #555;
+}
+
+.buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 18px;
+}
+
+.clear-btn,
+.back-btn {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    border-radius: 9px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.clear-btn {
+    background: #eeeeee;
+    color: #333;
+}
+
+.back-btn {
+    background: #e3f2fd;
+    color: #0d47a1;
+}
+
+.footer {
+    text-align: center;
+    margin: 25px 10px;
+    color: #777;
+    font-size: 13px;
+}
+
+@media (max-width: 600px) {
+    .card {
+        padding: 18px;
+    }
+
+    .header h1 {
+        font-size: 24px;
+    }
+
+    .price-item {
+        font-size: 14px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+    <h1>MyHelp India</h1>
+    <p>Your Life • Our Support</p>
+</div>
+
+<div class="container">
+
+<div class="card">
+
+    <div class="title">
+        <h2>🛒 Price Comparison</h2>
+        <p>Compare prices and find the best deal</p>
+    </div>
+
+    <label>Product Name</label>
+    <input type="text" id="product" placeholder="Example: Mobile Phone">
+
+    <div class="shop">
+        <h3>🏪 Shop 1</h3>
+
+        <label>Shop Name</label>
+        <input type="text" id="shop1" placeholder="Enter shop name">
+
+        <label>Price (₹)</label>
+        <input type="number" id="price1" placeholder="Enter price" min="0">
+    </div>
+
+    <div class="shop">
+        <h3>🏪 Shop 2</h3>
+
+        <label>Shop Name</label>
+        <input type="text" id="shop2" placeholder="Enter shop name">
+
+        <label>Price (₹)</label>
+        <input type="number" id="price2" placeholder="Enter price" min="0">
+    </div>
+
+    <div class="shop">
+        <h3>🏪 Shop 3</h3>
+
+        <label>Shop Name</label>
+        <input type="text" id="shop3" placeholder="Enter shop name">
+
+        <label>Price (₹)</label>
+        <input type="number" id="price3" placeholder="Enter price" min="0">
+    </div>
+
+    <button class="compare-btn" onclick="comparePrices()">
+        🔍 Compare Prices
+    </button>
+
+    <div class="result" id="result">
+
+        <h3>📊 Price Comparison Result</h3>
+
+        <div class="price-list" id="priceList"></div>
+
+        <div class="best">
+            🏆 Best Price<br><br>
+            <strong id="bestShop"></strong>
+            <br>
+            <span id="bestPrice"></span>
+
+            <div class="saving" id="saving"></div>
+        </div>
+
+    </div>
+
+    <div class="info">
+        ℹ️ Enter prices from different shops to compare them.
+        This tool compares the prices entered by you.
+    </div>
+
+    <div class="buttons">
+        <button class="clear-btn" onclick="clearAll()">
+            Clear
+        </button>
+
+        <button class="back-btn" onclick="goHome()">
+            ← MyHelp India
+        </button>
+    </div>
+
+</div>
+
+</div>
+
+<div class="footer">
+    © 2026 MyHelp India • Your Life • Our Support
+</div>
+
+
+<script>
+
+function comparePrices() {
+
+    let product = document.getElementById("product").value.trim();
+
+    let shop1 = document.getElementById("shop1").value.trim() || "Shop 1";
+    let shop2 = document.getElementById("shop2").value.trim() || "Shop 2";
+    let shop3 = document.getElementById("shop3").value.trim() || "Shop 3";
+
+    let price1 = parseFloat(document.getElementById("price1").value);
+    let price2 = parseFloat(document.getElementById("price2").value);
+    let price3 = parseFloat(document.getElementById("price3").value);
+
+    if (!product) {
+        alert("Please enter the product name.");
+        return;
+    }
+
+    if (isNaN(price1) || isNaN(price2) || isNaN(price3)) {
+        alert("Please enter prices for all three shops.");
+        return;
+    }
+
+    let shops = [
+        {name: shop1, price: price1},
+        {name: shop2, price: price2},
+        {name: shop3, price: price3}
+    ];
+
+    let lowest = Math.min(price1, price2, price3);
+    let highest = Math.max(price1, price2, price3);
+
+    let bestShop = shops.find(shop => shop.price === lowest);
+
+    shops.sort((a, b) => a.price - b.price);
+
+    let list = "";
+
+    shops.forEach((shop, index) => {
+
+        let lowestClass = shop.price === lowest ? "lowest" : "";
+
+        let badge = shop.price === lowest
+            ? '<span class="lowest-badge">✓ LOWEST</span>'
+            : '';
+
+        list += `
+            <div class="price-item ${lowestClass}">
+                <div>
+                    <strong>${shop.name}</strong><br>
+                    ${badge}
+                </div>
+
+                <strong>₹${shop.price.toLocaleString("en-IN", {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                })}</strong>
+            </div>
+        `;
+    });
+
+    document.getElementById("priceList").innerHTML = list;
+
+    document.getElementById("bestShop").innerText =
+        bestShop.name;
+
+    document.getElementById("bestPrice").innerText =
+        "₹" + bestShop.price.toLocaleString("en-IN", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
+
+    let saving = highest - lowest;
+
+    document.getElementById("saving").innerText =
+        "You can save up to ₹" +
+        saving.toLocaleString("en-IN", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        }) +
+        " compared with the highest price.";
+
+    document.getElementById("result").style.display = "block";
+}
+
+
+function clearAll() {
+
+    document.getElementById("product").value = "";
+    document.getElementById("shop1").value = "";
+    document.getElementById("shop2").value = "";
+    document.getElementById("shop3").value = "";
+    document.getElementById("price1").value = "";
+    document.getElementById("price2").value = "";
+    document.getElementById("price3").value = "";
+
+    document.getElementById("result").style.display = "none";
+}
+
+
+function goHome() {
+
+    window.location.href = "index.html";
+}
+
+</script>
+
+</body>
+</html>

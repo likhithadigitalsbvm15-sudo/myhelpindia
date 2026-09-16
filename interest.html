@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Interest Calculator - MyHelp India</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:Arial,sans-serif;
+    background:#f4f8ff;
+    color:#222;
+}
+
+header{
+    background:linear-gradient(135deg,#0d47a1,#1976d2,#42a5f5);
+    color:white;
+    text-align:center;
+    padding:25px 15px;
+}
+
+header h1{
+    font-size:30px;
+    margin-bottom:8px;
+}
+
+header p{
+    font-size:15px;
+}
+
+.container{
+    max-width:850px;
+    margin:30px auto;
+    padding:0 15px;
+}
+
+.card{
+    background:white;
+    padding:25px;
+    border-radius:15px;
+    box-shadow:0 5px 20px rgba(0,0,0,.10);
+    margin-bottom:25px;
+}
+
+h2{
+    color:#0d47a1;
+    margin-bottom:20px;
+}
+
+label{
+    display:block;
+    font-weight:bold;
+    margin:15px 0 7px;
+}
+
+input,select{
+    width:100%;
+    padding:14px;
+    border:1px solid #ccc;
+    border-radius:8px;
+    font-size:16px;
+    background:white;
+}
+
+input:focus,select:focus{
+    outline:none;
+    border-color:#1976d2;
+}
+
+.button-area{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-top:22px;
+}
+
+button,.back-btn{
+    border:none;
+    padding:13px 20px;
+    border-radius:8px;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.calculate{
+    background:#1976d2;
+    color:white;
+}
+
+.clear{
+    background:#e53935;
+    color:white;
+}
+
+.back-btn{
+    background:#555;
+    color:white;
+    text-decoration:none;
+    display:inline-block;
+}
+
+.results{
+    display:none;
+}
+
+.interest-main{
+    text-align:center;
+    background:#e8f5e9;
+    border-radius:14px;
+    padding:25px;
+    margin-bottom:20px;
+}
+
+.interest-main h3{
+    color:#2e7d32;
+    margin-bottom:10px;
+}
+
+.interest-main p{
+    font-size:34px;
+    font-weight:bold;
+    color:#1b5e20;
+}
+
+.result-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:15px;
+}
+
+.result-box{
+    background:#f4f8ff;
+    border:1px solid #dbe7f5;
+    border-radius:12px;
+    padding:20px;
+    text-align:center;
+}
+
+.result-box h3{
+    color:#555;
+    font-size:15px;
+    margin-bottom:10px;
+}
+
+.result-box p{
+    color:#0d47a1;
+    font-size:23px;
+    font-weight:bold;
+}
+
+.info{
+    margin-top:20px;
+    background:#fff8e1;
+    padding:15px;
+    border-radius:10px;
+    line-height:1.6;
+}
+
+@media(max-width:600px){
+
+    header h1{
+        font-size:24px;
+    }
+
+    .card{
+        padding:18px;
+    }
+
+    .result-grid{
+        grid-template-columns:1fr;
+    }
+
+    .button-area{
+        flex-direction:column;
+    }
+
+    button,.back-btn{
+        width:100%;
+        text-align:center;
+    }
+
+    .interest-main p{
+        font-size:28px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>MyHelp India</h1>
+    <p>Professional Interest Calculator</p>
+</header>
+
+<div class="container">
+
+    <div class="card">
+
+        <h2>💰 Interest Calculator</h2>
+
+        <label>Principal Amount (₹)</label>
+
+        <input
+            type="number"
+            id="principal"
+            placeholder="Example: 100000"
+            min="0"
+            step="0.01"
+        >
+
+        <label>Annual Interest Rate (%)</label>
+
+        <input
+            type="number"
+            id="rate"
+            placeholder="Example: 10"
+            min="0"
+            step="0.01"
+        >
+
+        <label>Time Period</label>
+
+        <input
+            type="number"
+            id="time"
+            placeholder="Example: 2"
+            min="0"
+            step="0.01"
+        >
+
+        <select id="timeUnit">
+            <option value="years">Years</option>
+            <option value="months">Months</option>
+        </select>
+
+        <label>Interest Type</label>
+
+        <select id="interestType">
+            <option value="simple">Simple Interest</option>
+            <option value="compound">Compound Interest</option>
+        </select>
+
+        <div class="button-area">
+
+            <button
+                class="calculate"
+                onclick="calculateInterest()"
+            >
+                🧮 Calculate Interest
+            </button>
+
+            <button
+                class="clear"
+                onclick="clearCalculator()"
+            >
+                🗑️ Clear
+            </button>
+
+            <a
+                href="index.html"
+                class="back-btn"
+            >
+                ← Back to MyHelp India
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <div class="card results" id="results">
+
+        <h2>📊 Interest Summary</h2>
+
+        <div class="interest-main">
+
+            <h3>Total Interest</h3>
+
+            <p id="interestAmount">₹0</p>
+
+        </div>
+
+        <div class="result-grid">
+
+            <div class="result-box">
+
+                <h3>Principal Amount</h3>
+
+                <p id="showPrincipal">₹0</p>
+
+            </div>
+
+            <div class="result-box">
+
+                <h3>Total Amount</h3>
+
+                <p id="totalAmount">₹0</p>
+
+            </div>
+
+            <div class="result-box">
+
+                <h3>Interest Rate</h3>
+
+                <p id="showRate">0%</p>
+
+            </div>
+
+            <div class="result-box">
+
+                <h3>Interest Type</h3>
+
+                <p id="showType">Simple</p>
+
+            </div>
+
+        </div>
+
+        <div class="info">
+
+            <strong>💡 Note:</strong>
+            This calculator provides an estimate. Actual interest
+            may vary depending on the bank, lender and applicable
+            terms and conditions.
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+function formatRupee(amount){
+
+    return "₹" + amount.toLocaleString("en-IN",{
+        minimumFractionDigits:2,
+        maximumFractionDigits:2
+    });
+
+}
+
+
+function calculateInterest(){
+
+    let principal =
+        Number(document.getElementById("principal").value);
+
+    let rate =
+        Number(document.getElementById("rate").value);
+
+    let time =
+        Number(document.getElementById("time").value);
+
+    let timeUnit =
+        document.getElementById("timeUnit").value;
+
+    let interestType =
+        document.getElementById("interestType").value;
+
+
+    if(principal <= 0){
+
+        alert("Please enter a valid principal amount.");
+
+        return;
+    }
+
+
+    if(rate < 0){
+
+        alert("Please enter a valid interest rate.");
+
+        return;
+    }
+
+
+    if(time <= 0){
+
+        alert("Please enter a valid time period.");
+
+        return;
+    }
+
+
+    let years = time;
+
+
+    if(timeUnit === "months"){
+
+        years = time / 12;
+
+    }
+
+
+    let interest = 0;
+
+    let total = 0;
+
+
+    if(interestType === "simple"){
+
+        interest =
+            principal * rate * years / 100;
+
+        total =
+            principal + interest;
+
+    }else{
+
+        total =
+            principal *
+            Math.pow(
+                1 + rate / 100,
+                years
+            );
+
+        interest =
+            total - principal;
+
+    }
+
+
+    document.getElementById("interestAmount").innerText =
+        formatRupee(interest);
+
+
+    document.getElementById("showPrincipal").innerText =
+        formatRupee(principal);
+
+
+    document.getElementById("totalAmount").innerText =
+        formatRupee(total);
+
+
+    document.getElementById("showRate").innerText =
+        rate + "%";
+
+
+    document.getElementById("showType").innerText =
+        interestType === "simple"
+        ? "Simple Interest"
+        : "Compound Interest";
+
+
+    document.getElementById("results").style.display =
+        "block";
+
+
+    document.getElementById("results").scrollIntoView({
+        behavior:"smooth"
+    });
+
+}
+
+
+function clearCalculator(){
+
+    document.getElementById("principal").value = "";
+
+    document.getElementById("rate").value = "";
+
+    document.getElementById("time").value = "";
+
+    document.getElementById("timeUnit").value = "years";
+
+    document.getElementById("interestType").value = "simple";
+
+    document.getElementById("results").style.display =
+        "none";
+
+}
+
+</script>
+
+</body>
+</html>

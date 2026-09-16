@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Discount Calculator - MyHelp India</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:Arial,sans-serif;
+    background:#f4f8ff;
+    color:#222;
+}
+
+header{
+    background:linear-gradient(135deg,#0d47a1,#1976d2,#42a5f5);
+    color:white;
+    text-align:center;
+    padding:25px 15px;
+}
+
+header h1{
+    font-size:30px;
+    margin-bottom:8px;
+}
+
+header p{
+    font-size:15px;
+}
+
+.container{
+    max-width:850px;
+    margin:30px auto;
+    padding:0 15px;
+}
+
+.card{
+    background:white;
+    padding:25px;
+    border-radius:15px;
+    box-shadow:0 5px 20px rgba(0,0,0,.10);
+    margin-bottom:25px;
+}
+
+h2{
+    color:#0d47a1;
+    margin-bottom:20px;
+}
+
+label{
+    display:block;
+    font-weight:bold;
+    margin:15px 0 7px;
+}
+
+input{
+    width:100%;
+    padding:14px;
+    border:1px solid #ccc;
+    border-radius:8px;
+    font-size:16px;
+}
+
+input:focus{
+    outline:none;
+    border-color:#1976d2;
+}
+
+.button-area{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-top:22px;
+}
+
+button,.back-btn{
+    border:none;
+    padding:13px 20px;
+    border-radius:8px;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.calculate{
+    background:#1976d2;
+    color:white;
+}
+
+.clear{
+    background:#e53935;
+    color:white;
+}
+
+.back-btn{
+    background:#555;
+    color:white;
+    text-decoration:none;
+    display:inline-block;
+}
+
+.results{
+    display:none;
+}
+
+.final-price{
+    text-align:center;
+    background:#e8f5e9;
+    border-radius:14px;
+    padding:25px;
+    margin-bottom:20px;
+}
+
+.final-price h3{
+    color:#2e7d32;
+    margin-bottom:10px;
+}
+
+.final-price p{
+    font-size:36px;
+    font-weight:bold;
+    color:#1b5e20;
+}
+
+.result-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:15px;
+}
+
+.result-box{
+    background:#f4f8ff;
+    border:1px solid #dbe7f5;
+    border-radius:12px;
+    padding:20px;
+    text-align:center;
+}
+
+.result-box h3{
+    color:#555;
+    font-size:15px;
+    margin-bottom:10px;
+}
+
+.result-box p{
+    color:#0d47a1;
+    font-size:22px;
+    font-weight:bold;
+}
+
+.info{
+    margin-top:20px;
+    background:#fff8e1;
+    padding:15px;
+    border-radius:10px;
+    line-height:1.6;
+}
+
+@media(max-width:600px){
+
+    header h1{
+        font-size:24px;
+    }
+
+    .card{
+        padding:18px;
+    }
+
+    .result-grid{
+        grid-template-columns:1fr;
+    }
+
+    .button-area{
+        flex-direction:column;
+    }
+
+    button,.back-btn{
+        width:100%;
+        text-align:center;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>MyHelp India</h1>
+    <p>Professional Discount Calculator</p>
+</header>
+
+<div class="container">
+
+    <div class="card">
+
+        <h2>🏷️ Discount Calculator</h2>
+
+        <label>Original Price (₹)</label>
+
+        <input
+            type="number"
+            id="price"
+            placeholder="Example: 1000"
+            min="0"
+            step="0.01"
+        >
+
+        <label>Discount (%)</label>
+
+        <input
+            type="number"
+            id="discount"
+            placeholder="Example: 20"
+            min="0"
+            max="100"
+            step="0.01"
+        >
+
+        <div class="button-area">
+
+            <button
+                class="calculate"
+                onclick="calculateDiscount()"
+            >
+                🧮 Calculate Discount
+            </button>
+
+            <button
+                class="clear"
+                onclick="clearCalculator()"
+            >
+                🗑️ Clear
+            </button>
+
+            <a
+                href="index.html"
+                class="back-btn"
+            >
+                ← Back to MyHelp India
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <div class="card results" id="results">
+
+        <h2>📊 Discount Result</h2>
+
+        <div class="final-price">
+
+            <h3>Final Price</h3>
+
+            <p id="finalPrice">₹0</p>
+
+        </div>
+
+        <div class="result-grid">
+
+            <div class="result-box">
+
+                <h3>Original Price</h3>
+
+                <p id="showPrice">₹0</p>
+
+            </div>
+
+            <div class="result-box">
+
+                <h3>Discount Rate</h3>
+
+                <p id="showDiscount">0%</p>
+
+            </div>
+
+            <div class="result-box">
+
+                <h3>Discount Amount</h3>
+
+                <p id="discountAmount">₹0</p>
+
+            </div>
+
+            <div class="result-box">
+
+                <h3>You Save</h3>
+
+                <p id="saving">₹0</p>
+
+            </div>
+
+        </div>
+
+        <div class="info">
+
+            <strong>💡 Example:</strong><br>
+            Original Price = ₹1,000<br>
+            Discount = 20%<br>
+            Discount Amount = ₹200<br>
+            Final Price = ₹800
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+function formatRupee(amount){
+
+    return "₹" + amount.toLocaleString("en-IN",{
+        minimumFractionDigits:2,
+        maximumFractionDigits:2
+    });
+
+}
+
+
+function calculateDiscount(){
+
+    let price =
+        Number(document.getElementById("price").value);
+
+    let discount =
+        Number(document.getElementById("discount").value);
+
+
+    if(price <= 0){
+
+        alert("Please enter a valid original price.");
+
+        return;
+    }
+
+
+    if(discount < 0 || discount > 100){
+
+        alert("Please enter a discount between 0% and 100%.");
+
+        return;
+    }
+
+
+    let discountAmount =
+        (price * discount) / 100;
+
+    let finalPrice =
+        price - discountAmount;
+
+
+    document.getElementById("finalPrice").innerText =
+        formatRupee(finalPrice);
+
+
+    document.getElementById("showPrice").innerText =
+        formatRupee(price);
+
+
+    document.getElementById("showDiscount").innerText =
+        discount + "%";
+
+
+    document.getElementById("discountAmount").innerText =
+        formatRupee(discountAmount);
+
+
+    document.getElementById("saving").innerText =
+        formatRupee(discountAmount);
+
+
+    document.getElementById("results").style.display =
+        "block";
+
+
+    document.getElementById("results").scrollIntoView({
+        behavior:"smooth"
+    });
+
+}
+
+
+function clearCalculator(){
+
+    document.getElementById("price").value = "";
+
+    document.getElementById("discount").value = "";
+
+    document.getElementById("results").style.display =
+        "none";
+
+}
+
+</script>
+
+</body>
+</html>

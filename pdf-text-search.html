@@ -1,0 +1,1139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>PDF Text Search - MyHelp India</title>
+
+<meta name="description" content="Search words and sentences inside PDF files online for free with MyHelp India PDF Text Search.">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:Arial,Helvetica,sans-serif;
+    background:#f4f8ff;
+    color:#172033;
+}
+
+header{
+    background:linear-gradient(135deg,#0d47a1,#1976d2,#42a5f5);
+    color:white;
+    padding:24px 16px;
+    text-align:center;
+}
+
+.logo{
+    font-size:30px;
+    font-weight:800;
+    letter-spacing:.3px;
+}
+
+.subtitle{
+    margin-top:7px;
+    font-size:15px;
+    opacity:.95;
+}
+
+.container{
+    max-width:1000px;
+    margin:25px auto;
+    padding:0 15px;
+}
+
+.card{
+    background:white;
+    border-radius:18px;
+    padding:24px;
+    margin-bottom:20px;
+    box-shadow:0 8px 25px rgba(0,0,0,.08);
+}
+
+h2{
+    color:#0d47a1;
+    margin-bottom:15px;
+    font-size:21px;
+}
+
+.upload-box{
+    border:2px dashed #1976d2;
+    border-radius:15px;
+    padding:30px 20px;
+    text-align:center;
+    background:#f7fbff;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.upload-box:hover{
+    background:#eef7ff;
+}
+
+.upload-icon{
+    font-size:42px;
+    margin-bottom:10px;
+}
+
+.upload-box strong{
+    display:block;
+    font-size:18px;
+    margin-bottom:6px;
+}
+
+.upload-box span{
+    color:#667085;
+    font-size:14px;
+}
+
+input[type="file"]{
+    display:none;
+}
+
+.file-name{
+    margin-top:15px;
+    padding:12px;
+    background:#eef7ff;
+    border-radius:10px;
+    color:#0d47a1;
+    font-weight:600;
+    display:none;
+}
+
+.search-area{
+    display:none;
+}
+
+.search-row{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+}
+
+.search-input{
+    flex:1;
+    min-width:230px;
+    padding:14px 16px;
+    border:1px solid #ccd6e5;
+    border-radius:10px;
+    font-size:16px;
+    outline:none;
+}
+
+.search-input:focus{
+    border-color:#1976d2;
+    box-shadow:0 0 0 3px rgba(25,118,210,.12);
+}
+
+button{
+    border:none;
+    border-radius:10px;
+    padding:13px 18px;
+    font-size:15px;
+    font-weight:700;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.primary{
+    background:#1976d2;
+    color:white;
+}
+
+.primary:hover{
+    background:#0d47a1;
+}
+
+.secondary{
+    background:#eaf3ff;
+    color:#0d47a1;
+}
+
+.secondary:hover{
+    background:#dbeaff;
+}
+
+.danger{
+    background:#ffebee;
+    color:#c62828;
+}
+
+.options{
+    display:flex;
+    flex-wrap:wrap;
+    gap:18px;
+    margin-top:15px;
+    align-items:center;
+}
+
+.check{
+    display:flex;
+    align-items:center;
+    gap:7px;
+    font-size:14px;
+}
+
+.check input{
+    width:17px;
+    height:17px;
+}
+
+.stats{
+    display:none;
+    grid-template-columns:repeat(3,1fr);
+    gap:12px;
+    margin-top:20px;
+}
+
+.stat{
+    background:#f4f8ff;
+    border-radius:12px;
+    padding:15px;
+    text-align:center;
+}
+
+.stat-number{
+    font-size:24px;
+    font-weight:800;
+    color:#1976d2;
+}
+
+.stat-label{
+    margin-top:4px;
+    color:#667085;
+    font-size:13px;
+}
+
+.navigation{
+    display:none;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    margin-top:20px;
+    padding:14px;
+    background:#f7fbff;
+    border-radius:12px;
+    flex-wrap:wrap;
+}
+
+.nav-info{
+    font-weight:700;
+    color:#344054;
+}
+
+.results{
+    display:none;
+}
+
+.result-card{
+    border:1px solid #dbe3ef;
+    border-radius:14px;
+    margin-bottom:14px;
+    overflow:hidden;
+    background:#fff;
+}
+
+.result-head{
+    background:#f4f8ff;
+    padding:13px 15px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+}
+
+.page-title{
+    font-weight:800;
+    color:#0d47a1;
+}
+
+.match-badge{
+    background:#1976d2;
+    color:white;
+    padding:5px 9px;
+    border-radius:20px;
+    font-size:12px;
+    font-weight:700;
+}
+
+.result-body{
+    padding:15px;
+    line-height:1.7;
+    color:#344054;
+    word-break:break-word;
+}
+
+mark{
+    background:#fff176;
+    padding:2px 3px;
+    border-radius:3px;
+    color:#111;
+}
+
+.empty{
+    text-align:center;
+    padding:35px 15px;
+    color:#667085;
+}
+
+.loading{
+    display:none;
+    text-align:center;
+    padding:25px;
+}
+
+.spinner{
+    width:35px;
+    height:35px;
+    border:4px solid #dbeaff;
+    border-top-color:#1976d2;
+    border-radius:50%;
+    animation:spin 1s linear infinite;
+    margin:0 auto 12px;
+}
+
+@keyframes spin{
+    to{transform:rotate(360deg);}
+}
+
+.action-row{
+    display:none;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-top:18px;
+}
+
+.notice{
+    margin-top:18px;
+    padding:13px 15px;
+    border-radius:10px;
+    background:#fff8e1;
+    color:#795548;
+    font-size:13px;
+    line-height:1.5;
+}
+
+footer{
+    text-align:center;
+    padding:25px 15px;
+    color:#667085;
+    font-size:13px;
+}
+
+@media(max-width:600px){
+
+    header{
+        padding:20px 12px;
+    }
+
+    .logo{
+        font-size:25px;
+    }
+
+    .card{
+        padding:18px;
+        border-radius:15px;
+    }
+
+    .stats{
+        grid-template-columns:1fr;
+    }
+
+    .search-row button{
+        width:100%;
+    }
+
+    .navigation{
+        justify-content:center;
+    }
+
+    .nav-info{
+        width:100%;
+        text-align:center;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">MyHelp India 🇮🇳</div>
+    <div class="subtitle">PDF Text Search — Find Words & Sentences Easily</div>
+</header>
+
+<div class="container">
+
+    <div class="card">
+
+        <h2>📄 Upload PDF</h2>
+
+        <label class="upload-box" for="pdfFile">
+            <div class="upload-icon">📄</div>
+            <strong>Choose PDF File</strong>
+            <span>Click here to upload your PDF</span>
+        </label>
+
+        <input type="file" id="pdfFile" accept="application/pdf">
+
+        <div class="file-name" id="fileName"></div>
+
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <div id="loadingText">Reading PDF...</div>
+        </div>
+
+    </div>
+
+
+    <div class="card search-area" id="searchArea">
+
+        <h2>🔎 Search Inside PDF</h2>
+
+        <div class="search-row">
+
+            <input
+                type="text"
+                id="searchInput"
+                class="search-input"
+                placeholder="Enter word or sentence..."
+            >
+
+            <button class="primary" id="searchBtn">
+                Search
+            </button>
+
+        </div>
+
+        <div class="options">
+
+            <label class="check">
+                <input type="checkbox" id="caseSensitive">
+                Case sensitive
+            </label>
+
+        </div>
+
+        <div class="notice">
+            💡 Search works with selectable PDF text.
+            Scanned/image-only PDFs may require OCR before text can be searched.
+        </div>
+
+    </div>
+
+
+    <div class="card" id="resultCard" style="display:none;">
+
+        <h2>📊 Search Results</h2>
+
+        <div class="stats" id="stats">
+
+            <div class="stat">
+                <div class="stat-number" id="totalMatches">0</div>
+                <div class="stat-label">Total Matches</div>
+            </div>
+
+            <div class="stat">
+                <div class="stat-number" id="matchedPages">0</div>
+                <div class="stat-label">Pages Found</div>
+            </div>
+
+            <div class="stat">
+                <div class="stat-number" id="totalPages">0</div>
+                <div class="stat-label">Total Pages</div>
+            </div>
+
+        </div>
+
+
+        <div class="navigation" id="navigation">
+
+            <button class="secondary" id="prevBtn">
+                ◀ Previous
+            </button>
+
+            <div class="nav-info" id="navInfo">
+                Result 0 of 0
+            </div>
+
+            <button class="secondary" id="nextBtn">
+                Next ▶
+            </button>
+
+        </div>
+
+
+        <div class="action-row" id="actionRow">
+
+            <button class="secondary" id="copyBtn">
+                📋 Copy Results
+            </button>
+
+            <button class="secondary" id="downloadBtn">
+                ⬇ Download TXT
+            </button>
+
+            <button class="danger" id="clearBtn">
+                ✕ Clear
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <div class="card results" id="results">
+
+        <div id="resultsContainer"></div>
+
+    </div>
+
+</div>
+
+<footer>
+    © 2026 MyHelp India • Simple • Free • Useful
+</footer>
+
+
+<script>
+
+pdfjsLib.GlobalWorkerOptions.workerSrc =
+"https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+
+const pdfFile = document.getElementById("pdfFile");
+const fileName = document.getElementById("fileName");
+const loading = document.getElementById("loading");
+const loadingText = document.getElementById("loadingText");
+
+const searchArea = document.getElementById("searchArea");
+const searchInput = document.getElementById("searchInput");
+const searchBtn = document.getElementById("searchBtn");
+const caseSensitive = document.getElementById("caseSensitive");
+
+const resultCard = document.getElementById("resultCard");
+const results = document.getElementById("results");
+const resultsContainer = document.getElementById("resultsContainer");
+
+const stats = document.getElementById("stats");
+const totalMatches = document.getElementById("totalMatches");
+const matchedPages = document.getElementById("matchedPages");
+const totalPages = document.getElementById("totalPages");
+
+const navigation = document.getElementById("navigation");
+const navInfo = document.getElementById("navInfo");
+
+const prevBtn = document.getElementById("prevBtn");
+const nextBtn = document.getElementById("nextBtn");
+
+const actionRow = document.getElementById("actionRow");
+const copyBtn = document.getElementById("copyBtn");
+const downloadBtn = document.getElementById("downloadBtn");
+const clearBtn = document.getElementById("clearBtn");
+
+let pdfDocument = null;
+let pagesText = [];
+let searchResults = [];
+let currentResult = -1;
+
+
+/* ============================
+   PDF UPLOAD
+============================ */
+
+pdfFile.addEventListener("change", async function(){
+
+    const file = this.files[0];
+
+    if(!file) return;
+
+    if(file.type !== "application/pdf"){
+        alert("Please select a PDF file.");
+        pdfFile.value = "";
+        return;
+    }
+
+    fileName.style.display = "block";
+    fileName.textContent = "📄 " + file.name;
+
+    loading.style.display = "block";
+    loadingText.textContent = "Opening PDF...";
+
+    searchArea.style.display = "none";
+    resultCard.style.display = "none";
+    results.style.display = "none";
+
+    pagesText = [];
+    searchResults = [];
+    currentResult = -1;
+
+    try{
+
+        const arrayBuffer = await file.arrayBuffer();
+
+        pdfDocument = await pdfjsLib.getDocument({
+            data: arrayBuffer
+        }).promise;
+
+        totalPages.textContent = pdfDocument.numPages;
+
+        for(let pageNumber = 1;
+            pageNumber <= pdfDocument.numPages;
+            pageNumber++){
+
+            loadingText.textContent =
+                "Reading page " +
+                pageNumber +
+                " of " +
+                pdfDocument.numPages +
+                "...";
+
+            const page =
+                await pdfDocument.getPage(pageNumber);
+
+            const textContent =
+                await page.getTextContent();
+
+            const text = textContent.items
+                .map(item => item.str)
+                .join(" ");
+
+            pagesText.push({
+                page: pageNumber,
+                text: text
+            });
+        }
+
+        loading.style.display = "none";
+
+        searchArea.style.display = "block";
+
+        searchInput.focus();
+
+    }catch(error){
+
+        console.error(error);
+
+        loading.style.display = "none";
+
+        alert(
+            "Unable to read this PDF. " +
+            "The file may be damaged or unsupported."
+        );
+
+    }
+
+});
+
+
+/* ============================
+   SEARCH
+============================ */
+
+function escapeHtml(text){
+
+    return text
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+}
+
+
+function escapeRegex(text){
+
+    return text.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");
+
+}
+
+
+function highlightText(text, query){
+
+    const safeText = escapeHtml(text);
+    const safeQuery = escapeRegex(query);
+
+    if(!safeQuery) return safeText;
+
+    const flags =
+        caseSensitive.checked ? "g" : "gi";
+
+    const regex = new RegExp(
+        "(" + safeQuery + ")",
+        flags
+    );
+
+    return safeText.replace(
+        regex,
+        "<mark>$1</mark>"
+    );
+}
+
+
+function countMatches(text, query){
+
+    if(!query) return 0;
+
+    const flags =
+        caseSensitive.checked ? "g" : "gi";
+
+    const regex =
+        new RegExp(escapeRegex(query), flags);
+
+    const matches = text.match(regex);
+
+    return matches ? matches.length : 0;
+}
+
+
+function createSnippet(text, query){
+
+    const flags =
+        caseSensitive.checked ? "" : "i";
+
+    const index =
+        text.search(
+            new RegExp(escapeRegex(query), flags)
+        );
+
+    if(index === -1){
+        return text.substring(0,300);
+    }
+
+    const start = Math.max(0,index - 120);
+    const end = Math.min(
+        text.length,
+        index + query.length + 180
+    );
+
+    let snippet = text.substring(start,end);
+
+    if(start > 0){
+        snippet = "… " + snippet;
+    }
+
+    if(end < text.length){
+        snippet += " …";
+    }
+
+    return snippet;
+}
+
+
+/* ============================
+   SEARCH BUTTON
+============================ */
+
+searchBtn.addEventListener("click", performSearch);
+
+searchInput.addEventListener("keydown",function(e){
+
+    if(e.key === "Enter"){
+        performSearch();
+    }
+
+});
+
+
+function performSearch(){
+
+    const query = searchInput.value.trim();
+
+    if(!query){
+
+        alert("Please enter a word or sentence to search.");
+
+        searchInput.focus();
+
+        return;
+    }
+
+    searchResults = [];
+
+    pagesText.forEach(pageData => {
+
+        const matches =
+            countMatches(pageData.text,query);
+
+        if(matches > 0){
+
+            searchResults.push({
+
+                page: pageData.page,
+
+                matches: matches,
+
+                text: pageData.text,
+
+                snippet:
+                    createSnippet(
+                        pageData.text,
+                        query
+                    )
+
+            });
+
+        }
+
+    });
+
+    currentResult = -1;
+
+    resultCard.style.display = "block";
+    stats.style.display = "grid";
+    navigation.style.display = "flex";
+    actionRow.style.display = "flex";
+    results.style.display = "block";
+
+    const total =
+        searchResults.reduce(
+            (sum,item) => sum + item.matches,
+            0
+        );
+
+    totalMatches.textContent = total;
+
+    matchedPages.textContent =
+        searchResults.length;
+
+    renderResults(query);
+
+    updateNavigation();
+
+}
+
+
+/* ============================
+   RENDER RESULTS
+============================ */
+
+function renderResults(query){
+
+    resultsContainer.innerHTML = "";
+
+    if(searchResults.length === 0){
+
+        resultsContainer.innerHTML = `
+            <div class="empty">
+                <div style="font-size:42px;">🔍</div>
+                <h3 style="margin:10px 0;color:#344054;">
+                    No results found
+                </h3>
+                <p>
+                    Try another word or sentence.
+                </p>
+            </div>
+        `;
+
+        return;
+    }
+
+
+    searchResults.forEach((item,index)=>{
+
+        const card =
+            document.createElement("div");
+
+        card.className = "result-card";
+
+        card.id = "result-" + index;
+
+        const highlighted =
+            highlightText(
+                item.snippet,
+                query
+            );
+
+        card.innerHTML = `
+
+            <div class="result-head">
+
+                <div class="page-title">
+                    📄 Page ${item.page}
+                </div>
+
+                <div class="match-badge">
+                    ${item.matches}
+                    ${item.matches === 1 ? "match" : "matches"}
+                </div>
+
+            </div>
+
+            <div class="result-body">
+                ${highlighted}
+            </div>
+
+        `;
+
+        resultsContainer.appendChild(card);
+
+    });
+
+}
+
+
+/* ============================
+   NAVIGATION
+============================ */
+
+function updateNavigation(){
+
+    const total = searchResults.length;
+
+    if(total === 0){
+
+        navInfo.textContent = "No results";
+
+        prevBtn.disabled = true;
+        nextBtn.disabled = true;
+
+        return;
+    }
+
+    navInfo.textContent =
+        "Result " +
+        (currentResult + 1) +
+        " of " +
+        total;
+
+    prevBtn.disabled =
+        currentResult <= 0;
+
+    nextBtn.disabled =
+        currentResult >= total - 1;
+
+}
+
+
+function goToResult(index){
+
+    if(searchResults.length === 0) return;
+
+    currentResult = index;
+
+    updateNavigation();
+
+    const element =
+        document.getElementById(
+            "result-" + currentResult
+        );
+
+    if(element){
+
+        element.scrollIntoView({
+            behavior:"smooth",
+            block:"center"
+        });
+
+        element.style.boxShadow =
+            "0 0 0 3px rgba(25,118,210,.25)";
+
+        setTimeout(()=>{
+
+            element.style.boxShadow = "";
+
+        },1200);
+
+    }
+
+}
+
+
+prevBtn.addEventListener("click",function(){
+
+    if(currentResult > 0){
+
+        goToResult(currentResult - 1);
+
+    }
+
+});
+
+
+nextBtn.addEventListener("click",function(){
+
+    if(currentResult < searchResults.length - 1){
+
+        goToResult(currentResult + 1);
+
+    }
+
+});
+
+
+/* ============================
+   COPY RESULTS
+============================ */
+
+copyBtn.addEventListener("click",async function(){
+
+    if(searchResults.length === 0){
+
+        alert("No search results to copy.");
+
+        return;
+
+    }
+
+    const query = searchInput.value.trim();
+
+    let output =
+        "MyHelp India - PDF Text Search\n\n";
+
+    output +=
+        "Search: " + query + "\n";
+
+    output +=
+        "Total Matches: " +
+        searchResults.reduce(
+            (sum,item)=>sum+item.matches,0
+        ) +
+        "\n\n";
+
+
+    searchResults.forEach(item=>{
+
+        output +=
+            "Page " +
+            item.page +
+            " (" +
+            item.matches +
+            " matches)\n";
+
+        output +=
+            item.snippet +
+            "\n\n";
+
+    });
+
+
+    try{
+
+        await navigator.clipboard.writeText(output);
+
+        alert("Search results copied successfully.");
+
+    }catch(error){
+
+        alert(
+            "Copy failed. Please use Download TXT."
+        );
+
+    }
+
+});
+
+
+/* ============================
+   DOWNLOAD TXT
+============================ */
+
+downloadBtn.addEventListener("click",function(){
+
+    if(searchResults.length === 0){
+
+        alert("No search results to download.");
+
+        return;
+
+    }
+
+    const query = searchInput.value.trim();
+
+    let output =
+        "MYHELP INDIA - PDF TEXT SEARCH\n";
+
+    output +=
+        "================================\n\n";
+
+    output +=
+        "Search: " +
+        query +
+        "\n\n";
+
+    searchResults.forEach(item=>{
+
+        output +=
+            "PAGE " +
+            item.page +
+            " - " +
+            item.matches +
+            " MATCHES\n";
+
+        output +=
+            "--------------------------------\n";
+
+        output +=
+            item.snippet +
+            "\n\n";
+
+    });
+
+    const blob =
+        new Blob(
+            [output],
+            {type:"text/plain;charset=utf-8"}
+        );
+
+    const url =
+        URL.createObjectURL(blob);
+
+    const a =
+        document.createElement("a");
+
+    a.href = url;
+
+    a.download =
+        "pdf-search-results.txt";
+
+    document.body.appendChild(a);
+
+    a.click();
+
+    document.body.removeChild(a);
+
+    URL.revokeObjectURL(url);
+
+});
+
+
+/* ============================
+   CLEAR
+============================ */
+
+clearBtn.addEventListener("click",function(){
+
+    pdfFile.value = "";
+
+    fileName.style.display = "none";
+
+    searchArea.style.display = "none";
+
+    resultCard.style.display = "none";
+
+    results.style.display = "none";
+
+    loading.style.display = "none";
+
+    searchInput.value = "";
+
+    pagesText = [];
+
+    searchResults = [];
+
+    currentResult = -1;
+
+    resultsContainer.innerHTML = "";
+
+});
+
+
+</script>
+
+</body>
+</html>

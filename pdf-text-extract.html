@@ -1,0 +1,1214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>PDF Text Extractor - MyHelp India</title>
+
+<meta name="description" content="Extract text from PDF files online for free. Copy or download extracted PDF text with MyHelp India.">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+
+<style>
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    font-family:Arial,Helvetica,sans-serif;
+    background:#f4f8ff;
+    color:#222;
+}
+
+header{
+    background:linear-gradient(135deg,#0d47a1,#1976d2,#42a5f5);
+    color:white;
+    text-align:center;
+    padding:24px 15px;
+}
+
+header h1{
+    margin:0;
+    font-size:29px;
+}
+
+header p{
+    margin:8px 0 0;
+    font-size:15px;
+}
+
+.container{
+    max-width:900px;
+    margin:25px auto;
+    padding:0 15px;
+}
+
+.card{
+    background:white;
+    border-radius:16px;
+    padding:25px;
+    margin-bottom:20px;
+    box-shadow:0 5px 20px rgba(0,0,0,0.08);
+}
+
+.card h2{
+    margin-top:0;
+    color:#0d47a1;
+    font-size:21px;
+}
+
+.file-box{
+    border:2px dashed #42a5f5;
+    background:#f8fbff;
+    border-radius:12px;
+    padding:22px;
+    text-align:center;
+}
+
+.file-box input{
+    width:100%;
+    border:none;
+    background:transparent;
+    font-size:15px;
+}
+
+.file-info{
+    display:none;
+    margin-top:15px;
+    padding:14px;
+    background:#f1f8e9;
+    border-left:5px solid #43a047;
+    border-radius:8px;
+    line-height:1.7;
+}
+
+.info{
+    margin-top:16px;
+    padding:14px;
+    background:#eef6ff;
+    border-left:5px solid #1976d2;
+    border-radius:8px;
+    line-height:1.6;
+}
+
+textarea{
+    width:100%;
+    min-height:420px;
+    resize:vertical;
+    padding:15px;
+    border:1px solid #ccd6e0;
+    border-radius:10px;
+    font-family:Arial,Helvetica,sans-serif;
+    font-size:15px;
+    line-height:1.6;
+    outline:none;
+}
+
+textarea:focus{
+    border-color:#1976d2;
+    box-shadow:0 0 0 2px rgba(25,118,210,0.1);
+}
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:12px;
+    margin-top:15px;
+}
+
+.stat{
+    background:#f8fbff;
+    border:1px solid #dce8f5;
+    border-radius:10px;
+    padding:14px;
+    text-align:center;
+}
+
+.stat strong{
+    display:block;
+    font-size:20px;
+    color:#1976d2;
+    margin-bottom:5px;
+}
+
+.stat span{
+    color:#666;
+    font-size:13px;
+}
+
+.buttons{
+    display:flex;
+    flex-wrap:wrap;
+    gap:12px;
+    margin-top:20px;
+}
+
+button{
+    border:none;
+    padding:13px 20px;
+    border-radius:9px;
+    font-size:15px;
+    font-weight:bold;
+    cursor:pointer;
+    transition:0.2s;
+}
+
+button:hover{
+    transform:translateY(-1px);
+}
+
+.primary{
+    background:#1976d2;
+    color:white;
+}
+
+.success{
+    background:#2e7d32;
+    color:white;
+}
+
+.secondary{
+    background:#607d8b;
+    color:white;
+}
+
+.danger{
+    background:#d32f2f;
+    color:white;
+}
+
+.status{
+    display:none;
+    margin-top:18px;
+    padding:13px;
+    border-radius:8px;
+    line-height:1.5;
+}
+
+.success-status{
+    background:#e8f5e9;
+    color:#2e7d32;
+}
+
+.error-status{
+    background:#ffebee;
+    color:#c62828;
+}
+
+.loading{
+    display:none;
+    margin-top:15px;
+    padding:15px;
+    background:#fff8e1;
+    border-left:5px solid #f9a825;
+    border-radius:8px;
+    color:#7a5a00;
+}
+
+.page-list{
+    display:none;
+    margin-top:20px;
+}
+
+.page-item{
+    background:#f8fbff;
+    border:1px solid #dce8f5;
+    border-radius:10px;
+    margin-bottom:12px;
+    overflow:hidden;
+}
+
+.page-title{
+    background:#eef6ff;
+    padding:12px 15px;
+    font-weight:bold;
+    color:#0d47a1;
+}
+
+.page-text{
+    padding:15px;
+    white-space:pre-wrap;
+    line-height:1.6;
+    font-size:14px;
+    max-height:350px;
+    overflow:auto;
+}
+
+.no-text{
+    color:#c62828;
+    font-style:italic;
+}
+
+footer{
+    text-align:center;
+    padding:25px 15px;
+    color:#666;
+    font-size:14px;
+}
+
+@media(max-width:600px){
+
+    header h1{
+        font-size:23px;
+    }
+
+    .card{
+        padding:18px;
+    }
+
+    .stats{
+        grid-template-columns:1fr;
+    }
+
+    .buttons{
+        flex-direction:column;
+    }
+
+    button{
+        width:100%;
+    }
+
+    textarea{
+        min-height:350px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>📝 PDF Text Extractor</h1>
+    <p>Extract, Copy & Download Text from PDF Files</p>
+</header>
+
+
+<div class="container">
+
+    <!-- PDF SELECT -->
+
+    <div class="card">
+
+        <h2>📁 Select PDF File</h2>
+
+        <div class="file-box">
+
+            <input
+                type="file"
+                id="pdfFile"
+                accept="application/pdf"
+            >
+
+        </div>
+
+        <div id="fileInfo" class="file-info"></div>
+
+        <div class="info">
+
+            ℹ️ This tool extracts selectable text from PDF pages.
+            Scanned/image-only PDFs may not contain extractable text.
+
+        </div>
+
+    </div>
+
+
+    <!-- ACTION -->
+
+    <div class="card">
+
+        <h2>⚡ Extract Text</h2>
+
+        <div class="buttons">
+
+            <button
+                class="primary"
+                onclick="extractText()"
+            >
+                📝 Extract PDF Text
+            </button>
+
+            <button
+                class="secondary"
+                onclick="clearAll()"
+            >
+                🗑️ Clear
+            </button>
+
+            <button
+                class="secondary"
+                onclick="goBack()"
+            >
+                🏠 Back to MyHelp India
+            </button>
+
+        </div>
+
+        <div id="loading" class="loading">
+            ⏳ Reading PDF and extracting text... Please wait.
+        </div>
+
+        <div id="status" class="status"></div>
+
+    </div>
+
+
+    <!-- RESULTS -->
+
+    <div class="card" id="resultCard" style="display:none;">
+
+        <h2>📄 Extracted Text</h2>
+
+        <div class="stats">
+
+            <div class="stat">
+                <strong id="pageCount">0</strong>
+                <span>Pages</span>
+            </div>
+
+            <div class="stat">
+                <strong id="wordCount">0</strong>
+                <span>Words</span>
+            </div>
+
+            <div class="stat">
+                <strong id="characterCount">0</strong>
+                <span>Characters</span>
+            </div>
+
+        </div>
+
+        <br>
+
+        <textarea
+            id="extractedText"
+            placeholder="Extracted PDF text will appear here..."
+        ></textarea>
+
+
+        <div class="buttons">
+
+            <button
+                class="success"
+                onclick="copyText()"
+            >
+                📋 Copy Text
+            </button>
+
+            <button
+                class="primary"
+                onclick="downloadTXT()"
+            >
+                💾 Download TXT
+            </button>
+
+            <button
+                class="secondary"
+                onclick="downloadTextHTML()"
+            >
+                🌐 Download HTML
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- PAGE BY PAGE -->
+
+    <div class="card page-list" id="pageList">
+
+        <h2>📑 Page-by-Page Text</h2>
+
+        <div id="pageResults"></div>
+
+    </div>
+
+</div>
+
+
+<footer>
+    <p>
+        © 2026 MyHelp India • Simple & Free Tools for Everyday Life
+    </p>
+</footer>
+
+
+<script>
+
+/* =========================
+   PDF.JS CONFIGURATION
+========================= */
+
+pdfjsLib.GlobalWorkerOptions.workerSrc =
+"https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+
+
+/* =========================
+   VARIABLES
+========================= */
+
+let selectedPDF = null;
+let extractedFullText = "";
+let extractedPages = [];
+
+
+/* =========================
+   FILE SELECT
+========================= */
+
+document
+.getElementById("pdfFile")
+.addEventListener("change", function(){
+
+    const file = this.files[0];
+
+    if(!file){
+        return;
+    }
+
+    if(file.type !== "application/pdf"){
+
+        showStatus(
+            "Please select a valid PDF file.",
+            false
+        );
+
+        this.value = "";
+
+        return;
+    }
+
+    selectedPDF = file;
+
+    const sizeMB =
+        (file.size / (1024 * 1024)).toFixed(2);
+
+    const fileInfo =
+        document.getElementById("fileInfo");
+
+    fileInfo.style.display = "block";
+
+    fileInfo.innerHTML =
+        "<strong>File Name:</strong> " +
+        escapeHTML(file.name) +
+        "<br>" +
+        "<strong>File Size:</strong> " +
+        sizeMB +
+        " MB";
+
+    showStatus(
+        "PDF selected successfully. Click Extract PDF Text.",
+        true
+    );
+
+});
+
+
+/* =========================
+   EXTRACT TEXT
+========================= */
+
+async function extractText(){
+
+    if(!selectedPDF){
+
+        showStatus(
+            "Please select a PDF file first.",
+            false
+        );
+
+        return;
+    }
+
+
+    try{
+
+        document.getElementById("loading")
+        .style.display = "block";
+
+        document.getElementById("resultCard")
+        .style.display = "none";
+
+        document.getElementById("pageList")
+        .style.display = "none";
+
+        extractedFullText = "";
+        extractedPages = [];
+
+
+        const arrayBuffer =
+            await selectedPDF.arrayBuffer();
+
+
+        const pdf =
+            await pdfjsLib.getDocument({
+                data:arrayBuffer
+            }).promise;
+
+
+        const totalPages =
+            pdf.numPages;
+
+
+        for(
+            let pageNumber = 1;
+            pageNumber <= totalPages;
+            pageNumber++
+        ){
+
+            const page =
+                await pdf.getPage(pageNumber);
+
+
+            const textContent =
+                await page.getTextContent();
+
+
+            let pageText = "";
+
+
+            /*
+               Build readable text
+            */
+
+            let lastY = null;
+
+            for(
+                let i = 0;
+                i < textContent.items.length;
+                i++
+            ){
+
+                const item =
+                    textContent.items[i];
+
+
+                const text =
+                    item.str || "";
+
+
+                if(!text){
+                    continue;
+                }
+
+
+                const currentY =
+                    item.transform
+                    ? item.transform[5]
+                    : null;
+
+
+                /*
+                   Detect new lines
+                */
+
+                if(
+                    lastY !== null &&
+                    currentY !== null &&
+                    Math.abs(currentY - lastY) > 4
+                ){
+
+                    pageText += "\n";
+
+                }else if(
+                    pageText.length > 0 &&
+                    !pageText.endsWith("\n") &&
+                    !pageText.endsWith(" ")
+                ){
+
+                    pageText += " ";
+
+                }
+
+
+                pageText += text;
+
+                lastY = currentY;
+
+            }
+
+
+            pageText =
+                cleanText(pageText);
+
+
+            extractedPages.push(pageText);
+
+
+            extractedFullText +=
+                "===== Page " +
+                pageNumber +
+                " =====\n\n";
+
+
+            if(pageText.trim()){
+
+                extractedFullText +=
+                    pageText;
+
+            }else{
+
+                extractedFullText +=
+                    "[No selectable text found on this page]";
+
+            }
+
+
+            extractedFullText +=
+                "\n\n";
+
+        }
+
+
+        displayResults(totalPages);
+
+
+        document.getElementById("loading")
+        .style.display = "none";
+
+
+        showStatus(
+            "Text extracted successfully from " +
+            totalPages +
+            " page(s).",
+            true
+        );
+
+
+    }catch(error){
+
+        console.error(error);
+
+        document.getElementById("loading")
+        .style.display = "none";
+
+        showStatus(
+            "Unable to read this PDF. The file may be damaged, encrypted, or unsupported.",
+            false
+        );
+
+    }
+
+}
+
+
+/* =========================
+   DISPLAY RESULTS
+========================= */
+
+function displayResults(totalPages){
+
+    const textArea =
+        document.getElementById("extractedText");
+
+
+    textArea.value =
+        extractedFullText;
+
+
+    const words =
+        countWords(extractedFullText);
+
+
+    const characters =
+        extractedFullText.length;
+
+
+    document.getElementById("pageCount")
+    .textContent =
+        totalPages;
+
+
+    document.getElementById("wordCount")
+    .textContent =
+        words.toLocaleString();
+
+
+    document.getElementById("characterCount")
+    .textContent =
+        characters.toLocaleString();
+
+
+    document.getElementById("resultCard")
+    .style.display = "block";
+
+
+    /*
+       Page by page display
+    */
+
+    const pageResults =
+        document.getElementById("pageResults");
+
+
+    pageResults.innerHTML = "";
+
+
+    extractedPages.forEach(
+        function(text,index){
+
+            const pageItem =
+                document.createElement("div");
+
+            pageItem.className =
+                "page-item";
+
+
+            const title =
+                document.createElement("div");
+
+            title.className =
+                "page-title";
+
+            title.textContent =
+                "📄 Page " +
+                (index + 1);
+
+
+            const content =
+                document.createElement("div");
+
+            content.className =
+                "page-text";
+
+
+            if(text.trim()){
+
+                content.textContent =
+                    text;
+
+            }else{
+
+                content.className +=
+                    " no-text";
+
+                content.textContent =
+                    "No selectable text found on this page.";
+
+            }
+
+
+            pageItem.appendChild(title);
+
+            pageItem.appendChild(content);
+
+            pageResults.appendChild(pageItem);
+
+        }
+    );
+
+
+    document.getElementById("pageList")
+    .style.display = "block";
+
+}
+
+
+/* =========================
+   COPY TEXT
+========================= */
+
+async function copyText(){
+
+    const text =
+        document.getElementById(
+            "extractedText"
+        ).value;
+
+
+    if(!text.trim()){
+
+        showStatus(
+            "There is no extracted text to copy.",
+            false
+        );
+
+        return;
+
+    }
+
+
+    try{
+
+        await navigator.clipboard.writeText(text);
+
+        showStatus(
+            "Extracted text copied to clipboard!",
+            true
+        );
+
+    }catch(error){
+
+        /*
+           Fallback
+        */
+
+        const textarea =
+            document.getElementById(
+                "extractedText"
+            );
+
+        textarea.focus();
+
+        textarea.select();
+
+        document.execCommand("copy");
+
+        showStatus(
+            "Text copied successfully!",
+            true
+        );
+
+    }
+
+}
+
+
+/* =========================
+   DOWNLOAD TXT
+========================= */
+
+function downloadTXT(){
+
+    const text =
+        document.getElementById(
+            "extractedText"
+        ).value;
+
+
+    if(!text.trim()){
+
+        showStatus(
+            "There is no text to download.",
+            false
+        );
+
+        return;
+
+    }
+
+
+    const blob =
+        new Blob(
+            [text],
+            {
+                type:"text/plain;charset=utf-8"
+            }
+        );
+
+
+    downloadBlob(
+        blob,
+        "MyHelp-India-Extracted-Text.txt"
+    );
+
+
+    showStatus(
+        "TXT file downloaded successfully!",
+        true
+    );
+
+}
+
+
+/* =========================
+   DOWNLOAD HTML
+========================= */
+
+function downloadTextHTML(){
+
+    const text =
+        document.getElementById(
+            "extractedText"
+        ).value;
+
+
+    if(!text.trim()){
+
+        showStatus(
+            "There is no text to download.",
+            false
+        );
+
+        return;
+
+    }
+
+
+    const safeText =
+        escapeHTML(text)
+        .replace(/\n/g,"<br>");
+
+
+    const html = `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Extracted PDF Text - MyHelp India</title>
+
+<style>
+body{
+    font-family:Arial,Helvetica,sans-serif;
+    max-width:900px;
+    margin:40px auto;
+    padding:20px;
+    line-height:1.7;
+    color:#222;
+}
+
+h1{
+    color:#0d47a1;
+}
+
+.content{
+    white-space:normal;
+}
+</style>
+
+</head>
+
+<body>
+
+<h1>Extracted PDF Text</h1>
+
+<p>
+Generated by MyHelp India
+</p>
+
+<hr>
+
+<div class="content">
+${safeText}
+</div>
+
+</body>
+</html>
+`;
+
+
+    const blob =
+        new Blob(
+            [html],
+            {
+                type:"text/html;charset=utf-8"
+            }
+        );
+
+
+    downloadBlob(
+        blob,
+        "MyHelp-India-Extracted-Text.html"
+    );
+
+
+    showStatus(
+        "HTML file downloaded successfully!",
+        true
+    );
+
+}
+
+
+/* =========================
+   DOWNLOAD HELPER
+========================= */
+
+function downloadBlob(
+    blob,
+    filename
+){
+
+    const url =
+        URL.createObjectURL(blob);
+
+
+    const a =
+        document.createElement("a");
+
+
+    a.href = url;
+
+    a.download = filename;
+
+    document.body.appendChild(a);
+
+    a.click();
+
+    document.body.removeChild(a);
+
+
+    setTimeout(
+        function(){
+
+            URL.revokeObjectURL(url);
+
+        },
+        1000
+    );
+
+}
+
+
+/* =========================
+   COUNT WORDS
+========================= */
+
+function countWords(text){
+
+    const clean =
+        text.trim();
+
+
+    if(!clean){
+        return 0;
+    }
+
+
+    return clean
+        .split(/\s+/)
+        .filter(Boolean)
+        .length;
+
+}
+
+
+/* =========================
+   CLEAN TEXT
+========================= */
+
+function cleanText(text){
+
+    return text
+        .replace(/\r/g,"")
+        .replace(/[ \t]+\n/g,"\n")
+        .replace(/\n{3,}/g,"\n\n")
+        .trim();
+
+}
+
+
+/* =========================
+   CLEAR ALL
+========================= */
+
+function clearAll(){
+
+    selectedPDF = null;
+
+    extractedFullText = "";
+
+    extractedPages = [];
+
+
+    document.getElementById("pdfFile")
+    .value = "";
+
+
+    document.getElementById("fileInfo")
+    .style.display = "none";
+
+
+    document.getElementById("resultCard")
+    .style.display = "none";
+
+
+    document.getElementById("pageList")
+    .style.display = "none";
+
+
+    document.getElementById("loading")
+    .style.display = "none";
+
+
+    document.getElementById("status")
+    .style.display = "none";
+
+
+    document.getElementById("extractedText")
+    .value = "";
+
+
+    document.getElementById("pageResults")
+    .innerHTML = "";
+
+
+    document.getElementById("pageCount")
+    .textContent = "0";
+
+
+    document.getElementById("wordCount")
+    .textContent = "0";
+
+
+    document.getElementById("characterCount")
+    .textContent = "0";
+
+}
+
+
+/* =========================
+   BACK TO HOME
+========================= */
+
+function goBack(){
+
+    window.location.href =
+        "index.html";
+
+}
+
+
+/* =========================
+   STATUS MESSAGE
+========================= */
+
+function showStatus(
+    message,
+    success
+){
+
+    const status =
+        document.getElementById("status");
+
+
+    status.style.display = "block";
+
+
+    status.className =
+        "status " +
+        (
+            success
+            ? "success-status"
+            : "error-status"
+        );
+
+
+    status.textContent =
+        message;
+
+}
+
+
+/* =========================
+   SECURITY
+========================= */
+
+function escapeHTML(text){
+
+    return text
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+
+}
+
+</script>
+
+</body>
+</html>

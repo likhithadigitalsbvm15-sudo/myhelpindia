@@ -1,0 +1,406 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>About Us - MyHelp India</title>
+
+<meta name="description" content="Learn about MyHelp India, a simple platform offering useful free online tools for everyday needs.">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    background:#f4f8ff;
+    color:#172033;
+}
+
+/* HEADER */
+header{
+    background:linear-gradient(135deg,#0d47a1,#1976d2,#00a896);
+    color:white;
+    padding:18px 6%;
+    box-shadow:0 3px 15px rgba(0,0,0,.15);
+}
+
+.nav{
+    max-width:1150px;
+    margin:auto;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.logo{
+    font-size:27px;
+    font-weight:bold;
+}
+
+.logo span{
+    color:#ffe082;
+}
+
+.nav a{
+    color:white;
+    text-decoration:none;
+    margin-left:22px;
+    font-size:15px;
+}
+
+.nav a:hover{
+    text-decoration:underline;
+}
+
+/* HERO */
+.hero{
+    background:linear-gradient(135deg,#0d47a1,#1976d2,#00a896);
+    color:white;
+    text-align:center;
+    padding:55px 20px 65px;
+}
+
+.hero h1{
+    font-size:42px;
+    margin-bottom:12px;
+}
+
+.hero p{
+    font-size:18px;
+}
+
+/* CONTENT */
+.container{
+    max-width:1050px;
+    margin:-30px auto 50px;
+    padding:0 20px;
+    position:relative;
+}
+
+.card{
+    background:white;
+    border-radius:20px;
+    padding:35px;
+    margin-bottom:22px;
+    box-shadow:0 7px 25px rgba(0,0,0,.08);
+}
+
+.card h2{
+    color:#1976d2;
+    margin-bottom:15px;
+    font-size:25px;
+}
+
+.card p{
+    color:#555;
+    line-height:1.8;
+    font-size:16px;
+}
+
+.features{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:18px;
+    margin-top:20px;
+}
+
+.feature{
+    background:#f7fbff;
+    border:1px solid #e1edf8;
+    border-radius:16px;
+    padding:25px 18px;
+    text-align:center;
+}
+
+.feature .icon{
+    font-size:38px;
+    margin-bottom:12px;
+}
+
+.feature h3{
+    margin-bottom:8px;
+    color:#172033;
+}
+
+.feature p{
+    font-size:14px;
+    line-height:1.5;
+}
+
+/* BACK BUTTON */
+.back{
+    text-align:center;
+    margin:30px 0;
+}
+
+.back a{
+    display:inline-block;
+    background:#1976d2;
+    color:white;
+    text-decoration:none;
+    padding:13px 25px;
+    border-radius:25px;
+    font-weight:bold;
+}
+
+.back a:hover{
+    background:#0d47a1;
+}
+
+/* FOOTER */
+footer{
+    background:#101827;
+    color:#cbd5e1;
+    text-align:center;
+    padding:35px 20px;
+}
+
+footer h2{
+    color:white;
+    margin-bottom:10px;
+}
+
+footer p{
+    font-size:14px;
+    margin:6px 0;
+}
+
+/* MOBILE */
+@media(max-width:700px){
+
+    .nav{
+        flex-direction:column;
+        gap:12px;
+    }
+
+    .nav a{
+        margin:0 7px;
+        font-size:14px;
+    }
+
+    .hero h1{
+        font-size:32px;
+    }
+
+    .hero p{
+        font-size:15px;
+    }
+
+    .card{
+        padding:25px 20px;
+    }
+
+    .features{
+        grid-template-columns:1fr;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<header>
+
+    <div class="nav">
+
+        <div class="logo">
+            MyHelp <span>India</span> 🇮🇳
+        </div>
+
+        <div>
+            <a href="index.html">Home</a>
+            <a href="about.html">About</a>
+        </div>
+
+    </div>
+
+</header>
+
+
+<!-- HERO -->
+<section class="hero">
+
+    <h1>About MyHelp India 🇮🇳</h1>
+
+    <p>Your Life • Our Support</p>
+
+</section>
+
+
+<!-- CONTENT -->
+<main class="container">
+
+
+    <div class="card">
+
+        <h2>Welcome to MyHelp India</h2>
+
+        <p>
+            MyHelp India is a simple and useful online platform created
+            to help people with everyday digital needs.
+            Our goal is to bring useful tools together in one easy-to-use place.
+        </p>
+
+        <br>
+
+        <p>
+            From calculators and document tools to PDF, image, QR and
+            student tools, MyHelp India provides a convenient way to complete
+            common tasks online.
+        </p>
+
+    </div>
+
+
+    <div class="card">
+
+        <h2>Our Mission</h2>
+
+        <p>
+            Our mission is to make useful digital tools simple,
+            accessible and easy to understand for everyone.
+            We want users to spend less time searching for different tools
+            and more time getting their work done.
+        </p>
+
+    </div>
+
+
+    <div class="card">
+
+        <h2>What You Can Find Here</h2>
+
+        <div class="features">
+
+            <div class="feature">
+
+                <div class="icon">📄</div>
+
+                <h3>Documents</h3>
+
+                <p>
+                    Create resumes, letters and other useful documents.
+                </p>
+
+            </div>
+
+
+            <div class="feature">
+
+                <div class="icon">💰</div>
+
+                <h3>Calculators</h3>
+
+                <p>
+                    Use calculators for EMI, GST, salary, age and more.
+                </p>
+
+            </div>
+
+
+            <div class="feature">
+
+                <div class="icon">📑</div>
+
+                <h3>PDF Tools</h3>
+
+                <p>
+                    Work with PDF files using a variety of browser tools.
+                </p>
+
+            </div>
+
+
+            <div class="feature">
+
+                <div class="icon">🖼️</div>
+
+                <h3>Image Tools</h3>
+
+                <p>
+                    Resize, convert and work with images easily.
+                </p>
+
+            </div>
+
+
+            <div class="feature">
+
+                <div class="icon">🎓</div>
+
+                <h3>Student Help</h3>
+
+                <p>
+                    Helpful tools for students and learning.
+                </p>
+
+            </div>
+
+
+            <div class="feature">
+
+                <div class="icon">🔲</div>
+
+                <h3>QR Tools</h3>
+
+                <p>
+                    Create and scan QR codes quickly.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="card">
+
+        <h2>Why MyHelp India?</h2>
+
+        <p>
+            We believe online tools should be simple, clear and easy to use.
+            MyHelp India is designed with a clean interface so that users
+            can quickly find the tool they need.
+        </p>
+
+    </div>
+
+
+    <div class="back">
+
+        <a href="index.html">
+            ← Back to MyHelp India
+        </a>
+
+    </div>
+
+
+</main>
+
+
+<!-- FOOTER -->
+<footer>
+
+    <h2>MyHelp India 🇮🇳</h2>
+
+    <p>Your Life • Our Support</p>
+
+    <p>Free online tools for everyday needs.</p>
+
+    <p style="margin-top:15px;">
+        © 2026 MyHelp India. All Rights Reserved.
+    </p>
+
+</footer>
+
+</body>
+</html>
+```

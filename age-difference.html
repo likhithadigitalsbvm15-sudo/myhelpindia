@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Age Difference Calculator - MyHelp India</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    font-family:Arial, sans-serif;
+}
+
+body{
+    background:#f4f8ff;
+    color:#17345f;
+}
+
+.header{
+    background:linear-gradient(135deg,#0d47a1,#1976d2,#42a5f5);
+    color:white;
+    text-align:center;
+    padding:25px 15px;
+}
+
+.header h1{
+    font-size:30px;
+    margin-bottom:8px;
+}
+
+.header p{
+    font-size:15px;
+}
+
+.container{
+    max-width:650px;
+    margin:30px auto;
+    padding:0 15px;
+}
+
+.card{
+    background:white;
+    border-radius:18px;
+    padding:25px;
+    box-shadow:0 8px 25px rgba(0,0,0,0.10);
+}
+
+.card h2{
+    text-align:center;
+    margin-bottom:25px;
+    color:#0d47a1;
+}
+
+.input-group{
+    margin-bottom:18px;
+}
+
+label{
+    display:block;
+    font-weight:bold;
+    margin-bottom:8px;
+}
+
+input{
+    width:100%;
+    padding:13px;
+    border:1px solid #ccd8e8;
+    border-radius:10px;
+    font-size:16px;
+    outline:none;
+}
+
+input:focus{
+    border-color:#1976d2;
+}
+
+.buttons{
+    display:flex;
+    gap:10px;
+    margin-top:20px;
+}
+
+button{
+    flex:1;
+    padding:13px;
+    border:none;
+    border-radius:10px;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.calculate{
+    background:#1976d2;
+    color:white;
+}
+
+.clear{
+    background:#e9eef5;
+    color:#17345f;
+}
+
+.back{
+    width:100%;
+    margin-top:12px;
+    background:#0d47a1;
+    color:white;
+}
+
+.result{
+    display:none;
+    margin-top:25px;
+    padding:20px;
+    background:#eef6ff;
+    border-radius:15px;
+    border:1px solid #c9e0fa;
+}
+
+.result h3{
+    text-align:center;
+    color:#0d47a1;
+    margin-bottom:18px;
+}
+
+.result-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:10px;
+}
+
+.result-box{
+    background:white;
+    padding:15px 8px;
+    border-radius:12px;
+    text-align:center;
+    box-shadow:0 3px 10px rgba(0,0,0,0.06);
+}
+
+.result-box strong{
+    display:block;
+    font-size:25px;
+    color:#1976d2;
+    margin-bottom:5px;
+}
+
+.total-days{
+    margin-top:15px;
+    background:white;
+    padding:14px;
+    border-radius:10px;
+    text-align:center;
+}
+
+.footer{
+    text-align:center;
+    margin-top:30px;
+    padding:20px;
+    color:#607d9b;
+    font-size:14px;
+}
+
+@media(max-width:500px){
+    .result-grid{
+        grid-template-columns:1fr;
+    }
+
+    .buttons{
+        flex-direction:column;
+    }
+
+    .header h1{
+        font-size:25px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+    <h1>📅 Age Difference Calculator</h1>
+    <p>Calculate the exact age difference between two dates</p>
+</div>
+
+<div class="container">
+
+<div class="card">
+
+<h2>Enter Two Dates of Birth</h2>
+
+<div class="input-group">
+    <label>Person 1 - Date of Birth</label>
+    <input type="date" id="date1">
+</div>
+
+<div class="input-group">
+    <label>Person 2 - Date of Birth</label>
+    <input type="date" id="date2">
+</div>
+
+<div class="buttons">
+    <button class="calculate" onclick="calculateDifference()">
+        Calculate Difference
+    </button>
+
+    <button class="clear" onclick="clearAll()">
+        Clear
+    </button>
+</div>
+
+<div class="result" id="result">
+
+    <h3>Age Difference</h3>
+
+    <div class="result-grid">
+
+        <div class="result-box">
+            <strong id="years">0</strong>
+            Years
+        </div>
+
+        <div class="result-box">
+            <strong id="months">0</strong>
+            Months
+        </div>
+
+        <div class="result-box">
+            <strong id="days">0</strong>
+            Days
+        </div>
+
+    </div>
+
+    <div class="total-days">
+        Total Difference:
+        <strong id="totalDays">0</strong> Days
+    </div>
+
+</div>
+
+<button class="back" onclick="goBack()">
+    ← Back to MyHelp India
+</button>
+
+</div>
+
+<div class="footer">
+    © 2026 MyHelp India • Simple Solutions for a Better Life
+</div>
+
+</div>
+
+<script>
+
+function calculateDifference(){
+
+    let date1 = document.getElementById("date1").value;
+    let date2 = document.getElementById("date2").value;
+
+    if(!date1 || !date2){
+        alert("Please select both dates.");
+        return;
+    }
+
+    let d1 = new Date(date1 + "T00:00:00");
+    let d2 = new Date(date2 + "T00:00:00");
+
+    let start = d1 < d2 ? d1 : d2;
+    let end = d1 < d2 ? d2 : d1;
+
+    let years = end.getFullYear() - start.getFullYear();
+    let months = end.getMonth() - start.getMonth();
+    let days = end.getDate() - start.getDate();
+
+    if(days < 0){
+
+        months--;
+
+        let previousMonth = new Date(
+            end.getFullYear(),
+            end.getMonth(),
+            0
+        );
+
+        days += previousMonth.getDate();
+    }
+
+    if(months < 0){
+        years--;
+        months += 12;
+    }
+
+    let totalMilliseconds = end - start;
+    let totalDays = Math.floor(
+        totalMilliseconds / (1000 * 60 * 60 * 24)
+    );
+
+    document.getElementById("years").textContent = years;
+    document.getElementById("months").textContent = months;
+    document.getElementById("days").textContent = days;
+    document.getElementById("totalDays").textContent = totalDays.toLocaleString();
+
+    document.getElementById("result").style.display = "block";
+}
+
+function clearAll(){
+
+    document.getElementById("date1").value = "";
+    document.getElementById("date2").value = "";
+
+    document.getElementById("result").style.display = "none";
+}
+
+function goBack(){
+
+    window.location.href = "index.html";
+
+}
+
+</script>
+
+</body>
+</html>

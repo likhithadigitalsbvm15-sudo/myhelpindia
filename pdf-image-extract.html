@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>PDF Image Extractor - MyHelp India</title>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+
+<style>
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    font-family:Arial,sans-serif;
+    background:#f4f8ff;
+    color:#222;
+}
+
+.header{
+    background:linear-gradient(135deg,#0d47a1,#1976d2,#42a5f5);
+    color:white;
+    text-align:center;
+    padding:25px 15px;
+}
+
+.header h1{
+    margin:0;
+    font-size:30px;
+}
+
+.header p{
+    margin:8px 0 0;
+    font-size:15px;
+}
+
+.container{
+    max-width:750px;
+    margin:25px auto;
+    padding:15px;
+}
+
+.card{
+    background:white;
+    padding:25px;
+    border-radius:16px;
+    box-shadow:0 5px 20px rgba(0,0,0,.10);
+}
+
+label{
+    display:block;
+    margin-top:17px;
+    margin-bottom:7px;
+    font-weight:bold;
+}
+
+input,select{
+    width:100%;
+    padding:13px;
+    border:1px solid #ccc;
+    border-radius:9px;
+    font-size:16px;
+    background:white;
+}
+
+button{
+    width:100%;
+    padding:14px;
+    margin-top:20px;
+    border:0;
+    border-radius:9px;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.extract{
+    background:#1976d2;
+    color:white;
+}
+
+.clear{
+    background:#e9ecef;
+    color:#333;
+}
+
+.back{
+    background:#0d47a1;
+    color:white;
+}
+
+.file-info{
+    display:none;
+    margin-top:15px;
+    padding:12px;
+    background:#f8f9fa;
+    border-radius:8px;
+}
+
+.status{
+    display:none;
+    margin-top:20px;
+    padding:15px;
+    background:#eef6ff;
+    border-left:5px solid #1976d2;
+    border-radius:8px;
+    line-height:1.6;
+}
+
+.results{
+    margin-top:20px;
+}
+
+.image-card{
+    background:#f8f9fa;
+    border-radius:12px;
+    padding:15px;
+    margin-top:15px;
+    text-align:center;
+}
+
+.image-card img{
+    max-width:100%;
+    max-height:450px;
+    border-radius:8px;
+    border:1px solid #ddd;
+}
+
+.download{
+    background:#198754;
+    color:white;
+}
+
+.footer{
+    text-align:center;
+    padding:25px;
+    color:#666;
+    font-size:13px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+    <h1>🖼️ PDF Image Extractor</h1>
+    <p>Convert PDF pages into high-quality images</p>
+</div>
+
+<div class="container">
+
+<div class="card">
+
+    <label>Select PDF File</label>
+
+    <input
+        type="file"
+        id="pdfFile"
+        accept=".pdf,application/pdf"
+    >
+
+    <div class="file-info" id="fileInfo"></div>
+
+    <label>Image Format</label>
+
+    <select id="imageFormat">
+        <option value="image/jpeg">JPG / JPEG</option>
+        <option value="image/png">PNG</option>
+    </select>
+
+    <label>Image Quality</label>
+
+    <select id="quality">
+        <option value="1.5">Standard</option>
+        <option value="2" selected>High Quality</option>
+        <option value="2.5">Very High Quality</option>
+        <option value="3">Ultra Quality</option>
+    </select>
+
+    <button class="extract" onclick="extractImages()">
+        🖼️ Extract PDF Pages
+    </button>
+
+    <button class="clear" onclick="clearAll()">
+        🗑️ Clear
+    </button>
+
+    <button class="back" onclick="goBack()">
+        ← Back to MyHelp India
+    </button>
+
+    <div class="status" id="status"></div>
+
+    <div class="results" id="results"></div>
+
+</div>
+
+</div>
+
+<div class="footer">
+    © 2026 MyHelp India • Simple & Helpful Tools
+</div>
+
+<script>
+
+pdfjsLib.GlobalWorkerOptions.workerSrc =
+"https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+
+let selectedFile = null;
+
+document.getElementById("pdfFile").addEventListener("change",function(){
+
+    selectedFile = this.files[0];
+
+    if(!selectedFile){
+        return;
+    }
+
+    const info =
+        document.getElementById("fileInfo");
+
+    info.style.display = "block";
+
+    info.innerHTML =
+        "<b>Selected PDF:</b> " +
+        escapeHTML(selectedFile.name) +
+        "<br><b>File Size:</b> " +
+        formatBytes(selectedFile.size);
+
+});
+
+async function extractImages(){
+
+    if(!selectedFile){
+
+        alert("Please select a PDF file first.");
+
+        return;
+    }
+
+    const status =
+        document.getElementById("status");
+
+    const results =
+        document.getElementById("results");
+
+    const format =
+        document.getElementById("imageFormat").value;
+
+    const scale =
+        parseFloat(document.getElementById("quality").value);
+
+    results.innerHTML = "";
+
+    status.style.display = "block";
+
+    status.innerHTML =
+        "⏳ Reading PDF... Please wait.";
+
+    try{
+
+        const arrayBuffer =
+            await selectedFile.arrayBuffer();
+
+        const pdf =
+            await pdfjsLib.getDocument({
+                data:arrayBuffer
+            }).promise;
+
+        const totalPages =
+            pdf.numPages;
+
+        status.innerHTML =
+            "📄 PDF loaded successfully.<br>" +
+            "Total Pages: <b>" +
+            totalPages +
+            "</b><br><br>" +
+            "⏳ Converting pages to images...";
+
+        for(let pageNumber=1;pageNumber<=totalPages;pageNumber++){
+
+            const page =
+                await pdf.getPage(pageNumber);
+
+            const viewport =
+                page.getViewport({
+                    scale:scale
+                });
+
+            const canvas =
+                document.createElement("canvas");
+
+            const context =
+                canvas.getContext("2d");
+
+            canvas.width =
+                Math.floor(viewport.width);
+
+            canvas.height =
+                Math.floor(viewport.height);
+
+            await page.render({
+                canvasContext:context,
+                viewport:viewport
+            }).promise;
+
+            let dataUrl;
+
+            if(format === "image/png"){
+
+                dataUrl =
+                    canvas.toDataURL(
+                        "image/png"
+                    );
+
+            }else{
+
+                dataUrl =
+                    canvas.toDataURL(
+                        "image/jpeg",
+                        0.95
+                    );
+
+            }
+
+            const card =
+                document.createElement("div");
+
+            card.className =
+                "image-card";
+
+            const image =
+                document.createElement("img");
+
+            image.src = dataUrl;
+
+            image.alt =
+                "PDF Page " + pageNumber;
+
+            const title =
+                document.createElement("h3");
+
+            title.textContent =
+                "Page " + pageNumber;
+
+            const button =
+                document.createElement("button");
+
+            button.className =
+                "download";
+
+            button.textContent =
+                "⬇️ Download Page " +
+                pageNumber;
+
+            const extension =
+                format === "image/png"
+                ? "png"
+                : "jpg";
+
+            button.onclick = function(){
+
+                const link =
+                    document.createElement("a");
+
+                link.href = dataUrl;
+
+                link.download =
+                    "MyHelp-India-PDF-Page-" +
+                    pageNumber +
+                    "." +
+                    extension;
+
+                document.body.appendChild(link);
+
+                link.click();
+
+                document.body.removeChild(link);
+
+            };
+
+            card.appendChild(title);
+
+            card.appendChild(image);
+
+            card.appendChild(button);
+
+            results.appendChild(card);
+
+            status.innerHTML =
+                "✅ Processing PDF...<br>" +
+                "Page <b>" +
+                pageNumber +
+                "</b> of <b>" +
+                totalPages +
+                "</b> completed.";
+
+        }
+
+        status.innerHTML =
+            "🎉 <b>Conversion Completed!</b><br>" +
+            totalPages +
+            " PDF page(s) converted to images.<br>" +
+            "Choose any page above and download it.";
+
+    }
+    catch(error){
+
+        console.error(error);
+
+        status.innerHTML =
+            "❌ Unable to process this PDF.<br>" +
+            "Please make sure the selected file is a valid PDF.";
+
+    }
+
+}
+
+function clearAll(){
+
+    document.getElementById("pdfFile").value = "";
+
+    document.getElementById("fileInfo").style.display =
+        "none";
+
+    document.getElementById("status").style.display =
+        "none";
+
+    document.getElementById("results").innerHTML =
+        "";
+
+    selectedFile = null;
+
+}
+
+function goBack(){
+
+    window.location.href =
+        "index.html";
+
+}
+
+function formatBytes(bytes){
+
+    if(bytes === 0){
+        return "0 Bytes";
+    }
+
+    const sizes =
+        ["Bytes","KB","MB","GB"];
+
+    const i =
+        Math.floor(
+            Math.log(bytes) /
+            Math.log(1024)
+        );
+
+    return (
+        Math.round(
+            bytes /
+            Math.pow(1024,i) *
+            100
+        ) / 100
+    ) +
+    " " +
+    sizes[i];
+
+}
+
+function escapeHTML(text){
+
+    return text.replace(
+        /[&<>"']/g,
+        function(char){
+
+            return {
+                "&":"&amp;",
+                "<":"&lt;",
+                ">":"&gt;",
+                '"':"&quot;",
+                "'":"&#039;"
+            }[char];
+
+        }
+    );
+
+}
+
+</script>
+
+</body>
+</html>

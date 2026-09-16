@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>PDF Header & Footer - MyHelp India</title>
+
+<meta name="description" content="Add professional headers, footers and page numbers to PDF files online for free with MyHelp India.">
+
+<script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+
+<style>
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    font-family:Arial,Helvetica,sans-serif;
+    background:#f4f8ff;
+    color:#222;
+}
+
+header{
+    background:linear-gradient(135deg,#0d47a1,#1976d2,#42a5f5);
+    color:white;
+    padding:22px 15px;
+    text-align:center;
+}
+
+header h1{
+    margin:0;
+    font-size:28px;
+}
+
+header p{
+    margin:8px 0 0;
+    font-size:15px;
+}
+
+.container{
+    max-width:850px;
+    margin:25px auto;
+    padding:0 15px;
+}
+
+.card{
+    background:white;
+    border-radius:16px;
+    padding:25px;
+    margin-bottom:20px;
+    box-shadow:0 5px 20px rgba(0,0,0,0.08);
+}
+
+.card h2{
+    margin-top:0;
+    color:#0d47a1;
+    font-size:21px;
+}
+
+label{
+    display:block;
+    font-weight:bold;
+    margin-top:15px;
+    margin-bottom:7px;
+}
+
+input,
+select{
+    width:100%;
+    padding:13px;
+    border:1px solid #ccd6e0;
+    border-radius:9px;
+    font-size:15px;
+    outline:none;
+}
+
+input:focus,
+select:focus{
+    border-color:#1976d2;
+    box-shadow:0 0 0 2px rgba(25,118,210,.1);
+}
+
+.checkbox-row{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-top:18px;
+    font-weight:bold;
+}
+
+.checkbox-row input{
+    width:auto;
+}
+
+.file-box{
+    border:2px dashed #42a5f5;
+    border-radius:12px;
+    padding:20px;
+    text-align:center;
+    background:#f8fbff;
+}
+
+.file-box input{
+    border:none;
+    background:transparent;
+}
+
+.info{
+    margin-top:15px;
+    padding:14px;
+    background:#eef6ff;
+    border-left:5px solid #1976d2;
+    border-radius:8px;
+    line-height:1.6;
+}
+
+.buttons{
+    display:flex;
+    flex-wrap:wrap;
+    gap:12px;
+    margin-top:25px;
+}
+
+button{
+    border:none;
+    padding:13px 20px;
+    border-radius:9px;
+    font-size:15px;
+    font-weight:bold;
+    cursor:pointer;
+    transition:.2s;
+}
+
+button:hover{
+    transform:translateY(-1px);
+}
+
+.primary{
+    background:#1976d2;
+    color:white;
+}
+
+.success{
+    background:#2e7d32;
+    color:white;
+}
+
+.secondary{
+    background:#607d8b;
+    color:white;
+}
+
+.danger{
+    background:#d32f2f;
+    color:white;
+}
+
+.result{
+    display:none;
+    background:#f1f8e9;
+    border:1px solid #a5d6a7;
+    padding:18px;
+    border-radius:10px;
+    margin-top:20px;
+}
+
+.result h3{
+    margin-top:0;
+    color:#2e7d32;
+}
+
+.status{
+    margin-top:15px;
+    padding:12px;
+    border-radius:8px;
+    display:none;
+}
+
+.success-status{
+    background:#e8f5e9;
+    color:#2e7d32;
+}
+
+.error-status{
+    background:#ffebee;
+    color:#c62828;
+}
+
+footer{
+    text-align:center;
+    padding:25px 15px;
+    color:#666;
+    font-size:14px;
+}
+
+@media(max-width:600px){
+
+    header h1{
+        font-size:23px;
+    }
+
+    .card{
+        padding:18px;
+    }
+
+    .buttons{
+        flex-direction:column;
+    }
+
+    button{
+        width:100%;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>📄 PDF Header & Footer</h1>
+    <p>Add Professional Header, Footer & Page Numbers</p>
+</header>
+
+<div class="container">
+
+    <div class="card">
+
+        <h2>📁 Select PDF File</h2>
+
+        <div class="file-box">
+            <input type="file" id="pdfFile" accept="application/pdf">
+        </div>
+
+        <div id="fileInfo" class="info" style="display:none;"></div>
+
+    </div>
+
+
+    <div class="card">
+
+        <h2>⬆️ Header Settings</h2>
+
+        <label for="headerText">Header Text</label>
+        <input
+            type="text"
+            id="headerText"
+            placeholder="Example: MyHelp India"
+        >
+
+        <label for="headerPosition">Header Position</label>
+        <select id="headerPosition">
+            <option value="left">Left</option>
+            <option value="center" selected>Center</option>
+            <option value="right">Right</option>
+        </select>
+
+    </div>
+
+
+    <div class="card">
+
+        <h2>⬇️ Footer Settings</h2>
+
+        <label for="footerText">Footer Text</label>
+        <input
+            type="text"
+            id="footerText"
+            placeholder="Example: www.myhelpindia.com"
+        >
+
+        <label for="footerPosition">Footer Position</label>
+        <select id="footerPosition">
+            <option value="left">Left</option>
+            <option value="center" selected>Center</option>
+            <option value="right">Right</option>
+        </select>
+
+    </div>
+
+
+    <div class="card">
+
+        <h2>🔢 Page Number Settings</h2>
+
+        <div class="checkbox-row">
+            <input type="checkbox" id="addPageNumbers" checked>
+            <span>Add Page Numbers</span>
+        </div>
+
+        <label for="pageNumberFormat">Page Number Format</label>
+
+        <select id="pageNumberFormat">
+            <option value="page">Page 1</option>
+            <option value="of">Page 1 of 10</option>
+            <option value="slash">1 / 10</option>
+            <option value="number">1</option>
+        </select>
+
+        <label for="pagePosition">Page Number Position</label>
+
+        <select id="pagePosition">
+            <option value="left">Left</option>
+            <option value="center" selected>Center</option>
+            <option value="right">Right</option>
+        </select>
+
+    </div>
+
+
+    <div class="card">
+
+        <h2>⚙️ Design Settings</h2>
+
+        <label for="fontSize">Font Size</label>
+
+        <select id="fontSize">
+            <option value="8">8</option>
+            <option value="10">10</option>
+            <option value="12" selected>12</option>
+            <option value="14">14</option>
+            <option value="16">16</option>
+            <option value="18">18</option>
+            <option value="20">20</option>
+        </select>
+
+        <label for="margin">Header / Footer Margin</label>
+
+        <select id="margin">
+            <option value="20">20 points</option>
+            <option value="30" selected>30 points</option>
+            <option value="40">40 points</option>
+            <option value="50">50 points</option>
+            <option value="60">60 points</option>
+        </select>
+
+        <div class="info">
+            ℹ️ Header and footer will be added to every page of the PDF.
+            Page numbers can also be added automatically.
+        </div>
+
+        <div class="buttons">
+
+            <button class="primary" onclick="addHeaderFooter()">
+                ✨ Add Header & Footer
+            </button>
+
+            <button class="secondary" onclick="clearAll()">
+                🗑️ Clear
+            </button>
+
+            <button class="secondary" onclick="goBack()">
+                🏠 Back to MyHelp India
+            </button>
+
+        </div>
+
+        <div id="status" class="status"></div>
+
+        <div id="result" class="result">
+
+            <h3>✅ PDF Ready!</h3>
+
+            <p>
+                Your PDF has been successfully updated with the selected
+                header, footer and page number settings.
+            </p>
+
+            <button class="success" onclick="downloadPDF()">
+                ⬇️ Download PDF
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<footer>
+    <p>© 2026 MyHelp India • Simple & Free Tools for Everyday Life</p>
+</footer>
+
+
+<script>
+
+let selectedPDF = null;
+let outputPDF = null;
+
+
+/* PDF FILE SELECT */
+
+document.getElementById("pdfFile").addEventListener("change", function(){
+
+    const file = this.files[0];
+
+    if(!file){
+        return;
+    }
+
+    if(file.type !== "application/pdf"){
+        showStatus("Please select a valid PDF file.", false);
+        this.value = "";
+        return;
+    }
+
+    selectedPDF = file;
+
+    const sizeMB = (file.size / (1024 * 1024)).toFixed(2);
+
+    const fileInfo = document.getElementById("fileInfo");
+
+    fileInfo.style.display = "block";
+
+    fileInfo.innerHTML =
+        "<strong>File Name:</strong> " + escapeHTML(file.name) +
+        "<br><strong>File Size:</strong> " + sizeMB + " MB";
+
+    showStatus("PDF selected successfully.", true);
+
+});
+
+
+/* MAIN FUNCTION */
+
+async function addHeaderFooter(){
+
+    if(!selectedPDF){
+
+        showStatus("Please select a PDF file first.", false);
+        return;
+
+    }
+
+    try{
+
+        showStatus("Processing PDF... Please wait.", true);
+
+        const arrayBuffer = await selectedPDF.arrayBuffer();
+
+        const pdfDoc = await PDFLib.PDFDocument.load(arrayBuffer);
+
+        const pages = pdfDoc.getPages();
+
+        const font = await pdfDoc.embedFont(
+            PDFLib.StandardFonts.Helvetica
+        );
+
+        const boldFont = await pdfDoc.embedFont(
+            PDFLib.StandardFonts.HelveticaBold
+        );
+
+        const headerText =
+            document.getElementById("headerText").value.trim();
+
+        const footerText =
+            document.getElementById("footerText").value.trim();
+
+        const headerPosition =
+            document.getElementById("headerPosition").value;
+
+        const footerPosition =
+            document.getElementById("footerPosition").value;
+
+        const addPageNumbers =
+            document.getElementById("addPageNumbers").checked;
+
+        const pageNumberFormat =
+            document.getElementById("pageNumberFormat").value;
+
+        const pagePosition =
+            document.getElementById("pagePosition").value;
+
+        const fontSize =
+            parseInt(document.getElementById("fontSize").value);
+
+        const margin =
+            parseInt(document.getElementById("margin").value);
+
+        const totalPages = pages.length;
+
+
+        pages.forEach((page, index) => {
+
+            const pageNumber = index + 1;
+
+            const width = page.getWidth();
+            const height = page.getHeight();
+
+
+            /* HEADER */
+
+            if(headerText){
+
+                const headerWidth =
+                    boldFont.widthOfTextAtSize(
+                        headerText,
+                        fontSize
+                    );
+
+                let headerX;
+
+                if(headerPosition === "left"){
+
+                    headerX = margin;
+
+                }else if(headerPosition === "right"){
+
+                    headerX = width - headerWidth - margin;
+
+                }else{
+
+                    headerX = (width - headerWidth) / 2;
+
+                }
+
+                const headerY =
+                    height - margin;
+
+                page.drawText(headerText, {
+
+                    x: headerX,
+                    y: headerY,
+
+                    size: fontSize,
+
+                    font: boldFont,
+
+                    color: PDFLib.rgb(
+                        0.05,
+                        0.28,
+                        0.63
+                    )
+
+                });
+
+            }
+
+
+            /* FOOTER */
+
+            let finalFooterText = footerText;
+
+            if(addPageNumbers){
+
+                let pageText = "";
+
+                if(pageNumberFormat === "page"){
+
+                    pageText =
+                        "Page " + pageNumber;
+
+                }else if(pageNumberFormat === "of"){
+
+                    pageText =
+                        "Page " +
+                        pageNumber +
+                        " of " +
+                        totalPages;
+
+                }else if(pageNumberFormat === "slash"){
+
+                    pageText =
+                        pageNumber +
+                        " / " +
+                        totalPages;
+
+                }else{
+
+                    pageText =
+                        String(pageNumber);
+
+                }
+
+
+                if(finalFooterText){
+
+                    finalFooterText =
+                        finalFooterText +
+                        "  •  " +
+                        pageText;
+
+                }else{
+
+                    finalFooterText = pageText;
+
+                }
+
+            }
+
+
+            if(finalFooterText){
+
+                const footerWidth =
+                    font.widthOfTextAtSize(
+                        finalFooterText,
+                        fontSize
+                    );
+
+                let footerX;
+
+                if(
+                    addPageNumbers &&
+                    !footerText
+                ){
+
+                    if(pagePosition === "left"){
+
+                        footerX = margin;
+
+                    }else if(pagePosition === "right"){
+
+                        footerX =
+                            width -
+                            footerWidth -
+                            margin;
+
+                    }else{
+
+                        footerX =
+                            (width - footerWidth) / 2;
+
+                    }
+
+                }else{
+
+                    if(footerPosition === "left"){
+
+                        footerX = margin;
+
+                    }else if(footerPosition === "right"){
+
+                        footerX =
+                            width -
+                            footerWidth -
+                            margin;
+
+                    }else{
+
+                        footerX =
+                            (width - footerWidth) / 2;
+
+                    }
+
+                }
+
+
+                const footerY = margin - 5;
+
+                page.drawText(finalFooterText, {
+
+                    x: footerX,
+
+                    y: footerY,
+
+                    size: fontSize,
+
+                    font: font,
+
+                    color: PDFLib.rgb(
+                        0.35,
+                        0.35,
+                        0.35
+                    )
+
+                });
+
+            }
+
+        });
+
+
+        outputPDF = await pdfDoc.save();
+
+        document.getElementById("result").style.display = "block";
+
+        showStatus(
+            "Header, footer and page numbers added successfully!",
+            true
+        );
+
+    }catch(error){
+
+        console.error(error);
+
+        showStatus(
+            "Unable to process this PDF. Please try another PDF.",
+            false
+        );
+
+    }
+
+}
+
+
+/* DOWNLOAD */
+
+function downloadPDF(){
+
+    if(!outputPDF){
+
+        showStatus("Please process the PDF first.", false);
+        return;
+
+    }
+
+    const blob = new Blob(
+        [outputPDF],
+        {type:"application/pdf"}
+    );
+
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+
+    a.href = url;
+
+    a.download =
+        "MyHelp-India-Header-Footer-PDF.pdf";
+
+    document.body.appendChild(a);
+
+    a.click();
+
+    document.body.removeChild(a);
+
+    URL.revokeObjectURL(url);
+
+}
+
+
+/* CLEAR */
+
+function clearAll(){
+
+    selectedPDF = null;
+
+    outputPDF = null;
+
+    document.getElementById("pdfFile").value = "";
+
+    document.getElementById("headerText").value = "";
+
+    document.getElementById("footerText").value = "";
+
+    document.getElementById("addPageNumbers").checked = true;
+
+    document.getElementById("pageNumberFormat").value = "page";
+
+    document.getElementById("pagePosition").value = "center";
+
+    document.getElementById("headerPosition").value = "center";
+
+    document.getElementById("footerPosition").value = "center";
+
+    document.getElementById("fontSize").value = "12";
+
+    document.getElementById("margin").value = "30";
+
+    document.getElementById("fileInfo").style.display = "none";
+
+    document.getElementById("result").style.display = "none";
+
+    document.getElementById("status").style.display = "none";
+
+}
+
+
+/* BACK */
+
+function goBack(){
+
+    window.location.href = "index.html";
+
+}
+
+
+/* STATUS */
+
+function showStatus(message, success){
+
+    const status =
+        document.getElementById("status");
+
+    status.style.display = "block";
+
+    status.className =
+        "status " +
+        (success
+            ? "success-status"
+            : "error-status");
+
+    status.textContent = message;
+
+}
+
+
+/* SECURITY */
+
+function escapeHTML(text){
+
+    return text
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+
+}
+
+</script>
+
+</body>
+</html>

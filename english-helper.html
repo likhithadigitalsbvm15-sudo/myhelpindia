@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>English Helper - MyHelp India</title>
+<meta name="description" content="Free English Helper for grammar, nouns, verbs, tenses, sentence making and English Telugu meanings.">
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    font-family:Arial, sans-serif;
+}
+
+body{
+    background:#f4f8ff;
+    color:#222;
+}
+
+header{
+    background:linear-gradient(135deg,#0d47a1,#1976d2,#42a5f5);
+    color:white;
+    text-align:center;
+    padding:28px 15px;
+}
+
+header h1{
+    font-size:32px;
+    margin-bottom:8px;
+}
+
+header p{
+    font-size:16px;
+}
+
+.container{
+    max-width:900px;
+    margin:25px auto;
+    padding:0 15px;
+}
+
+.card{
+    background:white;
+    padding:22px;
+    margin-bottom:20px;
+    border-radius:14px;
+    box-shadow:0 4px 15px rgba(0,0,0,0.08);
+}
+
+.card h2{
+    color:#0d47a1;
+    margin-bottom:15px;
+}
+
+label{
+    display:block;
+    font-weight:bold;
+    margin:12px 0 7px;
+}
+
+select,input,textarea{
+    width:100%;
+    padding:13px;
+    border:1px solid #ccc;
+    border-radius:8px;
+    font-size:16px;
+}
+
+textarea{
+    min-height:110px;
+    resize:vertical;
+}
+
+button{
+    border:none;
+    padding:13px 20px;
+    border-radius:8px;
+    background:#1976d2;
+    color:white;
+    font-size:16px;
+    cursor:pointer;
+    margin-top:15px;
+    margin-right:8px;
+}
+
+button:hover{
+    background:#0d47a1;
+}
+
+.clear{
+    background:#777;
+}
+
+.result{
+    display:none;
+    margin-top:20px;
+    padding:20px;
+    background:#eef6ff;
+    border-left:5px solid #1976d2;
+    border-radius:8px;
+    line-height:1.7;
+}
+
+.result h3{
+    color:#0d47a1;
+    margin-bottom:10px;
+}
+
+.example{
+    background:#f8f8f8;
+    padding:12px;
+    margin-top:10px;
+    border-radius:7px;
+}
+
+.back{
+    display:block;
+    text-align:center;
+    margin:25px 0;
+    color:#0d47a1;
+    text-decoration:none;
+    font-weight:bold;
+}
+
+footer{
+    text-align:center;
+    background:#0d47a1;
+    color:white;
+    padding:18px;
+    margin-top:30px;
+}
+
+@media(max-width:600px){
+    header h1{
+        font-size:26px;
+    }
+
+    .card{
+        padding:17px;
+    }
+
+    button{
+        width:100%;
+        margin-right:0;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>📘 English Helper</h1>
+    <p>Learn English Easily • Simple & Free</p>
+</header>
+
+<div class="container">
+
+<div class="card">
+    <h2>English Learning Help</h2>
+
+    <label>Select Help Type</label>
+
+    <select id="helpType">
+        <option value="grammar">Grammar</option>
+        <option value="noun">Noun</option>
+        <option value="verb">Verb</option>
+        <option value="tenses">Tenses</option>
+        <option value="sentence">Sentence Making</option>
+        <option value="meaning">English → Telugu Meaning</option>
+        <option value="translate">Telugu → English Basic Sentence</option>
+    </select>
+
+    <label>Enter Your Question / Word / Sentence</label>
+
+    <textarea id="question" placeholder="Example: What is a noun?"></textarea>
+
+    <button onclick="getHelp()">Get Answer</button>
+    <button class="clear" onclick="clearAll()">Clear</button>
+
+    <div class="result" id="result"></div>
+</div>
+
+
+<div class="card">
+    <h2>⭐ Basic English Examples</h2>
+
+    <div class="example">
+        <b>I am a photographer.</b><br>
+        నేను ఫోటోగ్రాఫర్‌ని.
+    </div>
+
+    <div class="example">
+        <b>I am going to my studio.</b><br>
+        నేను నా స్టూడియోకి వెళ్తున్నాను.
+    </div>
+
+    <div class="example">
+        <b>Come with me.</b><br>
+        నాతో రా.
+    </div>
+
+    <div class="example">
+        <b>Wait for me.</b><br>
+        నా కోసం వేచి ఉండు.
+    </div>
+
+    <div class="example">
+        <b>Don't worry.</b><br>
+        బాధపడవద్దు.
+    </div>
+
+    <div class="example">
+        <b>I don't understand.</b><br>
+        నాకు అర్థం కాలేదు.
+    </div>
+</div>
+
+<a class="back" href="index.html">← Back to MyHelp India</a>
+
+</div>
+
+<footer>
+    <p>© 2026 MyHelp India • Your Life • Our Support</p>
+</footer>
+
+
+<script>
+
+function getHelp(){
+
+    let type = document.getElementById("helpType").value;
+    let question = document.getElementById("question").value.trim();
+    let result = document.getElementById("result");
+
+    if(question === ""){
+        result.style.display="block";
+        result.innerHTML="<h3>⚠️ Please enter something</h3><p>Please enter a word, sentence or question.</p>";
+        return;
+    }
+
+    let answer="";
+
+    if(type==="grammar"){
+
+        answer = `
+        <h3>📚 Grammar</h3>
+        <p><b>Grammar</b> means the rules used to speak and write English correctly.</p>
+
+        <div class="example">
+        <b>Example:</b><br>
+        I am a photographer.<br>
+        She is a student.<br>
+        They are friends.
+        </div>
+        `;
+    }
+
+    else if(type==="noun"){
+
+        answer = `
+        <h3>🔤 Noun</h3>
+        <p>A <b>Noun</b> is the name of a person, place, animal or thing.</p>
+
+        <div class="example">
+        <b>Person:</b> Ravi, Teacher<br>
+        <b>Place:</b> India, School<br>
+        <b>Animal:</b> Dog, Cat<br>
+        <b>Thing:</b> Camera, Book
+        </div>
+        `;
+    }
+
+    else if(type==="verb"){
+
+        answer = `
+        <h3>🏃 Verb</h3>
+        <p>A <b>Verb</b> is an action word.</p>
+
+        <div class="example">
+        <b>Examples:</b><br>
+        Go – వెళ్ళు<br>
+        Come – రా<br>
+        Eat – తిను<br>
+        Sleep – నిద్రపో<br>
+        Work – పని చేయు<br>
+        Take – తీసుకో
+        </div>
+        `;
+    }
+
+    else if(type==="tenses"){
+
+        answer = `
+        <h3>⏰ Tenses</h3>
+
+        <div class="example">
+        <b>Present:</b><br>
+        I take photos.<br>
+        నేను ఫోటోలు తీస్తాను.
+        </div>
+
+        <div class="example">
+        <b>Past:</b><br>
+        I took photos.<br>
+        నేను ఫోటోలు తీశాను.
+        </div>
+
+        <div class="example">
+        <b>Future:</b><br>
+        I will take photos.<br>
+        నేను ఫోటోలు తీస్తాను / తీసుకుంటాను.
+        </div>
+        `;
+    }
+
+    else if(type==="sentence"){
+
+        answer = `
+        <h3>✍️ Sentence Making</h3>
+        <p>Use this simple sentence pattern:</p>
+
+        <div class="example">
+        <b>Subject + Verb + Object</b><br><br>
+
+        I + take + photos.<br>
+        నేను + తీస్తాను + ఫోటోలు.
+        </div>
+
+        <div class="example">
+        <b>More Examples:</b><br>
+        I take photos.<br>
+        I edit photos.<br>
+        I go to my studio.<br>
+        I am working now.
+        </div>
+        `;
+    }
+
+    else if(type==="meaning"){
+
+        let word = question.toLowerCase();
+
+        let meanings = {
+            "hello":"నమస్కారం / హలో",
+            "good morning":"శుభోదయం",
+            "thank you":"ధన్యవాదాలు",
+            "please":"దయచేసి",
+            "come":"రా",
+            "go":"వెళ్ళు",
+            "wait":"వేచి ఉండు",
+            "eat":"తిను",
+            "drink":"తాగు",
+            "sleep":"నిద్రపో",
+            "work":"పని చేయు",
+            "photo":"ఫోటో",
+            "camera":"కెమెరా",
+            "school":"పాఠశాల",
+            "book":"పుస్తకం",
+            "friend":"స్నేహితుడు",
+            "mother":"అమ్మ",
+            "father":"నాన్న",
+            "happy":"సంతోషంగా",
+            "good":"మంచి",
+            "bad":"చెడు",
+            "beautiful":"అందమైన",
+            "today":"ఈ రోజు",
+            "tomorrow":"రేపు",
+            "yesterday":"నిన్న"
+        };
+
+        if(meanings[word]){
+            answer = `
+            <h3>📖 Meaning</h3>
+            <p><b>${question}</b> = <b>${meanings[word]}</b></p>
+            `;
+        }else{
+            answer = `
+            <h3>📖 Meaning</h3>
+            <p>Basic meaning is not available for this word.</p>
+            <p>Try simple words like <b>Hello, Camera, School, Friend</b>.</p>
+            `;
+        }
+    }
+
+    else if(type==="translate"){
+
+        let text = question.toLowerCase();
+
+        let translations = {
+            "నమస్కారం":"Hello",
+            "హలో":"Hello",
+            "ధన్యవాదాలు":"Thank you",
+            "రా":"Come",
+            "వెళ్ళు":"Go",
+            "నాతో రా":"Come with me",
+            "నా కోసం వేచి ఉండు":"Wait for me",
+            "బాధపడవద్దు":"Don't worry",
+            "నాకు అర్థం కాలేదు":"I don't understand",
+            "నాకు అర్థమైంది":"I understand",
+            "నేను ఫోటోగ్రాఫర్‌ని":"I am a photographer",
+            "నేను నా స్టూడియోకి వెళ్తున్నాను":"I am going to my studio",
+            "నేను ఫోటోలు తీస్తాను":"I take photos",
+            "నేను ఇప్పుడు పని చేస్తున్నాను":"I am working now",
+            "మనము వెళ్దాం":"Let's go",
+            "త్వరగా రా":"Come fast",
+            "ఇది బాగుంది":"This is good"
+        };
+
+        if(translations[text]){
+            answer = `
+            <h3>🌐 Telugu → English</h3>
+            <p><b>${question}</b></p>
+            <p>English: <b>${translations[text]}</b></p>
+            `;
+        }else{
+            answer = `
+            <h3>🌐 Telugu → English</h3>
+            <p>Basic translation is not available for this sentence.</p>
+            <p>Try a simple sentence.</p>
+            `;
+        }
+    }
+
+    result.style.display="block";
+    result.innerHTML=answer;
+}
+
+
+function clearAll(){
+
+    document.getElementById("question").value="";
+    document.getElementById("result").style.display="none";
+
+}
+
+</script>
+
+</body>
+</html>

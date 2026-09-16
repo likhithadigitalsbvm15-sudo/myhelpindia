@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>PDF Page Number - MyHelp India</title>
+
+<script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+
+<style>
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    font-family:Arial, sans-serif;
+    background:#f4f8ff;
+    color:#222;
+}
+
+.header{
+    background:linear-gradient(135deg,#0d47a1,#1976d2,#42a5f5);
+    color:white;
+    padding:25px 15px;
+    text-align:center;
+}
+
+.header h1{
+    margin:0;
+    font-size:30px;
+}
+
+.header p{
+    margin:8px 0 0;
+    font-size:15px;
+}
+
+.container{
+    max-width:700px;
+    margin:25px auto;
+    padding:15px;
+}
+
+.card{
+    background:white;
+    border-radius:16px;
+    padding:25px;
+    box-shadow:0 5px 20px rgba(0,0,0,0.10);
+}
+
+label{
+    display:block;
+    font-weight:bold;
+    margin-top:16px;
+    margin-bottom:7px;
+}
+
+input,select{
+    width:100%;
+    padding:13px;
+    border:1px solid #ccc;
+    border-radius:9px;
+    font-size:16px;
+    background:white;
+}
+
+button{
+    width:100%;
+    padding:14px;
+    border:none;
+    border-radius:9px;
+    margin-top:20px;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.add-btn{
+    background:#1976d2;
+    color:white;
+}
+
+.download-btn{
+    background:#198754;
+    color:white;
+    display:none;
+}
+
+.clear-btn{
+    background:#e9ecef;
+    color:#333;
+}
+
+.back-btn{
+    background:#0d47a1;
+    color:white;
+}
+
+.info{
+    background:#eef6ff;
+    border-left:5px solid #1976d2;
+    padding:12px;
+    margin-top:18px;
+    border-radius:7px;
+    font-size:14px;
+}
+
+.file-info{
+    margin-top:15px;
+    padding:12px;
+    background:#f8f9fa;
+    border-radius:8px;
+    display:none;
+}
+
+.result{
+    margin-top:20px;
+    padding:15px;
+    background:#e8f5e9;
+    border-left:5px solid #198754;
+    border-radius:8px;
+    display:none;
+    line-height:1.7;
+}
+
+.footer{
+    text-align:center;
+    padding:25px;
+    color:#666;
+    font-size:13px;
+}
+
+.small{
+    font-size:13px;
+    color:#666;
+    margin-top:5px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+    <h1>📄 PDF Page Number</h1>
+    <p>Add professional page numbers to your PDF</p>
+</div>
+
+<div class="container">
+
+<div class="card">
+
+    <label>Select PDF File</label>
+    <input type="file" id="pdfFile" accept=".pdf,application/pdf">
+
+    <div class="file-info" id="fileInfo"></div>
+
+    <label>Page Number Position</label>
+    <select id="position">
+        <option value="bottom-center">Bottom Center</option>
+        <option value="bottom-left">Bottom Left</option>
+        <option value="bottom-right">Bottom Right</option>
+        <option value="top-center">Top Center</option>
+        <option value="top-left">Top Left</option>
+        <option value="top-right">Top Right</option>
+    </select>
+
+    <label>Start Page Number</label>
+    <input type="number" id="startNumber" value="1" min="1">
+
+    <label>Font Size</label>
+    <select id="fontSize">
+        <option value="10">10</option>
+        <option value="12" selected>12</option>
+        <option value="14">14</option>
+        <option value="16">16</option>
+        <option value="18">18</option>
+    </select>
+
+    <label>Page Number Format</label>
+    <select id="format">
+        <option value="number">1, 2, 3, 4...</option>
+        <option value="page">Page 1, Page 2...</option>
+        <option value="of">1 of 10, 2 of 10...</option>
+        <option value="pageof">Page 1 of 10...</option>
+    </select>
+
+    <button class="add-btn" onclick="addPageNumbers()">
+        🔢 Add Page Numbers
+    </button>
+
+    <button class="download-btn" id="downloadBtn">
+        ⬇️ Download Numbered PDF
+    </button>
+
+    <button class="clear-btn" onclick="clearAll()">
+        🗑️ Clear
+    </button>
+
+    <button class="back-btn" onclick="goBack()">
+        ← Back to MyHelp India
+    </button>
+
+    <div class="info">
+        <b>ℹ️ How it works:</b><br>
+        Upload your PDF → Choose page number position → Select format → Add page numbers → Download your new PDF.
+        <br><br>
+        Your PDF is processed directly in your browser.
+    </div>
+
+    <div class="result" id="result"></div>
+
+</div>
+
+</div>
+
+<div class="footer">
+    © 2026 MyHelp India • Simple & Helpful Tools
+</div>
+
+<script>
+
+let numberedPdfBytes = null;
+
+document.getElementById("pdfFile").addEventListener("change", function(){
+
+    const file = this.files[0];
+
+    if(!file){
+        return;
+    }
+
+    const info = document.getElementById("fileInfo");
+
+    info.style.display = "block";
+
+    info.innerHTML =
+        "<b>Selected PDF:</b> " + file.name +
+        "<br><b>File Size:</b> " + formatBytes(file.size);
+
+});
+
+async function addPageNumbers(){
+
+    const fileInput = document.getElementById("pdfFile");
+    const file = fileInput.files[0];
+
+    if(!file){
+        alert("Please select a PDF file first.");
+        return;
+    }
+
+    try{
+
+        const position =
+            document.getElementById("position").value;
+
+        const startNumber =
+            parseInt(document.getElementById("startNumber").value) || 1;
+
+        const fontSize =
+            parseInt(document.getElementById("fontSize").value) || 12;
+
+        const format =
+            document.getElementById("format").value;
+
+        const arrayBuffer = await file.arrayBuffer();
+
+        const pdfDoc =
+            await PDFLib.PDFDocument.load(arrayBuffer);
+
+        const pages = pdfDoc.getPages();
+
+        const font =
+            await pdfDoc.embedFont(PDFLib.StandardFonts.Helvetica);
+
+        const totalPages = pages.length;
+
+        pages.forEach((page,index)=>{
+
+            const pageNumber =
+                startNumber + index;
+
+            let text = "";
+
+            if(format === "number"){
+                text = String(pageNumber);
+            }
+
+            if(format === "page"){
+                text = "Page " + pageNumber;
+            }
+
+            if(format === "of"){
+                text = pageNumber + " of " + totalPages;
+            }
+
+            if(format === "pageof"){
+                text = "Page " + pageNumber + " of " + totalPages;
+            }
+
+            const width = page.getWidth();
+            const height = page.getHeight();
+
+            const textWidth =
+                font.widthOfTextAtSize(text,fontSize);
+
+            let x = 0;
+            let y = 0;
+
+            const margin = 25;
+
+            if(position === "bottom-center"){
+                x = (width - textWidth) / 2;
+                y = margin;
+            }
+
+            if(position === "bottom-left"){
+                x = margin;
+                y = margin;
+            }
+
+            if(position === "bottom-right"){
+                x = width - textWidth - margin;
+                y = margin;
+            }
+
+            if(position === "top-center"){
+                x = (width - textWidth) / 2;
+                y = height - margin - fontSize;
+            }
+
+            if(position === "top-left"){
+                x = margin;
+                y = height - margin - fontSize;
+            }
+
+            if(position === "top-right"){
+                x = width - textWidth - margin;
+                y = height - margin - fontSize;
+            }
+
+            page.drawText(text,{
+                x:x,
+                y:y,
+                size:fontSize,
+                font:font,
+                color:PDFLib.rgb(0.25,0.25,0.25)
+            });
+
+        });
+
+        numberedPdfBytes =
+            await pdfDoc.save();
+
+        const downloadBtn =
+            document.getElementById("downloadBtn");
+
+        downloadBtn.style.display = "block";
+
+        downloadBtn.onclick = function(){
+
+            const blob =
+                new Blob([numberedPdfBytes],{
+                    type:"application/pdf"
+                });
+
+            const url =
+                URL.createObjectURL(blob);
+
+            const a =
+                document.createElement("a");
+
+            a.href = url;
+            a.download = "MyHelp-India-Numbered-PDF.pdf";
+
+            document.body.appendChild(a);
+
+            a.click();
+
+            document.body.removeChild(a);
+
+            URL.revokeObjectURL(url);
+
+        };
+
+        const result =
+            document.getElementById("result");
+
+        result.style.display = "block";
+
+        result.innerHTML =
+            "✅ <b>Page Numbers Added Successfully!</b><br>" +
+            "Total Pages: " + totalPages + "<br>" +
+            "Starting Number: " + startNumber + "<br>" +
+            "Format: " + getFormatName(format);
+
+    }
+    catch(error){
+
+        console.error(error);
+
+        alert(
+            "Unable to process this PDF. Please make sure the selected file is a valid PDF."
+        );
+
+    }
+
+}
+
+function getFormatName(format){
+
+    if(format === "number"){
+        return "1, 2, 3...";
+    }
+
+    if(format === "page"){
+        return "Page 1, Page 2...";
+    }
+
+    if(format === "of"){
+        return "1 of 10, 2 of 10...";
+    }
+
+    if(format === "pageof"){
+        return "Page 1 of 10...";
+    }
+
+    return "";
+}
+
+function formatBytes(bytes){
+
+    if(bytes === 0){
+        return "0 Bytes";
+    }
+
+    const sizes =
+        ["Bytes","KB","MB","GB"];
+
+    const i =
+        Math.floor(
+            Math.log(bytes) / Math.log(1024)
+        );
+
+    return (
+        Math.round(
+            bytes / Math.pow(1024,i) * 100
+        ) / 100
+    ) + " " + sizes[i];
+
+}
+
+function clearAll(){
+
+    document.getElementById("pdfFile").value = "";
+
+    document.getElementById("fileInfo").style.display = "none";
+
+    document.getElementById("downloadBtn").style.display = "none";
+
+    document.getElementById("result").style.display = "none";
+
+    numberedPdfBytes = null;
+
+}
+
+function goBack(){
+
+    window.location.href = "index.html";
+
+}
+
+</script>
+
+</body>
+</html>

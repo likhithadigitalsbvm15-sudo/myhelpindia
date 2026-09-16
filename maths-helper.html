@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Maths Helper - MyHelp India</title>
+<meta name="description" content="Free Maths Helper for addition, subtraction, multiplication, division, percentage and fractions.">
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f8ff;
+    color: #222;
+}
+
+.header {
+    background: linear-gradient(135deg, #0d47a1, #1976d2, #42a5f5);
+    color: white;
+    text-align: center;
+    padding: 22px 15px;
+}
+
+.header h1 {
+    font-size: 28px;
+    margin-bottom: 6px;
+}
+
+.header p {
+    font-size: 15px;
+}
+
+.container {
+    max-width: 700px;
+    margin: 30px auto;
+    padding: 0 15px;
+}
+
+.card {
+    background: white;
+    padding: 25px;
+    border-radius: 18px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.10);
+}
+
+.title {
+    text-align: center;
+    margin-bottom: 22px;
+}
+
+.title h2 {
+    color: #0d47a1;
+    margin-bottom: 6px;
+}
+
+.title p {
+    color: #666;
+    font-size: 14px;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    margin: 15px 0 7px;
+}
+
+select,
+input {
+    width: 100%;
+    padding: 13px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    font-size: 16px;
+    background: white;
+}
+
+.number-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.calculate-btn {
+    width: 100%;
+    margin-top: 22px;
+    padding: 14px;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #1976d2, #0d47a1);
+    color: white;
+    font-size: 17px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.calculate-btn:hover {
+    opacity: 0.9;
+}
+
+.result {
+    display: none;
+    margin-top: 25px;
+    padding: 20px;
+    background: #eef6ff;
+    border-radius: 14px;
+}
+
+.result h3 {
+    text-align: center;
+    color: #0d47a1;
+    margin-bottom: 15px;
+}
+
+.answer {
+    background: white;
+    padding: 18px;
+    border-radius: 10px;
+    border: 1px solid #d8e4ef;
+    text-align: center;
+}
+
+.answer-label {
+    color: #666;
+    font-size: 14px;
+}
+
+.answer-value {
+    color: #0d47a1;
+    font-size: 32px;
+    font-weight: bold;
+    margin-top: 8px;
+}
+
+.steps {
+    margin-top: 15px;
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    line-height: 1.8;
+    border: 1px solid #d8e4ef;
+    white-space: pre-line;
+}
+
+.info {
+    margin-top: 20px;
+    padding: 13px;
+    background: #fff8e1;
+    border-left: 4px solid #ffb300;
+    border-radius: 8px;
+    font-size: 13px;
+    color: #555;
+}
+
+.buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 18px;
+}
+
+.clear-btn,
+.back-btn {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    border-radius: 9px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.clear-btn {
+    background: #eeeeee;
+    color: #333;
+}
+
+.back-btn {
+    background: #e3f2fd;
+    color: #0d47a1;
+}
+
+.footer {
+    text-align: center;
+    margin: 25px 10px;
+    color: #777;
+    font-size: 13px;
+}
+
+@media (max-width: 600px) {
+    .card {
+        padding: 18px;
+    }
+
+    .number-row {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+
+    .header h1 {
+        font-size: 24px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+    <h1>MyHelp India</h1>
+    <p>Your Life • Our Support</p>
+</div>
+
+<div class="container">
+
+<div class="card">
+
+    <div class="title">
+        <h2>➗ Maths Helper</h2>
+        <p>Calculate Maths problems with simple steps</p>
+    </div>
+
+    <label>Select Operation</label>
+
+    <select id="operation">
+        <option value="addition">➕ Addition</option>
+        <option value="subtraction">➖ Subtraction</option>
+        <option value="multiplication">✖️ Multiplication</option>
+        <option value="division">➗ Division</option>
+        <option value="percentage">📊 Percentage</option>
+    </select>
+
+    <div class="number-row">
+
+        <div>
+            <label>First Number</label>
+            <input
+                type="number"
+                id="number1"
+                placeholder="Enter number"
+                step="any"
+            >
+        </div>
+
+        <div>
+            <label>Second Number</label>
+            <input
+                type="number"
+                id="number2"
+                placeholder="Enter number"
+                step="any"
+            >
+        </div>
+
+    </div>
+
+    <button class="calculate-btn" onclick="calculateMaths()">
+        🧮 Calculate
+    </button>
+
+    <div class="result" id="result">
+
+        <h3>📊 Maths Answer</h3>
+
+        <div class="answer">
+
+            <div class="answer-label">
+                Result
+            </div>
+
+            <div class="answer-value" id="answer">
+                0
+            </div>
+
+        </div>
+
+        <div class="steps" id="steps"></div>
+
+    </div>
+
+    <div class="info">
+        💡 For Percentage: enter the total number as the
+        <strong>First Number</strong> and percentage as the
+        <strong>Second Number</strong>.
+        <br><br>
+        Example: 500 and 10 → 10% of 500 = 50.
+    </div>
+
+    <div class="buttons">
+
+        <button class="clear-btn" onclick="clearAll()">
+            Clear
+        </button>
+
+        <button class="back-btn" onclick="goHome()">
+            ← MyHelp India
+        </button>
+
+    </div>
+
+</div>
+
+</div>
+
+<div class="footer">
+    © 2026 MyHelp India • Your Life • Our Support
+</div>
+
+
+<script>
+
+function formatNumber(number) {
+
+    return number.toLocaleString("en-IN", {
+        maximumFractionDigits: 10
+    });
+
+}
+
+
+function calculateMaths() {
+
+    let number1 =
+        parseFloat(document.getElementById("number1").value);
+
+    let number2 =
+        parseFloat(document.getElementById("number2").value);
+
+    let operation =
+        document.getElementById("operation").value;
+
+    if (isNaN(number1) || isNaN(number2)) {
+
+        alert("Please enter both numbers.");
+
+        return;
+    }
+
+    let result = 0;
+    let steps = "";
+
+
+    if (operation === "addition") {
+
+        result = number1 + number2;
+
+        steps =
+            "Addition\n\n" +
+            formatNumber(number1) +
+            " + " +
+            formatNumber(number2) +
+            " = " +
+            formatNumber(result);
+
+    }
+
+
+    else if (operation === "subtraction") {
+
+        result = number1 - number2;
+
+        steps =
+            "Subtraction\n\n" +
+            formatNumber(number1) +
+            " - " +
+            formatNumber(number2) +
+            " = " +
+            formatNumber(result);
+
+    }
+
+
+    else if (operation === "multiplication") {
+
+        result = number1 * number2;
+
+        steps =
+            "Multiplication\n\n" +
+            formatNumber(number1) +
+            " × " +
+            formatNumber(number2) +
+            " = " +
+            formatNumber(result);
+
+    }
+
+
+    else if (operation === "division") {
+
+        if (number2 === 0) {
+
+            alert("Cannot divide by zero.");
+
+            return;
+        }
+
+        result = number1 / number2;
+
+        steps =
+            "Division\n\n" +
+            formatNumber(number1) +
+            " ÷ " +
+            formatNumber(number2) +
+            " = " +
+            formatNumber(result);
+
+    }
+
+
+    else if (operation === "percentage") {
+
+        result = (number1 * number2) / 100;
+
+        steps =
+            "Percentage\n\n" +
+            number2 +
+            "% of " +
+            formatNumber(number1) +
+            "\n\n= (" +
+            formatNumber(number1) +
+            " × " +
+            number2 +
+            ") ÷ 100" +
+            "\n\n= " +
+            formatNumber(result);
+
+    }
+
+
+    document.getElementById("answer").innerText =
+        formatNumber(result);
+
+    document.getElementById("steps").innerText =
+        steps;
+
+    document.getElementById("result").style.display =
+        "block";
+}
+
+
+function clearAll() {
+
+    document.getElementById("number1").value = "";
+
+    document.getElementById("number2").value = "";
+
+    document.getElementById("operation").value =
+        "addition";
+
+    document.getElementById("result").style.display =
+        "none";
+}
+
+
+function goHome() {
+
+    window.location.href = "index.html";
+
+}
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>MyHelp India - Professional Resume Builder</title>
+
+<style>
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    font-family:Arial,Helvetica,sans-serif;
+    background:#eef4f9;
+    color:#222;
+}
+
+header{
+    background:linear-gradient(135deg,#0d47a1,#1976d2,#00a86b);
+    color:white;
+    padding:18px 20px;
+    text-align:center;
+}
+
+.logo{
+    font-size:27px;
+    font-weight:bold;
+}
+
+.subtitle{
+    margin-top:5px;
+    font-size:14px;
+}
+
+.container{
+    max-width:1000px;
+    margin:30px auto;
+    padding:0 18px;
+}
+
+.builder{
+    background:white;
+    padding:28px;
+    border-radius:18px;
+    box-shadow:0 8px 30px rgba(0,0,0,.10);
+}
+
+h1{
+    text-align:center;
+    color:#0d47a1;
+    margin-top:0;
+}
+
+.intro{
+    text-align:center;
+    color:#666;
+    margin-bottom:30px;
+}
+
+.section{
+    margin-top:28px;
+}
+
+.section-title{
+    color:#0d47a1;
+    border-bottom:2px solid #00a86b;
+    padding-bottom:8px;
+    margin-bottom:18px;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:16px;
+}
+
+.field{
+    display:flex;
+    flex-direction:column;
+}
+
+.field.full{
+    grid-column:1/-1;
+}
+
+label{
+    font-weight:bold;
+    margin-bottom:6px;
+}
+
+input,
+textarea{
+    width:100%;
+    padding:12px;
+    border:1px solid #ccd6df;
+    border-radius:8px;
+    font-size:15px;
+    outline:none;
+}
+
+input:focus,
+textarea:focus{
+    border-color:#1976d2;
+}
+
+textarea{
+    min-height:100px;
+    resize:vertical;
+}
+
+.photo-box{
+    text-align:center;
+    margin-bottom:20px;
+}
+
+#photoPreview{
+    width:120px;
+    height:120px;
+    object-fit:cover;
+    border-radius:50%;
+    border:4px solid #1976d2;
+    display:none;
+    margin:10px auto;
+}
+
+.photo-label{
+    display:inline-block;
+    background:#1976d2;
+    color:white;
+    padding:11px 20px;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+#photo{
+    display:none;
+}
+
+.buttons{
+    display:flex;
+    gap:12px;
+    margin-top:30px;
+}
+
+button{
+    flex:1;
+    padding:14px;
+    border:0;
+    border-radius:9px;
+    color:white;
+    font-size:16px;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+.create{
+    background:#1976d2;
+}
+
+.clear{
+    background:#777;
+}
+
+button:hover{
+    opacity:.9;
+}
+
+.back{
+    display:block;
+    text-align:center;
+    margin-top:22px;
+    color:#1976d2;
+    text-decoration:none;
+}
+
+/* Resume */
+
+#resumePage{
+    display:none;
+}
+
+.resume{
+    max-width:850px;
+    margin:30px auto;
+    background:white;
+    min-height:1100px;
+    box-shadow:0 5px 25px rgba(0,0,0,.12);
+}
+
+.resume-header{
+    background:linear-gradient(135deg,#0d47a1,#1976d2);
+    color:white;
+    padding:35px;
+    display:flex;
+    align-items:center;
+    gap:25px;
+}
+
+.resume-photo{
+    width:125px;
+    height:125px;
+    border-radius:50%;
+    object-fit:cover;
+    border:4px solid white;
+    display:none;
+}
+
+.resume-name{
+    font-size:34px;
+    font-weight:bold;
+    margin-bottom:8px;
+}
+
+.resume-contact{
+    line-height:1.8;
+    font-size:14px;
+}
+
+.resume-body{
+    padding:35px 45px;
+}
+
+.resume-section{
+    margin-bottom:25px;
+}
+
+.resume-section h2{
+    color:#0d47a1;
+    border-bottom:2px solid #00a86b;
+    padding-bottom:6px;
+    margin-bottom:12px;
+}
+
+.resume-text{
+    line-height:1.7;
+    white-space:pre-line;
+    color:#444;
+}
+
+.resume-actions{
+    max-width:850px;
+    margin:20px auto;
+    display:flex;
+    gap:12px;
+}
+
+.resume-actions button{
+    background:#1976d2;
+}
+
+@media(max-width:650px){
+
+    .grid{
+        grid-template-columns:1fr;
+    }
+
+    .field.full{
+        grid-column:auto;
+    }
+
+    .builder{
+        padding:20px;
+    }
+
+    .resume-header{
+        flex-direction:column;
+        text-align:center;
+    }
+
+    .resume-body{
+        padding:25px;
+    }
+
+    .resume-name{
+        font-size:28px;
+    }
+
+    .resume-actions{
+        margin:15px;
+    }
+}
+
+@media print{
+
+    body{
+        background:white;
+    }
+
+    .resume{
+        margin:0;
+        box-shadow:none;
+        max-width:none;
+    }
+
+    .resume-actions{
+        display:none;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">🇮🇳 MyHelp India</div>
+    <div class="subtitle">Professional Resume Builder</div>
+</header>
+
+<!-- BUILDER -->
+
+<div class="container" id="builderPage">
+
+<div class="builder">
+
+<h1>📄 Professional Resume Builder</h1>
+
+<p class="intro">
+Create a clean and professional resume in minutes.
+</p>
+
+<div class="photo-box">
+
+<img id="photoPreview">
+
+<label class="photo-label" for="photo">
+📸 Upload Profile Photo
+</label>
+
+<input type="file" id="photo" accept="image/*">
+
+</div>
+
+<div class="section">
+
+<h2 class="section-title">👤 Personal Details</h2>
+
+<div class="grid">
+
+<div class="field">
+<label>Full Name</label>
+<input id="name" placeholder="Enter your full name">
+</div>
+
+<div class="field">
+<label>Phone Number</label>
+<input id="phone" placeholder="Enter phone number">
+</div>
+
+<div class="field">
+<label>Email</label>
+<input id="email" type="email" placeholder="Enter email">
+</div>
+
+<div class="field">
+<label>Location</label>
+<input id="location" placeholder="City, State">
+</div>
+
+<div class="field full">
+<label>Address</label>
+<textarea id="address" placeholder="Enter your address"></textarea>
+</div>
+
+</div>
+</div>
+
+<div class="section">
+
+<h2 class="section-title">🎯 Career Objective</h2>
+
+<textarea id="objective"
+placeholder="Write your career objective"></textarea>
+
+</div>
+
+<div class="section">
+
+<h2 class="section-title">🎓 Education</h2>
+
+<textarea id="education"
+placeholder="Example:
+10th Class - 2020
+Intermediate - 2022
+Degree - 2025"></textarea>
+
+</div>
+
+<div class="section">
+
+<h2 class="section-title">💼 Work Experience</h2>
+
+<textarea id="experience"
+placeholder="Example:
+Photographer - Wedding Photography
+Photo Editing
+Video Editing"></textarea>
+
+</div>
+
+<div class="section">
+
+<h2 class="section-title">⭐ Skills</h2>
+
+<textarea id="skills"
+placeholder="Example:
+Photography
+Photo Editing
+Video Editing
+Computer Skills"></textarea>
+
+</div>
+
+<div class="section">
+
+<h2 class="section-title">🏆 Achievements</h2>
+
+<textarea id="achievements"
+placeholder="Enter your achievements, awards or certificates"></textarea>
+
+</div>
+
+<div class="section">
+
+<h2 class="section-title">🌐 Languages</h2>
+
+<textarea id="languages"
+placeholder="Example:
+Telugu
+English
+Hindi"></textarea>
+
+</div>
+
+<div class="buttons">
+
+<button class="create" onclick="createResume()">
+✨ Create Professional Resume
+</button>
+
+<button class="clear" onclick="clearForm()">
+🗑️ Clear
+</button>
+
+</div>
+
+<a class="back" href="index.html">
+← Back to MyHelp India
+</a>
+
+</div>
+</div>
+
+
+<!-- RESUME -->
+
+<div id="resumePage">
+
+<div class="resume" id="resume">
+
+<div class="resume-header">
+
+<img id="resumePhoto" class="resume-photo">
+
+<div>
+
+<div class="resume-name" id="rName"></div>
+
+<div class="resume-contact">
+
+📞 <span id="rPhone"></span><br>
+📧 <span id="rEmail"></span><br>
+📍 <span id="rLocation"></span>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="resume-body">
+
+<div class="resume-section">
+<h2>Career Objective</h2>
+<div class="resume-text" id="rObjective"></div>
+</div>
+
+<div class="resume-section">
+<h2>Education</h2>
+<div class="resume-text" id="rEducation"></div>
+</div>
+
+<div class="resume-section">
+<h2>Work Experience</h2>
+<div class="resume-text" id="rExperience"></div>
+</div>
+
+<div class="resume-section">
+<h2>Skills</h2>
+<div class="resume-text" id="rSkills"></div>
+</div>
+
+<div class="resume-section">
+<h2>Achievements</h2>
+<div class="resume-text" id="rAchievements"></div>
+</div>
+
+<div class="resume-section">
+<h2>Languages</h2>
+<div class="resume-text" id="rLanguages"></div>
+</div>
+
+</div>
+
+</div>
+
+<div class="resume-actions">
+
+<button onclick="window.print()">
+🖨️ Print / Save as PDF
+</button>
+
+<button onclick="editResume()">
+✏️ Edit Resume
+</button>
+
+</div>
+
+</div>
+
+
+<script>
+
+let photoData = "";
+
+document.getElementById("photo").addEventListener("change", function(){
+
+    const file = this.files[0];
+
+    if(!file) return;
+
+    const reader = new FileReader();
+
+    reader.onload = function(e){
+
+        photoData = e.target.result;
+
+        document.getElementById("photoPreview").src = photoData;
+        document.getElementById("photoPreview").style.display = "block";
+
+    };
+
+    reader.readAsDataURL(file);
+
+});
+
+
+function value(id){
+
+    return document.getElementById(id).value.trim();
+
+}
+
+
+function createResume(){
+
+    const name = value("name");
+
+    if(name === ""){
+
+        alert("Please enter your Full Name.");
+
+        return;
+
+    }
+
+    document.getElementById("rName").textContent = name;
+    document.getElementById("rPhone").textContent = value("phone");
+    document.getElementById("rEmail").textContent = value("email");
+    document.getElementById("rLocation").textContent = value("location");
+
+    document.getElementById("rObjective").textContent =
+        value("objective");
+
+    document.getElementById("rEducation").textContent =
+        value("education");
+
+    document.getElementById("rExperience").textContent =
+        value("experience");
+
+    document.getElementById("rSkills").textContent =
+        value("skills");
+
+    document.getElementById("rAchievements").textContent =
+        value("achievements");
+
+    document.getElementById("rLanguages").textContent =
+        value("languages");
+
+
+    if(photoData !== ""){
+
+        document.getElementById("resumePhoto").src = photoData;
+        document.getElementById("resumePhoto").style.display = "block";
+
+    }
+
+    document.getElementById("builderPage").style.display = "none";
+    document.getElementById("resumePage").style.display = "block";
+
+    window.scrollTo(0,0);
+
+}
+
+
+function editResume(){
+
+    document.getElementById("resumePage").style.display = "none";
+    document.getElementById("builderPage").style.display = "block";
+
+    window.scrollTo(0,0);
+
+}
+
+
+function clearForm(){
+
+    if(confirm("Clear all resume details?")){
+
+        document.querySelectorAll("input, textarea").forEach(function(element){
+
+            element.value = "";
+
+        });
+
+        photoData = "";
+
+        document.getElementById("photoPreview").style.display = "none";
+
+    }
+
+}
+
+</script>
+
+</body>
+</html>

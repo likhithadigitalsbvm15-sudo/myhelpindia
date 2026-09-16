@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>MyHelp India - QR Code Generator</title>
+
+<style>
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    font-family:Arial, sans-serif;
+    background:#f4f8ff;
+    color:#222;
+}
+
+header{
+    background:linear-gradient(135deg,#0d47a1,#1976d2,#42a5f5);
+    color:white;
+    text-align:center;
+    padding:28px 15px;
+}
+
+header h1{
+    margin:0;
+    font-size:30px;
+}
+
+header p{
+    margin:8px 0 0;
+    font-size:15px;
+}
+
+.container{
+    max-width:700px;
+    margin:30px auto;
+    padding:0 15px;
+}
+
+.card{
+    background:white;
+    border-radius:18px;
+    padding:25px;
+    box-shadow:0 5px 20px rgba(0,0,0,0.10);
+}
+
+h2{
+    text-align:center;
+    color:#0d47a1;
+    margin-top:0;
+}
+
+label{
+    display:block;
+    font-weight:bold;
+    margin-top:18px;
+    margin-bottom:7px;
+}
+
+select,
+input,
+textarea{
+    width:100%;
+    padding:13px;
+    border:1px solid #ccc;
+    border-radius:10px;
+    font-size:16px;
+    outline:none;
+}
+
+select:focus,
+input:focus,
+textarea:focus{
+    border-color:#1976d2;
+}
+
+textarea{
+    min-height:110px;
+    resize:vertical;
+}
+
+button{
+    width:100%;
+    border:none;
+    padding:14px;
+    margin-top:20px;
+    border-radius:10px;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.generate{
+    background:#1976d2;
+    color:white;
+}
+
+.generate:hover{
+    background:#0d47a1;
+}
+
+.download{
+    background:#2e7d32;
+    color:white;
+    display:none;
+}
+
+.clear{
+    background:#eeeeee;
+    color:#333;
+}
+
+.qr-box{
+    margin-top:25px;
+    padding:25px;
+    background:#f8fbff;
+    border:2px dashed #90caf9;
+    border-radius:15px;
+    text-align:center;
+    display:none;
+}
+
+#qrcode{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:220px;
+}
+
+#qrcode canvas,
+#qrcode img{
+    max-width:100%;
+    height:auto;
+}
+
+.message{
+    text-align:center;
+    color:#555;
+    margin-top:10px;
+    font-size:14px;
+}
+
+footer{
+    text-align:center;
+    color:#777;
+    font-size:13px;
+    padding:25px 10px;
+}
+
+.info{
+    background:#e3f2fd;
+    padding:12px;
+    border-radius:10px;
+    margin-top:15px;
+    font-size:14px;
+    color:#0d47a1;
+}
+
+@media(max-width:600px){
+    header h1{
+        font-size:25px;
+    }
+
+    .card{
+        padding:18px;
+    }
+}
+</style>
+
+<!-- QR Code Library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+</head>
+
+<body>
+
+<header>
+    <h1>📱 QR Code Generator</h1>
+    <p>Create Professional QR Codes Easily</p>
+</header>
+
+<div class="container">
+
+<div class="card">
+
+<h2>Generate Your QR Code</h2>
+
+<label>Choose QR Type</label>
+
+<select id="qrType" onchange="changeType()">
+    <option value="website">🌐 Website Link</option>
+    <option value="text">📝 Text</option>
+    <option value="phone">📞 Phone Number</option>
+    <option value="wifi">📶 Wi-Fi</option>
+    <option value="email">📧 Email</option>
+</select>
+
+
+<!-- WEBSITE -->
+
+<div id="websiteBox">
+
+<label>Website URL</label>
+
+<input
+type="text"
+id="website"
+placeholder="https://example.com"
+>
+
+</div>
+
+
+<!-- TEXT -->
+
+<div id="textBox" style="display:none;">
+
+<label>Your Text</label>
+
+<textarea
+id="text"
+placeholder="Enter your text here..."
+></textarea>
+
+</div>
+
+
+<!-- PHONE -->
+
+<div id="phoneBox" style="display:none;">
+
+<label>Phone Number</label>
+
+<input
+type="tel"
+id="phone"
+placeholder="Enter phone number"
+>
+
+</div>
+
+
+<!-- WIFI -->
+
+<div id="wifiBox" style="display:none;">
+
+<label>Wi-Fi Name (SSID)</label>
+
+<input
+type="text"
+id="wifiName"
+placeholder="Enter Wi-Fi name"
+>
+
+<label>Wi-Fi Password</label>
+
+<input
+type="text"
+id="wifiPassword"
+placeholder="Enter Wi-Fi password"
+>
+
+<label>Security Type</label>
+
+<select id="wifiSecurity">
+    <option value="WPA">WPA/WPA2</option>
+    <option value="WEP">WEP</option>
+    <option value="nopass">No Password</option>
+</select>
+
+</div>
+
+
+<!-- EMAIL -->
+
+<div id="emailBox" style="display:none;">
+
+<label>Email Address</label>
+
+<input
+type="email"
+id="email"
+placeholder="example@email.com"
+>
+
+<label>Email Subject</label>
+
+<input
+type="text"
+id="emailSubject"
+placeholder="Enter subject"
+>
+
+<label>Email Message</label>
+
+<textarea
+id="emailMessage"
+placeholder="Enter your message..."
+></textarea>
+
+</div>
+
+
+<div class="info">
+💡 Enter your details and click <b>Generate QR Code</b>.
+</div>
+
+
+<button class="generate" onclick="generateQR()">
+    🔲 Generate QR Code
+</button>
+
+
+<div class="qr-box" id="qrBox">
+
+    <h3>✅ Your QR Code</h3>
+
+    <div id="qrcode"></div>
+
+    <div class="message">
+        Scan this QR code using any mobile camera.
+    </div>
+
+    <button class="download" id="downloadBtn" onclick="downloadQR()">
+        ⬇️ Download QR Code
+    </button>
+
+</div>
+
+
+<button class="clear" onclick="clearAll()">
+    🗑️ Clear
+</button>
+
+</div>
+
+</div>
+
+
+<footer>
+    © 2026 MyHelp India • Simple • Useful • Free
+</footer>
+
+
+<script>
+
+function changeType(){
+
+    const type = document.getElementById("qrType").value;
+
+    document.getElementById("websiteBox").style.display="none";
+    document.getElementById("textBox").style.display="none";
+    document.getElementById("phoneBox").style.display="none";
+    document.getElementById("wifiBox").style.display="none";
+    document.getElementById("emailBox").style.display="none";
+
+    if(type==="website"){
+        document.getElementById("websiteBox").style.display="block";
+    }
+
+    if(type==="text"){
+        document.getElementById("textBox").style.display="block";
+    }
+
+    if(type==="phone"){
+        document.getElementById("phoneBox").style.display="block";
+    }
+
+    if(type==="wifi"){
+        document.getElementById("wifiBox").style.display="block";
+    }
+
+    if(type==="email"){
+        document.getElementById("emailBox").style.display="block";
+    }
+}
+
+
+function generateQR(){
+
+    const type = document.getElementById("qrType").value;
+
+    let qrText="";
+
+
+    if(type==="website"){
+
+        qrText=document.getElementById("website").value.trim();
+
+        if(qrText===""){
+            alert("Please enter a website URL.");
+            return;
+        }
+
+        if(!qrText.startsWith("http://") &&
+           !qrText.startsWith("https://")){
+
+            qrText="https://"+qrText;
+        }
+    }
+
+
+    if(type==="text"){
+
+        qrText=document.getElementById("text").value.trim();
+
+        if(qrText===""){
+            alert("Please enter some text.");
+            return;
+        }
+    }
+
+
+    if(type==="phone"){
+
+        const phone=document.getElementById("phone").value.trim();
+
+        if(phone===""){
+            alert("Please enter a phone number.");
+            return;
+        }
+
+        qrText="tel:"+phone;
+    }
+
+
+    if(type==="wifi"){
+
+        const ssid=document.getElementById("wifiName").value.trim();
+        const password=document.getElementById("wifiPassword").value.trim();
+        const security=document.getElementById("wifiSecurity").value;
+
+        if(ssid===""){
+            alert("Please enter Wi-Fi name.");
+            return;
+        }
+
+        qrText=
+        "WIFI:T:"+security+
+        ";S:"+escapeWifi(ssid)+
+        ";P:"+escapeWifi(password)+
+        ";;";
+    }
+
+
+    if(type==="email"){
+
+        const email=document.getElementById("email").value.trim();
+        const subject=document.getElementById("emailSubject").value.trim();
+        const message=document.getElementById("emailMessage").value.trim();
+
+        if(email===""){
+            alert("Please enter email address.");
+            return;
+        }
+
+        qrText=
+        "mailto:"+email+
+        "?subject="+encodeURIComponent(subject)+
+        "&body="+encodeURIComponent(message);
+    }
+
+
+    const qrContainer=document.getElementById("qrcode");
+
+    qrContainer.innerHTML="";
+
+    new QRCode(qrContainer,{
+        text:qrText,
+        width:220,
+        height:220,
+        correctLevel:QRCode.CorrectLevel.H
+    });
+
+
+    document.getElementById("qrBox").style.display="block";
+    document.getElementById("downloadBtn").style.display="block";
+
+}
+
+
+function escapeWifi(text){
+
+    return text
+    .replace(/\\/g,"\\\\")
+    .replace(/;/g,"\\;")
+    .replace(/,/g,"\\,")
+    .replace(/:/g,"\\:");
+}
+
+
+function downloadQR(){
+
+    const canvas=document.querySelector("#qrcode canvas");
+
+    if(canvas){
+
+        const link=document.createElement("a");
+
+        link.download="MyHelpIndia-QR-Code.png";
+
+        link.href=canvas.toDataURL("image/png");
+
+        link.click();
+
+        return;
+    }
+
+
+    const img=document.querySelector("#qrcode img");
+
+    if(img){
+
+        const link=document.createElement("a");
+
+        link.download="MyHelpIndia-QR-Code.png";
+
+        link.href=img.src;
+
+        link.click();
+    }
+
+}
+
+
+function clearAll(){
+
+    document.getElementById("website").value="";
+    document.getElementById("text").value="";
+    document.getElementById("phone").value="";
+    document.getElementById("wifiName").value="";
+    document.getElementById("wifiPassword").value="";
+    document.getElementById("email").value="";
+    document.getElementById("emailSubject").value="";
+    document.getElementById("emailMessage").value="";
+
+    document.getElementById("qrcode").innerHTML="";
+
+    document.getElementById("qrBox").style.display="none";
+
+    document.getElementById("downloadBtn").style.display="none";
+
+}
+
+</script>
+
+</body>
+</html>

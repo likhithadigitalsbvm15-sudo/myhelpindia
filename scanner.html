@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MyHelp India - Document Scanner</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    background:#f4f8ff;
+    color:#222;
+}
+
+header{
+    background:linear-gradient(135deg,#0d47a1,#1976d2,#42a5f5);
+    color:white;
+    text-align:center;
+    padding:25px 15px;
+}
+
+header h1{
+    font-size:30px;
+    margin-bottom:8px;
+}
+
+header p{
+    font-size:16px;
+}
+
+.container{
+    max-width:850px;
+    margin:25px auto;
+    padding:15px;
+}
+
+.card{
+    background:white;
+    border-radius:15px;
+    padding:25px;
+    margin-bottom:20px;
+    box-shadow:0 5px 18px rgba(0,0,0,0.10);
+}
+
+h2{
+    color:#0d47a1;
+    margin-bottom:15px;
+}
+
+label{
+    display:block;
+    font-weight:bold;
+    margin-top:15px;
+    margin-bottom:7px;
+}
+
+input,select{
+    width:100%;
+    padding:13px;
+    border:1px solid #ccc;
+    border-radius:8px;
+    font-size:16px;
+}
+
+button{
+    border:none;
+    padding:13px 18px;
+    border-radius:8px;
+    font-size:16px;
+    cursor:pointer;
+    margin:8px 5px 0 0;
+    background:#1976d2;
+    color:white;
+}
+
+button:hover{
+    background:#0d47a1;
+}
+
+.green{
+    background:#2e7d32;
+}
+
+.green:hover{
+    background:#1b5e20;
+}
+
+.red{
+    background:#d32f2f;
+}
+
+.red:hover{
+    background:#b71c1c;
+}
+
+.preview{
+    margin-top:20px;
+    text-align:center;
+}
+
+.preview img{
+    max-width:100%;
+    max-height:500px;
+    border-radius:10px;
+    border:1px solid #ddd;
+}
+
+#status{
+    margin-top:15px;
+    padding:12px;
+    background:#e3f2fd;
+    border-radius:8px;
+    color:#0d47a1;
+    display:none;
+}
+
+.info{
+    background:#f1f8e9;
+    padding:15px;
+    border-radius:10px;
+    margin-top:15px;
+    line-height:1.6;
+}
+
+.footer{
+    text-align:center;
+    padding:25px;
+    color:#666;
+    font-size:14px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>📄 Document Scanner</h1>
+    <p>Scan your document and save it as a clean PDF</p>
+</header>
+
+<div class="container">
+
+<div class="card">
+    <h2>📷 Select Document Photo</h2>
+
+    <label>Choose a document image</label>
+    <input type="file" id="fileInput" accept="image/*" capture="environment">
+
+    <label>Scan Quality</label>
+    <select id="quality">
+        <option value="1.0">High Quality</option>
+        <option value="0.85" selected>Medium Quality</option>
+        <option value="0.65">Small File</option>
+    </select>
+
+    <div class="preview" id="preview"></div>
+
+    <div id="status"></div>
+
+    <button class="green" onclick="scanDocument()">✨ Scan Document</button>
+    <button onclick="downloadPDF()">📄 Download PDF</button>
+    <button class="red" onclick="clearScanner()">🗑 Clear</button>
+
+    <div class="info">
+        <b>How to use:</b><br>
+        1. Select or take a photo of your document.<br>
+        2. Choose scan quality.<br>
+        3. Click <b>Scan Document</b>.<br>
+        4. Click <b>Download PDF</b> to save it.
+    </div>
+</div>
+
+<div class="card">
+    <h2>ℹ️ About Document Scanner</h2>
+    <p>
+        This tool converts a document photo into a clean PDF.
+        Processing happens in your browser.
+        Your photo is not uploaded to a server.
+    </p>
+</div>
+
+</div>
+
+<div class="footer">
+    © 2026 MyHelp India • Your Life • Our Support
+</div>
+
+<canvas id="canvas" style="display:none;"></canvas>
+
+<script>
+
+let image = null;
+let scannedData = null;
+
+document.getElementById("fileInput").addEventListener("change", function(e){
+
+    const file = e.target.files[0];
+
+    if(!file) return;
+
+    const reader = new FileReader();
+
+    reader.onload = function(event){
+
+        image = new Image();
+
+        image.onload = function(){
+
+            const preview = document.getElementById("preview");
+
+            preview.innerHTML =
+                '<img src="' + event.target.result + '" alt="Document Preview">';
+
+            showStatus("Document photo selected successfully.");
+
+        };
+
+        image.src = event.target.result;
+    };
+
+    reader.readAsDataURL(file);
+});
+
+
+function scanDocument(){
+
+    if(!image){
+
+        alert("Please select a document photo first.");
+        return;
+    }
+
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d");
+
+    let maxWidth = 1600;
+    let scale = Math.min(1, maxWidth / image.width);
+
+    canvas.width = image.width * scale;
+    canvas.height = image.height * scale;
+
+    ctx.drawImage(
+        image,
+        0,
+        0,
+        canvas.width,
+        canvas.height
+    );
+
+    // Light document enhancement
+    const imgData = ctx.getImageData(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+    );
+
+    const data = imgData.data;
+
+    for(let i=0; i<data.length; i+=4){
+
+        let r = data[i];
+        let g = data[i+1];
+        let b = data[i+2];
+
+        let gray = 0.299*r + 0.587*g + 0.114*b;
+
+        // Slight contrast enhancement
+        gray = (gray - 128) * 1.15 + 128;
+
+        gray = Math.max(0,Math.min(255,gray));
+
+        data[i] = gray;
+        data[i+1] = gray;
+        data[i+2] = gray;
+    }
+
+    ctx.putImageData(imgData,0,0);
+
+    const quality =
+        parseFloat(document.getElementById("quality").value);
+
+    scannedData = canvas.toDataURL("image/jpeg",quality);
+
+    document.getElementById("preview").innerHTML =
+        '<img src="' + scannedData + '" alt="Scanned Document">';
+
+    showStatus("✅ Document scanned successfully!");
+}
+
+
+function downloadPDF(){
+
+    if(!scannedData){
+
+        alert("Please scan a document first.");
+        return;
+    }
+
+    const canvas = document.getElementById("canvas");
+
+    const imgWidth = canvas.width;
+    const imgHeight = canvas.height;
+
+    const pageWidth = 595;
+    const pageHeight = 842;
+
+    const margin = 25;
+
+    const availableWidth = pageWidth - margin*2;
+    const availableHeight = pageHeight - margin*2;
+
+    let ratio = Math.min(
+        availableWidth / imgWidth,
+        availableHeight / imgHeight
+    );
+
+    let displayWidth = imgWidth * ratio;
+    let displayHeight = imgHeight * ratio;
+
+    let x = (pageWidth-displayWidth)/2;
+    let y = (pageHeight-displayHeight)/2;
+
+    const base64 = scannedData.split(",")[1];
+
+    const binary = atob(base64);
+
+    let imageBytes = new Uint8Array(binary.length);
+
+    for(let i=0;i<binary.length;i++){
+        imageBytes[i]=binary.charCodeAt(i);
+    }
+
+    function strBytes(str){
+        const arr=[];
+        for(let i=0;i<str.length;i++){
+            arr.push(str.charCodeAt(i));
+        }
+        return arr;
+    }
+
+    let objects = [];
+
+    objects[1] = strBytes(
+        "1 0 obj\n<< /Type /Catalog /Pages 2 0 R >>\nendobj\n"
+    );
+
+    objects[2] = strBytes(
+        "2 0 obj\n<< /Type /Pages /Kids [3 0 R] /Count 1 >>\nendobj\n"
+    );
+
+    objects[3] = strBytes(
+        "3 0 obj\n<< /Type /Page /Parent 2 0 R " +
+        "/MediaBox [0 0 " + pageWidth + " " + pageHeight + "] " +
+        "/Resources << /XObject << /Im1 4 0 R >> >> " +
+        "/Contents 5 0 R >>\nendobj\n"
+    );
+
+    let imageHeader =
+        "4 0 obj\n" +
+        "<< /Type /XObject /Subtype /Image " +
+        "/Width " + imgWidth +
+        " /Height " + imgHeight +
+        " /ColorSpace /DeviceRGB " +
+        "/BitsPerComponent 8 " +
+        "/Filter /DCTDecode " +
+        "/Length " + imageBytes.length +
+        " >>\nstream\n";
+
+    let imageFooter = "\nendstream\nendobj\n";
+
+    objects[4] = [
+        ...strBytes(imageHeader),
+        ...imageBytes,
+        ...strBytes(imageFooter)
+    ];
+
+    const content =
+        "q\n" +
+        displayWidth + " 0 0 " +
+        displayHeight + " " +
+        x + " " + y +
+        " cm\n" +
+        "/Im1 Do\n" +
+        "Q\n";
+
+    objects[5] = strBytes(
+        "5 0 obj\n<< /Length " +
+        content.length +
+        " >>\nstream\n" +
+        content +
+        "endstream\nendobj\n"
+    );
+
+    let pdf = [];
+
+    pdf.push(...strBytes("%PDF-1.4\n"));
+
+    let offsets = [0];
+
+    for(let i=1;i<=5;i++){
+
+        offsets[i] = pdf.length;
+
+        pdf.push(...objects[i]);
+    }
+
+    let xref = pdf.length;
+
+    pdf.push(...strBytes(
+        "xref\n0 6\n" +
+        "0000000000 65535 f \n"
+    ));
+
+    for(let i=1;i<=5;i++){
+
+        let off = String(offsets[i]).padStart(10,"0");
+
+        pdf.push(...strBytes(
+            off + " 00000 n \n"
+        ));
+    }
+
+    pdf.push(...strBytes(
+        "trailer\n" +
+        "<< /Size 6 /Root 1 0 R >>\n" +
+        "startxref\n" +
+        xref +
+        "\n%%EOF"
+    ));
+
+    const blob = new Blob(
+        [new Uint8Array(pdf)],
+        {type:"application/pdf"}
+    );
+
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+
+    a.href = url;
+    a.download = "MyHelp-India-Scanned-Document.pdf";
+
+    a.click();
+
+    URL.revokeObjectURL(url);
+
+    showStatus("✅ PDF created and download started.");
+}
+
+
+function showStatus(message){
+
+    const status = document.getElementById("status");
+
+    status.style.display="block";
+    status.innerText=message;
+}
+
+
+function clearScanner(){
+
+    image = null;
+    scannedData = null;
+
+    document.getElementById("fileInput").value="";
+    document.getElementById("preview").innerHTML="";
+    document.getElementById("status").style.display="none";
+}
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>PDF Page Reorder - MyHelp India</title>
+
+<meta name="description"
+content="Reorder PDF pages easily online for free with MyHelp India.">
+
+<style>
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:Arial,sans-serif;
+    background:linear-gradient(135deg,#eef7ff,#f5fff9);
+    color:#222;
+    min-height:100vh;
+}
+
+.header{
+    background:linear-gradient(135deg,#0d47a1,#1976d2,#2e7d32);
+    color:white;
+    text-align:center;
+    padding:26px 15px;
+    box-shadow:0 4px 15px rgba(0,0,0,.15);
+}
+
+.header h1{
+    font-size:30px;
+    margin-bottom:8px;
+}
+
+.header p{
+    font-size:15px;
+}
+
+.container{
+    max-width:950px;
+    margin:30px auto;
+    padding:0 15px;
+}
+
+.card{
+    background:white;
+    border-radius:18px;
+    padding:25px;
+    margin-bottom:20px;
+    box-shadow:0 8px 30px rgba(0,0,0,.10);
+}
+
+.card h2{
+    color:#0d47a1;
+    margin-bottom:18px;
+    font-size:22px;
+}
+
+.upload-box{
+    border:2px dashed #1976d2;
+    border-radius:15px;
+    padding:35px 20px;
+    text-align:center;
+    background:#f8fbff;
+}
+
+.upload-box strong{
+    font-size:18px;
+}
+
+.upload-box p{
+    margin-top:8px;
+    color:#666;
+}
+
+.upload-box input{
+    margin-top:18px;
+    width:100%;
+}
+
+.file-info{
+    display:none;
+    margin-top:15px;
+    padding:14px;
+    background:#f1f8e9;
+    border-radius:10px;
+    line-height:1.7;
+}
+
+.order-box{
+    display:none;
+    margin-top:22px;
+}
+
+.order-title{
+    font-size:18px;
+    font-weight:bold;
+    color:#0d47a1;
+    margin-bottom:8px;
+}
+
+.help-text{
+    color:#666;
+    font-size:14px;
+    margin-bottom:15px;
+    line-height:1.6;
+}
+
+.page-list{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
+
+.page-item{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:13px;
+    border:1px solid #ddd;
+    border-radius:12px;
+    background:#fafafa;
+}
+
+.page-number{
+    min-width:42px;
+    height:42px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#1976d2;
+    color:white;
+    border-radius:10px;
+    font-weight:bold;
+}
+
+.page-label{
+    flex:1;
+    font-weight:bold;
+}
+
+.page-buttons{
+    display:flex;
+    gap:5px;
+}
+
+.small-btn{
+    width:38px;
+    height:36px;
+    padding:0;
+    background:#eeeeee;
+    color:#333;
+    border-radius:8px;
+    font-size:18px;
+}
+
+.small-btn:hover{
+    background:#ddd;
+}
+
+.delete-btn{
+    background:#ffebee;
+    color:#c62828;
+}
+
+.order-input{
+    width:100%;
+    padding:13px;
+    border:1px solid #bbb;
+    border-radius:9px;
+    font-size:16px;
+    margin-top:12px;
+}
+
+.preview{
+    display:none;
+    margin-top:20px;
+    padding:15px;
+    background:#f5f5f5;
+    border-radius:12px;
+}
+
+.preview strong{
+    color:#0d47a1;
+}
+
+.buttons{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-top:22px;
+}
+
+button{
+    border:none;
+    border-radius:10px;
+    padding:13px 20px;
+    font-size:15px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+button:hover{
+    opacity:.9;
+}
+
+.primary{
+    background:#1976d2;
+    color:white;
+}
+
+.green{
+    background:#2e7d32;
+    color:white;
+}
+
+.gray{
+    background:#757575;
+    color:white;
+}
+
+.status{
+    display:none;
+    margin-top:20px;
+    padding:15px;
+    border-radius:10px;
+    background:#e3f2fd;
+    color:#0d47a1;
+    font-weight:bold;
+    line-height:1.6;
+}
+
+.progress{
+    display:none;
+    margin-top:20px;
+}
+
+.progress-bar{
+    width:100%;
+    height:12px;
+    background:#ddd;
+    border-radius:10px;
+    overflow:hidden;
+}
+
+.progress-fill{
+    width:0%;
+    height:100%;
+    background:#1976d2;
+    transition:.3s;
+}
+
+.info{
+    margin-top:20px;
+    padding:15px;
+    background:#e8f5e9;
+    border-left:5px solid #2e7d32;
+    border-radius:8px;
+    line-height:1.7;
+}
+
+.warning{
+    margin-top:20px;
+    padding:15px;
+    background:#fff8e1;
+    border-left:5px solid #ff9800;
+    border-radius:8px;
+    line-height:1.7;
+}
+
+.footer{
+    text-align:center;
+    padding:25px;
+    color:#666;
+    font-size:14px;
+}
+
+@media(max-width:600px){
+
+    .header h1{
+        font-size:24px;
+    }
+
+    .card{
+        padding:18px;
+    }
+
+    .page-item{
+        flex-wrap:wrap;
+    }
+
+    .page-label{
+        min-width:120px;
+    }
+
+    .page-buttons{
+        width:100%;
+    }
+
+    .page-buttons button{
+        flex:1;
+    }
+
+    .buttons button{
+        width:100%;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="header">
+
+    <h1>🔄 PDF Page Reorder</h1>
+
+    <p>
+        Change the order of PDF pages easily
+    </p>
+
+</div>
+
+
+<div class="container">
+
+
+<div class="card">
+
+    <h2>📄 Select PDF</h2>
+
+    <div class="upload-box">
+
+        <strong>📁 Choose a PDF File</strong>
+
+        <p>
+            Select the PDF whose pages you want to reorder
+        </p>
+
+        <input
+            type="file"
+            id="pdfFile"
+            accept="application/pdf"
+        >
+
+    </div>
+
+
+    <div
+        class="file-info"
+        id="fileInfo"
+    ></div>
+
+
+    <div
+        class="order-box"
+        id="orderBox"
+    >
+
+        <div class="order-title">
+            📑 Page Order
+        </div>
+
+        <div class="help-text">
+
+            Use the ▲ and ▼ buttons to move pages.
+            You can also enter a custom order below.
+
+        </div>
+
+
+        <div
+            class="page-list"
+            id="pageList"
+        ></div>
+
+
+        <div class="preview">
+
+            <strong>
+                Current Order:
+            </strong>
+
+            <span id="currentOrder">
+                -
+            </span>
+
+        </div>
+
+
+        <div style="margin-top:20px;">
+
+            <label
+                style="font-weight:bold;"
+            >
+                ✏️ Custom Page Order
+            </label>
+
+            <input
+                type="text"
+                id="customOrder"
+                class="order-input"
+                placeholder="Example: 3,1,5,2,4"
+            >
+
+            <p
+                style="margin-top:7px;color:#666;font-size:13px;"
+            >
+                Example: For 5 pages enter
+                <strong>3,1,5,2,4</strong>
+            </p>
+
+        </div>
+
+
+        <div class="buttons">
+
+            <button
+                class="primary"
+                onclick="applyCustomOrder()"
+            >
+                ✓ Apply Custom Order
+            </button>
+
+            <button
+                class="green"
+                onclick="reorderPDF()"
+            >
+                🔄 Create Reordered PDF
+            </button>
+
+            <button
+                class="gray"
+                onclick="clearForm()"
+            >
+                🔄 Clear
+            </button>
+
+            <button
+                class="green"
+                onclick="goBack()"
+            >
+                🏠 Back to MyHelp India
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <div
+        class="progress"
+        id="progressBox"
+    >
+
+        <div class="progress-bar">
+
+            <div
+                class="progress-fill"
+                id="progressFill"
+            ></div>
+
+        </div>
+
+        <p
+            id="progressText"
+            style="margin-top:8px;text-align:center;color:#555;"
+        >
+            Processing...
+        </p>
+
+    </div>
+
+
+    <div
+        class="status"
+        id="status"
+    ></div>
+
+</div>
+
+
+<div class="card">
+
+    <h2>💡 How to Use</h2>
+
+    <p style="line-height:1.8;">
+
+        <strong>1.</strong>
+        Select your PDF.<br>
+
+        <strong>2.</strong>
+        Move pages using ▲ and ▼.<br>
+
+        <strong>3.</strong>
+        Or enter a custom order like
+        <strong>3,1,5,2,4</strong>.<br>
+
+        <strong>4.</strong>
+        Click <strong>Create Reordered PDF</strong>.<br>
+
+        <strong>5.</strong>
+        Your new PDF will be downloaded.
+
+    </p>
+
+</div>
+
+
+<div class="info">
+
+    <strong>🔒 Privacy:</strong><br>
+
+    Your PDF is processed directly in your browser.
+    This page does not intentionally upload your PDF
+    to a server.
+
+</div>
+
+
+<div class="warning">
+
+    <strong>⚠️ Important:</strong><br>
+
+    Digital signatures, some annotations, interactive
+    forms and certain advanced PDF features may not be
+    preserved when creating the new PDF.
+
+</div>
+
+
+</div>
+
+
+<div class="footer">
+
+    © 2026 MyHelp India • Your Life • Our Support
+
+</div>
+
+
+<script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+
+
+<script>
+
+let selectedFile = null;
+
+let pageOrder = [];
+
+
+const pdfFile =
+document.getElementById("pdfFile");
+
+const fileInfo =
+document.getElementById("fileInfo");
+
+const orderBox =
+document.getElementById("orderBox");
+
+const pageList =
+document.getElementById("pageList");
+
+const currentOrder =
+document.getElementById("currentOrder");
+
+const customOrder =
+document.getElementById("customOrder");
+
+const statusBox =
+document.getElementById("status");
+
+const progressBox =
+document.getElementById("progressBox");
+
+const progressFill =
+document.getElementById("progressFill");
+
+const progressText =
+document.getElementById("progressText");
+
+
+pdfFile.addEventListener(
+    "change",
+    loadPDF
+);
+
+
+async function loadPDF(){
+
+    selectedFile =
+    pdfFile.files[0];
+
+    if(!selectedFile){
+
+        fileInfo.style.display =
+        "none";
+
+        orderBox.style.display =
+        "none";
+
+        return;
+
+    }
+
+
+    if(selectedFile.type !== "application/pdf"){
+
+        alert(
+            "Please select a PDF file."
+        );
+
+        pdfFile.value = "";
+
+        selectedFile = null;
+
+        return;
+
+    }
+
+
+    try{
+
+        const arrayBuffer =
+        await selectedFile.arrayBuffer();
+
+        const pdfDoc =
+        await PDFLib.PDFDocument.load(
+            arrayBuffer
+        );
+
+        const totalPages =
+        pdfDoc.getPageCount();
+
+
+        const sizeMB =
+        (
+            selectedFile.size /
+            1024 /
+            1024
+        ).toFixed(2);
+
+
+        fileInfo.innerHTML =
+
+            "📄 <strong>File:</strong> " +
+            escapeHTML(selectedFile.name) +
+
+            "<br>📦 <strong>Size:</strong> " +
+            sizeMB +
+            " MB" +
+
+            "<br>📑 <strong>Total Pages:</strong> " +
+            totalPages;
+
+
+        fileInfo.style.display =
+        "block";
+
+
+        pageOrder = [];
+
+        for(
+            let i = 1;
+            i <= totalPages;
+            i++
+        ){
+
+            pageOrder.push(i);
+
+        }
+
+
+        renderPageList();
+
+
+        orderBox.style.display =
+        "block";
+
+
+        showStatus(
+            "✅ PDF loaded. Arrange the pages as you want."
+        );
+
+
+    }catch(error){
+
+        console.error(error);
+
+        alert(
+            "Unable to read this PDF.\n\n" +
+            (
+                error.message ||
+                "The PDF may be damaged or protected."
+            )
+        );
+
+        selectedFile = null;
+
+        pdfFile.value = "";
+
+    }
+
+}
+
+
+function renderPageList(){
+
+    pageList.innerHTML = "";
+
+
+    pageOrder.forEach(
+        function(pageNumber,index){
+
+            const item =
+            document.createElement("div");
+
+            item.className =
+            "page-item";
+
+
+            const number =
+            document.createElement("div");
+
+            number.className =
+            "page-number";
+
+            number.textContent =
+            index + 1;
+
+
+            const label =
+            document.createElement("div");
+
+            label.className =
+            "page-label";
+
+            label.innerHTML =
+            "📄 PDF Page " +
+            "<strong>" +
+            pageNumber +
+            "</strong>";
+
+
+            const buttons =
+            document.createElement("div");
+
+            buttons.className =
+            "page-buttons";
+
+
+            const up =
+            document.createElement("button");
+
+            up.className =
+            "small-btn";
+
+            up.textContent =
+            "▲";
+
+            up.title =
+            "Move Up";
+
+            up.onclick =
+            function(){
+
+                movePage(index,-1);
+
+            };
+
+
+            const down =
+            document.createElement("button");
+
+            down.className =
+            "small-btn";
+
+            down.textContent =
+            "▼";
+
+            down.title =
+            "Move Down";
+
+            down.onclick =
+            function(){
+
+                movePage(index,1);
+
+            };
+
+
+            const remove =
+            document.createElement("button");
+
+            remove.className =
+            "small-btn delete-btn";
+
+            remove.textContent =
+            "✕";
+
+            remove.title =
+            "Remove Page";
+
+            remove.onclick =
+            function(){
+
+                removePage(index);
+
+            };
+
+
+            buttons.appendChild(up);
+
+            buttons.appendChild(down);
+
+            buttons.appendChild(remove);
+
+
+            item.appendChild(number);
+
+            item.appendChild(label);
+
+            item.appendChild(buttons);
+
+
+            pageList.appendChild(item);
+
+        }
+    );
+
+
+    updateCurrentOrder();
+
+}
+
+
+function movePage(
+    index,
+    direction
+){
+
+    const newIndex =
+    index + direction;
+
+
+    if(
+        newIndex < 0 ||
+        newIndex >= pageOrder.length
+    ){
+
+        return;
+
+    }
+
+
+    const temp =
+    pageOrder[index];
+
+    pageOrder[index] =
+    pageOrder[newIndex];
+
+    pageOrder[newIndex] =
+    temp;
+
+
+    renderPageList();
+
+}
+
+
+function removePage(index){
+
+    if(pageOrder.length <= 1){
+
+        alert(
+            "At least one page must remain."
+        );
+
+        return;
+
+    }
+
+
+    pageOrder.splice(index,1);
+
+    renderPageList();
+
+}
+
+
+function updateCurrentOrder(){
+
+    currentOrder.textContent =
+    pageOrder.join(", ");
+
+}
+
+
+function applyCustomOrder(){
+
+    if(!selectedFile){
+
+        alert(
+            "Please select a PDF first."
+        );
+
+        return;
+
+    }
+
+
+    const value =
+    customOrder.value.trim();
+
+
+    if(!value){
+
+        alert(
+            "Please enter a page order."
+        );
+
+        return;
+
+    }
+
+
+    const parts =
+    value.split(",");
+
+
+    const numbers =
+    parts.map(
+        function(item){
+
+            return Number(
+                item.trim()
+            );
+
+        }
+    );
+
+
+    if(
+        numbers.some(
+            number =>
+            !Number.isInteger(number)
+        )
+    ){
+
+        alert(
+            "Please enter only page numbers separated by commas."
+        );
+
+        return;
+
+    }
+
+
+    let totalPages;
+
+
+    try{
+
+        totalPages =
+        pageOrder.length;
+
+    }catch(e){
+
+        totalPages = 0;
+
+    }
+
+
+    if(numbers.length !== totalPages){
+
+        alert(
+            "Please enter exactly " +
+            totalPages +
+            " page numbers."
+        );
+
+        return;
+
+    }
+
+
+    const sorted =
+    [...numbers].sort(
+        (a,b) => a-b
+    );
+
+
+    for(
+        let i = 1;
+        i <= totalPages;
+        i++
+    ){
+
+        if(sorted[i-1] !== i){
+
+            alert(
+                "Each page number must be used exactly once.\n\n" +
+                "Example: 3,1,5,2,4"
+            );
+
+            return;
+
+        }
+
+    }
+
+
+    pageOrder =
+    numbers;
+
+
+    renderPageList();
+
+
+    showStatus(
+        "✅ Custom page order applied."
+    );
+
+}
+
+
+async function reorderPDF(){
+
+    if(!selectedFile){
+
+        alert(
+            "Please select a PDF first."
+        );
+
+        return;
+
+    }
+
+
+    if(pageOrder.length === 0){
+
+        alert(
+            "No pages are available."
+        );
+
+        return;
+
+    }
+
+
+    try{
+
+        showProgress(
+            10,
+            "Reading PDF..."
+        );
+
+
+        const arrayBuffer =
+        await selectedFile.arrayBuffer();
+
+
+        const sourcePDF =
+        await PDFLib.PDFDocument.load(
+            arrayBuffer
+        );
+
+
+        const outputPDF =
+        await PDFLib.PDFDocument.create();
+
+
+        const indexes =
+        pageOrder.map(
+            pageNumber =>
+            pageNumber - 1
+        );
+
+
+        const copiedPages =
+        await outputPDF.copyPages(
+            sourcePDF,
+            indexes
+        );
+
+
+        for(
+            let i = 0;
+            i < copiedPages.length;
+            i++
+        ){
+
+            outputPDF.addPage(
+                copiedPages[i]
+            );
+
+
+            const percent =
+            10 +
+            Math.round(
+                (
+                    (i + 1) /
+                    copiedPages.length
+                ) * 80
+            );
+
+
+            showProgress(
+                percent,
+                "Reordering page " +
+                (i + 1) +
+                " of " +
+                copiedPages.length +
+                "..."
+            );
+
+        }
+
+
+        showProgress(
+            95,
+            "Creating new PDF..."
+        );
+
+
+        const pdfBytes =
+        await outputPDF.save({
+            useObjectStreams:true
+        });
+
+
+        const blob =
+        new Blob(
+            [pdfBytes],
+            {
+                type:"application/pdf"
+            }
+        );
+
+
+        const url =
+        URL.createObjectURL(blob);
+
+
+        const link =
+        document.createElement("a");
+
+
+        link.href =
+        url;
+
+
+        link.download =
+        "MyHelp-India-Reordered-PDF.pdf";
+
+
+        document.body.appendChild(link);
+
+        link.click();
+
+        link.remove();
+
+
+        URL.revokeObjectURL(url);
+
+
+        showProgress(
+            100,
+            "Completed!"
+        );
+
+
+        showStatus(
+            "✅ PDF pages reordered successfully! Your download has started."
+        );
+
+
+        setTimeout(
+            function(){
+
+                progressBox.style.display =
+                "none";
+
+            },
+            1800
+        );
+
+
+    }catch(error){
+
+        console.error(error);
+
+        progressBox.style.display =
+        "none";
+
+
+        showStatus(
+            "❌ Unable to reorder this PDF. " +
+            (
+                error.message ||
+                ""
+            )
+        );
+
+    }
+
+}
+
+
+function showProgress(
+    percent,
+    message
+){
+
+    progressBox.style.display =
+    "block";
+
+
+    progressFill.style.width =
+    percent +
+    "%";
+
+
+    progressText.textContent =
+    message;
+
+}
+
+
+function showStatus(message){
+
+    if(message){
+
+        statusBox.textContent =
+        message;
+
+        statusBox.style.display =
+        "block";
+
+    }else{
+
+        statusBox.style.display =
+        "none";
+
+    }
+
+}
+
+
+function clearForm(){
+
+    selectedFile = null;
+
+    pageOrder = [];
+
+    pdfFile.value = "";
+
+    fileInfo.style.display =
+    "none";
+
+    orderBox.style.display =
+    "none";
+
+    pageList.innerHTML =
+    "";
+
+    customOrder.value =
+    "";
+
+    currentOrder.textContent =
+    "-";
+
+    statusBox.style.display =
+    "none";
+
+    progressBox.style.display =
+    "none";
+
+    progressFill.style.width =
+    "0%";
+
+}
+
+
+function goBack(){
+
+    window.location.href =
+    "index.html";
+
+}
+
+
+function escapeHTML(text){
+
+    return text
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+
+}
+
+</script>
+
+</body>
+</html>

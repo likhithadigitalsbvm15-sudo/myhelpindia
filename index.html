@@ -1,0 +1,908 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>MyHelp India – Free Online Tools for PDF, Calculators, Students & More</title>
+
+<meta name="description" content="MyHelp India offers free online tools for PDF, documents, calculators, money, students, photos, images and QR codes. Easy-to-use tools for everyday needs.">
+
+<meta name="keywords" content="MyHelp India, free online tools, PDF tools, PDF converter, PDF compressor, calculators, EMI calculator, GST calculator, age calculator, salary calculator, student tools, photo tools, QR generator">
+
+<meta name="robots" content="index, follow">
+
+<meta name="author" content="MyHelp India">
+
+<meta name="theme-color" content="#0d47a1">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="MyHelp India – Free Online Tools">
+<meta property="og:description" content="Free online tools for PDF, documents, calculators, money, students, photos, images and QR codes.">
+<meta property="og:site_name" content="MyHelp India">
+
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MyHelp India – Free Online Tools">
+<meta name="twitter:description" content="Free online tools for PDF, documents, calculators, students, photos, images and QR codes.">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "MyHelp India",
+  "description": "Free online tools for PDF, documents, calculators, money, students, photos, images and QR codes."
+}
+</script>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, sans-serif;
+}
+
+body{
+    background:#f4f8ff;
+    color:#172033;
+}
+
+/* HEADER */
+header{
+    background:linear-gradient(135deg,#0d47a1,#1976d2,#00a896);
+    color:white;
+    padding:18px 6%;
+    position:sticky;
+    top:0;
+    z-index:1000;
+    box-shadow:0 3px 15px rgba(0,0,0,.15);
+}
+
+.nav{
+    max-width:1200px;
+    margin:auto;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.logo{
+    font-size:27px;
+    font-weight:bold;
+}
+
+.logo span{
+    color:#ffe082;
+}
+
+nav a{
+    color:white;
+    text-decoration:none;
+    margin-left:22px;
+    font-size:15px;
+}
+
+/* HERO */
+.hero{
+    background:linear-gradient(135deg,#0d47a1,#1976d2,#00a896);
+    color:white;
+    text-align:center;
+    padding:65px 20px 75px;
+}
+
+.hero h1{
+    font-size:45px;
+    margin-bottom:15px;
+}
+
+.hero p{
+    font-size:18px;
+    margin-bottom:28px;
+    opacity:.95;
+}
+
+.search{
+    max-width:650px;
+    margin:auto;
+    position:relative;
+}
+
+.search input{
+    width:100%;
+    padding:18px 22px;
+    border:none;
+    border-radius:35px;
+    font-size:16px;
+    outline:none;
+    box-shadow:0 8px 25px rgba(0,0,0,.18);
+}
+
+/* STATS */
+.stats{
+    max-width:1100px;
+    margin:-35px auto 40px;
+    padding:0 20px;
+    position:relative;
+}
+
+.stats-box{
+    background:white;
+    border-radius:18px;
+    box-shadow:0 8px 30px rgba(0,0,0,.10);
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    overflow:hidden;
+}
+
+.stat{
+    text-align:center;
+    padding:25px;
+    border-right:1px solid #eee;
+}
+
+.stat:last-child{
+    border-right:none;
+}
+
+.stat h2{
+    color:#1976d2;
+    font-size:28px;
+}
+
+.stat p{
+    color:#666;
+    margin-top:5px;
+}
+
+/* MAIN */
+.container{
+    max-width:1200px;
+    margin:auto;
+    padding:0 20px 60px;
+}
+
+.category{
+    margin-bottom:45px;
+}
+
+.category-title{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:18px;
+}
+
+.category-title h2{
+    font-size:25px;
+}
+
+.category-title span{
+    background:#e3f2fd;
+    color:#1976d2;
+    padding:7px 13px;
+    border-radius:20px;
+    font-size:13px;
+    font-weight:bold;
+}
+
+/* TOOLS GRID */
+.tools{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:16px;
+}
+
+.tool{
+    background:white;
+    padding:22px 18px;
+    border-radius:16px;
+    text-decoration:none;
+    color:#172033;
+    border:1px solid #e7edf5;
+    transition:.25s;
+    box-shadow:0 4px 14px rgba(0,0,0,.05);
+}
+
+.tool:hover{
+    transform:translateY(-5px);
+    box-shadow:0 10px 25px rgba(0,0,0,.12);
+    border-color:#90caf9;
+}
+
+.icon{
+    width:48px;
+    height:48px;
+    border-radius:13px;
+    background:#e3f2fd;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:25px;
+    margin-bottom:14px;
+}
+
+.tool h3{
+    font-size:16px;
+    margin-bottom:7px;
+}
+
+.tool p{
+    font-size:13px;
+    color:#6b7280;
+    line-height:1.4;
+}
+
+/* NO RESULT */
+.no-result{
+    display:none;
+    text-align:center;
+    padding:50px 20px;
+    color:#666;
+}
+
+.no-result h2{
+    margin-bottom:8px;
+}
+
+/* FOOTER */
+footer{
+    background:#101827;
+    color:#cbd5e1;
+    text-align:center;
+    padding:35px 20px;
+}
+
+footer h2{
+    color:white;
+    margin-bottom:10px;
+}
+
+footer p{
+    font-size:14px;
+    margin:5px 0;
+}
+
+/* MOBILE */
+@media(max-width:900px){
+    .tools{
+        grid-template-columns:repeat(3,1fr);
+    }
+}
+
+@media(max-width:650px){
+    nav{
+        display:none;
+    }
+
+    .hero{
+        padding:45px 18px 60px;
+    }
+
+    .hero h1{
+        font-size:34px;
+    }
+
+    .hero p{
+        font-size:15px;
+    }
+
+    .stats-box{
+        grid-template-columns:1fr;
+    }
+
+    .stat{
+        border-right:none;
+        border-bottom:1px solid #eee;
+    }
+
+    .stat:last-child{
+        border-bottom:none;
+    }
+
+    .tools{
+        grid-template-columns:repeat(2,1fr);
+        gap:12px;
+    }
+
+    .tool{
+        padding:18px 14px;
+    }
+
+    .category-title h2{
+        font-size:20px;
+    }
+}
+
+@media(max-width:400px){
+    .tools{
+        grid-template-columns:1fr;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<header>
+    <div class="nav">
+        <div class="logo">MyHelp <span>India</span> 🇮🇳</div>
+
+        <nav>
+            <a href="#documents">Documents</a>
+            <a href="#calculators">Money</a>
+            <a href="#students">Students</a>
+            <a href="#images">Images</a>
+            <a href="#pdf">PDF</a>
+        </nav>
+    </div>
+</header>
+
+
+<!-- HERO -->
+<section class="hero">
+
+    <h1>MyHelp India 🇮🇳</h1>
+
+    <p>Your Life • Our Support</p>
+
+    <div class="search">
+        <input
+            type="text"
+            id="searchBox"
+            aria-label="Search MyHelp India tools"
+            placeholder="🔍 Search a tool..."
+            onkeyup="searchTools()">
+    </div>
+
+</section>
+
+
+<!-- STATS -->
+<section class="stats">
+
+    <div class="stats-box">
+
+        <div class="stat">
+            <h2>51+</h2>
+            <p>Free Tools</p>
+        </div>
+
+        <div class="stat">
+            <h2>6</h2>
+            <p>Categories</p>
+        </div>
+
+        <div class="stat">
+            <h2>100%</h2>
+            <p>Easy to Use</p>
+        </div>
+
+    </div>
+
+</section>
+
+
+<main class="container">
+
+<div id="noResult" class="no-result">
+    <h2>No tools found 🔍</h2>
+    <p>Try another search.</p>
+</div>
+
+
+<!-- DOCUMENTS -->
+<section class="category" id="documents">
+
+    <div class="category-title">
+        <h2>📄 Documents & Letters</h2>
+        <span>3 Tools</span>
+    </div>
+
+    <div class="tools">
+
+        <a class="tool" href="resume.html">
+            <div class="icon">📄</div>
+            <h3>Resume Builder</h3>
+            <p>Create a professional resume.</p>
+        </a>
+
+        <a class="tool" href="letter.html">
+            <div class="icon">✉️</div>
+            <h3>School Leave Letter</h3>
+            <p>Create a school leave letter.</p>
+        </a>
+
+        <a class="tool" href="job-letter.html">
+            <div class="icon">💼</div>
+            <h3>Job Application Letter</h3>
+            <p>Create a professional job letter.</p>
+        </a>
+
+    </div>
+</section>
+
+
+<!-- CALCULATORS -->
+<section class="category" id="calculators">
+
+    <div class="category-title">
+        <h2>💰 Calculators & Money</h2>
+        <span>16 Tools</span>
+    </div>
+
+    <div class="tools">
+
+        <a class="tool" href="salary.html">
+            <div class="icon">💵</div>
+            <h3>Salary Calculator</h3>
+            <p>Calculate salary and deductions.</p>
+        </a>
+
+        <a class="tool" href="age.html">
+            <div class="icon">🎂</div>
+            <h3>Age Calculator</h3>
+            <p>Calculate your exact age.</p>
+        </a>
+
+        <a class="tool" href="emi.html">
+            <div class="icon">🏦</div>
+            <h3>EMI Calculator</h3>
+            <p>Calculate monthly loan EMI.</p>
+        </a>
+
+        <a class="tool" href="gst.html">
+            <div class="icon">🧾</div>
+            <h3>GST Calculator</h3>
+            <p>Calculate GST amount.</p>
+        </a>
+
+        <a class="tool" href="interest.html">
+            <div class="icon">📈</div>
+            <h3>Interest Calculator</h3>
+            <p>Calculate simple interest.</p>
+        </a>
+
+        <a class="tool" href="bmi.html">
+            <div class="icon">⚖️</div>
+            <h3>BMI Calculator</h3>
+            <p>Calculate body mass index.</p>
+        </a>
+
+        <a class="tool" href="percentage.html">
+            <div class="icon">％</div>
+            <h3>Percentage Calculator</h3>
+            <p>Calculate percentages easily.</p>
+        </a>
+
+        <a class="tool" href="discount.html">
+            <div class="icon">🏷️</div>
+            <h3>Discount Calculator</h3>
+            <p>Calculate discounts and final price.</p>
+        </a>
+
+        <a class="tool" href="loan.html">
+            <div class="icon">💳</div>
+            <h3>Loan Calculator</h3>
+            <p>Estimate loan payments.</p>
+        </a>
+
+        <a class="tool" href="time.html">
+            <div class="icon">⏱️</div>
+            <h3>Time Calculator</h3>
+            <p>Add and subtract time.</p>
+        </a>
+
+        <a class="tool" href="age-difference.html">
+            <div class="icon">👥</div>
+            <h3>Age Difference</h3>
+            <p>Find the difference between ages.</p>
+        </a>
+
+        <a class="tool" href="date-difference.html">
+            <div class="icon">📅</div>
+            <h3>Date Difference</h3>
+            <p>Calculate days between dates.</p>
+        </a>
+
+        <a class="tool" href="unit-converter.html">
+            <div class="icon">📏</div>
+            <h3>Unit Converter</h3>
+            <p>Convert common measurement units.</p>
+        </a>
+
+        <a class="tool" href="currency-converter.html">
+            <div class="icon">💱</div>
+            <h3>Currency Converter</h3>
+            <p>Convert currencies.</p>
+        </a>
+
+        <a class="tool" href="price-comparison.html">
+            <div class="icon">🛒</div>
+            <h3>Price Comparison</h3>
+            <p>Compare two prices.</p>
+        </a>
+
+        <a class="tool" href="electricity-bill.html">
+            <div class="icon">⚡</div>
+            <h3>Electricity Bill</h3>
+            <p>Estimate electricity bill.</p>
+        </a>
+
+    </div>
+</section>
+
+
+<!-- STUDENTS -->
+<section class="category" id="students">
+
+    <div class="category-title">
+        <h2>🎓 Student Help</h2>
+        <span>3 Tools</span>
+    </div>
+
+    <div class="tools">
+
+        <a class="tool" href="study-help.html">
+            <div class="icon">📚</div>
+            <h3>Study Help</h3>
+            <p>Helpful study resources.</p>
+        </a>
+
+        <a class="tool" href="maths-helper.html">
+            <div class="icon">➗</div>
+            <h3>Maths Helper</h3>
+            <p>Get help with maths.</p>
+        </a>
+
+        <a class="tool" href="english-helper.html">
+            <div class="icon">🔤</div>
+            <h3>English Helper</h3>
+            <p>Practice simple English.</p>
+        </a>
+
+    </div>
+</section>
+
+
+<!-- IMAGE -->
+<section class="category" id="images">
+
+    <div class="category-title">
+        <h2>🖼️ Photo & Image Tools</h2>
+        <span>4 Tools</span>
+    </div>
+
+    <div class="tools">
+
+        <a class="tool" href="photo-resize.html">
+            <div class="icon">📐</div>
+            <h3>Photo Resize</h3>
+            <p>Resize photos easily.</p>
+        </a>
+
+        <a class="tool" href="photo-pdf.html">
+            <div class="icon">📷</div>
+            <h3>Photo to PDF</h3>
+            <p>Convert photos into PDF.</p>
+        </a>
+
+        <a class="tool" href="image-converter.html">
+            <div class="icon">🖼️</div>
+            <h3>Image Converter</h3>
+            <p>Convert image formats.</p>
+        </a>
+
+        <a class="tool" href="scanner.html">
+            <div class="icon">📠</div>
+            <h3>Document Scanner</h3>
+            <p>Scan documents and create PDF.</p>
+        </a>
+
+    </div>
+</section>
+
+
+<!-- QR -->
+<section class="category" id="qr">
+
+    <div class="category-title">
+        <h2>🔲 QR Tools</h2>
+        <span>2 Tools</span>
+    </div>
+
+    <div class="tools">
+
+        <a class="tool" href="qr-generator.html">
+            <div class="icon">🔳</div>
+            <h3>QR Generator</h3>
+            <p>Create QR codes easily.</p>
+        </a>
+
+        <a class="tool" href="qr-scanner.html">
+            <div class="icon">📱</div>
+            <h3>QR Scanner</h3>
+            <p>Scan QR codes.</p>
+        </a>
+
+    </div>
+</section>
+
+
+<!-- PDF -->
+<section class="category" id="pdf">
+
+    <div class="category-title">
+        <h2>📑 PDF Tools</h2>
+        <span>23 Tools</span>
+    </div>
+
+    <div class="tools">
+
+        <a class="tool" href="pdf-image.html">
+            <div class="icon">🖼️</div>
+            <h3>PDF to Image</h3>
+            <p>Convert PDF pages to images.</p>
+        </a>
+
+        <a class="tool" href="pdf-compress.html">
+            <div class="icon">🗜️</div>
+            <h3>PDF Compress</h3>
+            <p>Reduce PDF file size.</p>
+        </a>
+
+        <a class="tool" href="pdf-merge.html">
+            <div class="icon">🔗</div>
+            <h3>PDF Merge</h3>
+            <p>Combine multiple PDFs.</p>
+        </a>
+
+        <a class="tool" href="pdf-split.html">
+            <div class="icon">✂️</div>
+            <h3>PDF Split</h3>
+            <p>Split PDF pages.</p>
+        </a>
+
+        <a class="tool" href="pdf-rotate.html">
+            <div class="icon">🔄</div>
+            <h3>PDF Rotate</h3>
+            <p>Rotate PDF pages.</p>
+        </a>
+
+        <a class="tool" href="pdf-watermark.html">
+            <div class="icon">💧</div>
+            <h3>PDF Watermark</h3>
+            <p>Add watermark to PDF.</p>
+        </a>
+
+        <a class="tool" href="pdf-page-number.html">
+            <div class="icon">🔢</div>
+            <h3>PDF Page Number</h3>
+            <p>Add page numbers.</p>
+        </a>
+
+        <a class="tool" href="pdf-password.html">
+            <div class="icon">🔐</div>
+            <h3>PDF Password</h3>
+            <p>PDF password tool.</p>
+        </a>
+
+        <a class="tool" href="pdf-image-extract.html">
+            <div class="icon">📤</div>
+            <h3>PDF Image Extract</h3>
+            <p>Convert PDF pages to images.</p>
+        </a>
+
+        <a class="tool" href="pdf-print.html">
+            <div class="icon">🖨️</div>
+            <h3>PDF Print</h3>
+            <p>Print PDF documents.</p>
+        </a>
+
+        <a class="tool" href="pdf-metadata.html">
+            <div class="icon">ℹ️</div>
+            <h3>PDF Metadata</h3>
+            <p>View PDF information.</p>
+        </a>
+
+        <a class="tool" href="pdf-crop.html">
+            <div class="icon">✂️</div>
+            <h3>PDF Crop</h3>
+            <p>Crop PDF pages.</p>
+        </a>
+
+        <a class="tool" href="pdf-unlock.html">
+            <div class="icon">🔓</div>
+            <h3>PDF Unlock</h3>
+            <p>Remove a known PDF password.</p>
+        </a>
+
+        <a class="tool" href="pdf-repair.html">
+            <div class="icon">🛠️</div>
+            <h3>PDF Repair</h3>
+            <p>Repair readable PDF pages.</p>
+        </a>
+
+        <a class="tool" href="pdf-reorder.html">
+            <div class="icon">↕️</div>
+            <h3>PDF Reorder</h3>
+            <p>Rearrange PDF pages.</p>
+        </a>
+
+        <a class="tool" href="pdf-header-footer.html">
+            <div class="icon">📄</div>
+            <h3>PDF Header & Footer</h3>
+            <p>Add header and footer.</p>
+        </a>
+
+        <a class="tool" href="pdf-resize.html">
+            <div class="icon">📐</div>
+            <h3>PDF Resize</h3>
+            <p>Resize PDF pages.</p>
+        </a>
+
+        <a class="tool" href="pdf-sign.html">
+            <div class="icon">✍️</div>
+            <h3>PDF Sign</h3>
+            <p>Add a visible signature.</p>
+        </a>
+
+        <a class="tool" href="pdf-add-image.html">
+            <div class="icon">➕</div>
+            <h3>PDF Add Image</h3>
+            <p>Add an image to PDF.</p>
+        </a>
+
+        <a class="tool" href="pdf-extract-text.html">
+            <div class="icon">📝</div>
+            <h3>PDF Extract Text</h3>
+            <p>Extract text from PDF.</p>
+        </a>
+
+        <a class="tool" href="pdf-text-search.html">
+            <div class="icon">🔎</div>
+            <h3>PDF Text Search</h3>
+            <p>Search text inside PDF.</p>
+        </a>
+
+        <a class="tool" href="pdf-info.html">
+            <div class="icon">📊</div>
+            <h3>PDF Information</h3>
+            <p>View PDF details and page count.</p>
+        </a>
+
+        <a class="tool" href="pdf-page-size.html">
+            <div class="icon">📏</div>
+            <h3>PDF Page Size</h3>
+            <p>Check PDF page dimensions.</p>
+        </a>
+
+    </div>
+</section>
+
+</main>
+
+
+<!-- FOOTER -->
+<footer>
+
+    <h2>MyHelp India 🇮🇳</h2>
+
+    <p>Your Life • Our Support</p>
+
+    <p>Free online tools for everyday needs.</p>
+
+    <div style="margin:18px 0;">
+
+        <a href="about.html"
+           style="color:#90caf9; text-decoration:none; margin:0 8px;">
+            About
+        </a>
+
+        <a href="contact.html"
+           style="color:#90caf9; text-decoration:none; margin:0 8px;">
+            Contact
+        </a>
+
+        <a href="privacy.html"
+           style="color:#90caf9; text-decoration:none; margin:0 8px;">
+            Privacy Policy
+        </a>
+
+        <a href="terms.html"
+           style="color:#90caf9; text-decoration:none; margin:0 8px;">
+            Terms & Conditions
+        </a>
+
+    </div>
+
+    <p style="margin-top:15px;">
+        © 2026 MyHelp India. All Rights Reserved.
+    </p>
+
+</footer>
+```
+
+
+<script>
+
+function searchTools(){
+
+    const input =
+        document.getElementById("searchBox")
+        .value
+        .toLowerCase()
+        .trim();
+
+    const tools =
+        document.querySelectorAll(".tool");
+
+    const categories =
+        document.querySelectorAll(".category");
+
+    let found = 0;
+
+    tools.forEach(function(tool){
+
+        const text =
+            tool.innerText.toLowerCase();
+
+        if(text.includes(input)){
+
+            tool.style.display = "block";
+            found++;
+
+        }else{
+
+            tool.style.display = "none";
+
+        }
+
+    });
+
+
+    categories.forEach(function(category){
+
+        const visibleTools =
+            category.querySelectorAll(
+                '.tool[style="display: block;"]'
+            );
+
+        if(input === ""){
+
+            category.style.display = "block";
+
+        }else if(visibleTools.length > 0){
+
+            category.style.display = "block";
+
+        }else{
+
+            category.style.display = "none";
+
+        }
+
+    });
+
+
+    const noResult =
+        document.getElementById("noResult");
+
+    if(found === 0 && input !== ""){
+
+        noResult.style.display = "block";
+
+    }else{
+
+        noResult.style.display = "none";
+
+    }
+
+}
+
+</script>
+
+</body>
+</html>
+```

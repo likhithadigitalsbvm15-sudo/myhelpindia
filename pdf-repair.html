@@ -1,0 +1,1299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>PDF Repair & Validate - MyHelp India</title>
+
+<meta name="description"
+content="Check, validate and attempt to repair PDF files online with MyHelp India.">
+
+<style>
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:Arial,sans-serif;
+    background:linear-gradient(135deg,#eef7ff,#f5fff9);
+    color:#222;
+    min-height:100vh;
+}
+
+.header{
+    background:linear-gradient(135deg,#0d47a1,#1976d2,#2e7d32);
+    color:white;
+    text-align:center;
+    padding:26px 15px;
+    box-shadow:0 4px 15px rgba(0,0,0,.15);
+}
+
+.header h1{
+    font-size:30px;
+    margin-bottom:8px;
+}
+
+.header p{
+    font-size:15px;
+}
+
+.container{
+    max-width:900px;
+    margin:30px auto;
+    padding:0 15px;
+}
+
+.card{
+    background:white;
+    border-radius:18px;
+    padding:25px;
+    margin-bottom:20px;
+    box-shadow:0 8px 30px rgba(0,0,0,.10);
+}
+
+.card h2{
+    color:#0d47a1;
+    margin-bottom:18px;
+    font-size:22px;
+}
+
+.upload-box{
+    border:2px dashed #1976d2;
+    border-radius:15px;
+    padding:35px 20px;
+    text-align:center;
+    background:#f8fbff;
+}
+
+.upload-box strong{
+    font-size:18px;
+}
+
+.upload-box p{
+    margin-top:8px;
+    color:#666;
+}
+
+.upload-box input{
+    margin-top:18px;
+    width:100%;
+}
+
+.file-info{
+    display:none;
+    margin-top:15px;
+    padding:14px;
+    background:#f1f8e9;
+    border-radius:10px;
+    line-height:1.7;
+}
+
+.result-box{
+    display:none;
+    margin-top:20px;
+}
+
+.result-title{
+    font-size:19px;
+    font-weight:bold;
+    margin-bottom:12px;
+}
+
+.result-item{
+    display:flex;
+    justify-content:space-between;
+    gap:15px;
+    padding:12px;
+    border-bottom:1px solid #ddd;
+}
+
+.result-item:last-child{
+    border-bottom:none;
+}
+
+.label{
+    font-weight:bold;
+}
+
+.good{
+    color:#2e7d32;
+    font-weight:bold;
+}
+
+.warning{
+    color:#ef6c00;
+    font-weight:bold;
+}
+
+.error{
+    color:#c62828;
+    font-weight:bold;
+}
+
+.info{
+    margin-top:20px;
+    padding:15px;
+    background:#e3f2fd;
+    border-left:5px solid #1976d2;
+    border-radius:8px;
+    line-height:1.7;
+}
+
+.warning-box{
+    margin-top:20px;
+    padding:15px;
+    background:#fff8e1;
+    border-left:5px solid #ff9800;
+    border-radius:8px;
+    line-height:1.7;
+}
+
+.buttons{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-top:22px;
+}
+
+button{
+    border:none;
+    border-radius:10px;
+    padding:13px 20px;
+    font-size:15px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+button:hover{
+    opacity:.9;
+}
+
+.primary{
+    background:#1976d2;
+    color:white;
+}
+
+.green{
+    background:#2e7d32;
+    color:white;
+}
+
+.gray{
+    background:#757575;
+    color:white;
+}
+
+.status{
+    display:none;
+    margin-top:20px;
+    padding:15px;
+    border-radius:10px;
+    background:#e3f2fd;
+    color:#0d47a1;
+    font-weight:bold;
+    line-height:1.6;
+}
+
+.progress{
+    display:none;
+    margin-top:20px;
+}
+
+.progress-bar{
+    width:100%;
+    height:12px;
+    background:#ddd;
+    border-radius:10px;
+    overflow:hidden;
+}
+
+.progress-fill{
+    width:0%;
+    height:100%;
+    background:#1976d2;
+    transition:.3s;
+}
+
+.footer{
+    text-align:center;
+    padding:25px;
+    color:#666;
+    font-size:14px;
+}
+
+@media(max-width:600px){
+
+    .header h1{
+        font-size:24px;
+    }
+
+    .card{
+        padding:18px;
+    }
+
+    .result-item{
+        flex-direction:column;
+        gap:5px;
+    }
+
+    .buttons button{
+        width:100%;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="header">
+
+    <h1>🛠️ PDF Repair & Validate</h1>
+
+    <p>
+        Check your PDF and attempt basic browser-based repair
+    </p>
+
+</div>
+
+
+<div class="container">
+
+
+<div class="card">
+
+    <h2>📄 Select Your PDF</h2>
+
+    <div class="upload-box">
+
+        <strong>📁 Choose a PDF File</strong>
+
+        <p>
+            Select a PDF from your computer
+        </p>
+
+        <input
+            type="file"
+            id="pdfFile"
+            accept="application/pdf"
+        >
+
+    </div>
+
+
+    <div
+        class="file-info"
+        id="fileInfo"
+    ></div>
+
+
+    <div class="buttons">
+
+        <button
+            class="primary"
+            onclick="validatePDF()"
+        >
+            🔍 Check PDF
+        </button>
+
+        <button
+            class="green"
+            onclick="repairPDF()"
+        >
+            🛠️ Try Basic Repair
+        </button>
+
+        <button
+            class="gray"
+            onclick="clearForm()"
+        >
+            🔄 Clear
+        </button>
+
+        <button
+            class="green"
+            onclick="goBack()"
+        >
+            🏠 Back to MyHelp India
+        </button>
+
+    </div>
+
+
+    <div
+        class="progress"
+        id="progressBox"
+    >
+
+        <div class="progress-bar">
+
+            <div
+                class="progress-fill"
+                id="progressFill"
+            ></div>
+
+        </div>
+
+        <p
+            id="progressText"
+            style="margin-top:8px;text-align:center;color:#555;"
+        >
+            Processing...
+        </p>
+
+    </div>
+
+
+    <div
+        class="status"
+        id="status"
+    ></div>
+
+
+    <div
+        class="result-box"
+        id="resultBox"
+    >
+
+        <div class="result-title">
+            📊 PDF Check Result
+        </div>
+
+
+        <div class="result-item">
+
+            <span class="label">
+                File Name
+            </span>
+
+            <span id="resultName">
+                -
+            </span>
+
+        </div>
+
+
+        <div class="result-item">
+
+            <span class="label">
+                File Size
+            </span>
+
+            <span id="resultSize">
+                -
+            </span>
+
+        </div>
+
+
+        <div class="result-item">
+
+            <span class="label">
+                PDF Open Status
+            </span>
+
+            <span id="resultOpen">
+                -
+            </span>
+
+        </div>
+
+
+        <div class="result-item">
+
+            <span class="label">
+                Total Pages
+            </span>
+
+            <span id="resultPages">
+                -
+            </span>
+
+        </div>
+
+
+        <div class="result-item">
+
+            <span class="label">
+                Pages Readable
+            </span>
+
+            <span id="resultReadable">
+                -
+            </span>
+
+        </div>
+
+
+        <div class="result-item">
+
+            <span class="label">
+                Page Size
+            </span>
+
+            <span id="resultPageSize">
+                -
+            </span>
+
+        </div>
+
+
+        <div class="result-item">
+
+            <span class="label">
+                Overall Status
+            </span>
+
+            <span id="resultStatus">
+                -
+            </span>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="card">
+
+    <h2>💡 What This Tool Checks</h2>
+
+    <p style="line-height:1.8;">
+
+        ✔ Whether the PDF can be opened<br>
+
+        ✔ Total number of pages<br>
+
+        ✔ Whether pages can be rendered/read<br>
+
+        ✔ Basic page dimensions<br>
+
+        ✔ Whether the browser can recreate the PDF<br>
+
+        ✔ Attempts basic repair by recreating readable pages
+
+    </p>
+
+</div>
+
+
+<div class="warning-box">
+
+    <strong>⚠️ Important:</strong><br>
+
+    This is a browser-based PDF repair tool.
+    It cannot guarantee recovery of severely corrupted PDFs.
+
+    <br><br>
+
+    Advanced PDF problems such as broken cross-reference tables,
+    damaged fonts, encrypted files, digital signatures, embedded
+    attachments, or heavily corrupted objects may require
+    professional desktop PDF repair software.
+
+</div>
+
+
+</div>
+
+
+<div class="footer">
+
+    © 2026 MyHelp India • Your Life • Our Support
+
+</div>
+
+
+<!-- PDF.js -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+
+
+<!-- jsPDF -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+
+<script>
+
+pdfjsLib.GlobalWorkerOptions.workerSrc =
+"https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+
+
+let selectedFile = null;
+
+
+const pdfFile =
+document.getElementById("pdfFile");
+
+const fileInfo =
+document.getElementById("fileInfo");
+
+const statusBox =
+document.getElementById("status");
+
+const resultBox =
+document.getElementById("resultBox");
+
+const progressBox =
+document.getElementById("progressBox");
+
+const progressFill =
+document.getElementById("progressFill");
+
+const progressText =
+document.getElementById("progressText");
+
+
+pdfFile.addEventListener("change",function(){
+
+    selectedFile = this.files[0];
+
+    resultBox.style.display = "none";
+
+    statusBox.style.display = "none";
+
+    if(!selectedFile){
+
+        fileInfo.style.display = "none";
+
+        return;
+
+    }
+
+
+    if(selectedFile.type !== "application/pdf"){
+
+        alert("Please select a PDF file.");
+
+        this.value = "";
+
+        selectedFile = null;
+
+        return;
+
+    }
+
+
+    const sizeMB =
+    (selectedFile.size / 1024 / 1024).toFixed(2);
+
+
+    fileInfo.innerHTML =
+
+        "📄 <strong>File:</strong> " +
+        escapeHTML(selectedFile.name) +
+
+        "<br>📦 <strong>Size:</strong> " +
+        sizeMB +
+        " MB";
+
+
+    fileInfo.style.display = "block";
+
+});
+
+
+async function validatePDF(){
+
+    if(!selectedFile){
+
+        alert("Please select a PDF file first.");
+
+        return;
+
+    }
+
+
+    try{
+
+        showProgress(
+            10,
+            "Opening PDF..."
+        );
+
+
+        const arrayBuffer =
+        await selectedFile.arrayBuffer();
+
+
+        const loadingTask =
+        pdfjsLib.getDocument({
+            data:arrayBuffer
+        });
+
+
+        const pdf =
+        await loadingTask.promise;
+
+
+        const totalPages =
+        pdf.numPages;
+
+
+        let readablePages = 0;
+
+        let firstWidth = 0;
+
+        let firstHeight = 0;
+
+
+        for(
+            let i = 1;
+            i <= totalPages;
+            i++
+        ){
+
+            try{
+
+                const page =
+                await pdf.getPage(i);
+
+
+                const viewport =
+                page.getViewport({
+                    scale:1
+                });
+
+
+                if(i === 1){
+
+                    firstWidth =
+                    viewport.width;
+
+                    firstHeight =
+                    viewport.height;
+
+                }
+
+
+                const canvas =
+                document.createElement("canvas");
+
+                const context =
+                canvas.getContext("2d");
+
+
+                canvas.width =
+                Math.ceil(viewport.width);
+
+                canvas.height =
+                Math.ceil(viewport.height);
+
+
+                await page.render({
+                    canvasContext:context,
+                    viewport:viewport
+                }).promise;
+
+
+                readablePages++;
+
+
+                const percent =
+                10 +
+                Math.round(
+                    (i / totalPages) * 85
+                );
+
+
+                showProgress(
+                    percent,
+                    "Checking page " +
+                    i +
+                    " of " +
+                    totalPages +
+                    "..."
+                );
+
+
+                canvas.width = 1;
+                canvas.height = 1;
+
+
+            }catch(pageError){
+
+                console.warn(
+                    "Page " +
+                    i +
+                    " could not be read:",
+                    pageError
+                );
+
+            }
+
+        }
+
+
+        const allReadable =
+        readablePages === totalPages;
+
+
+        document.getElementById("resultName")
+        .textContent =
+        selectedFile.name;
+
+
+        document.getElementById("resultSize")
+        .textContent =
+        formatBytes(selectedFile.size);
+
+
+        document.getElementById("resultOpen")
+        .innerHTML =
+        "<span class='good'>✓ PDF opened</span>";
+
+
+        document.getElementById("resultPages")
+        .textContent =
+        totalPages;
+
+
+        document.getElementById("resultReadable")
+        .innerHTML =
+        readablePages +
+        " / " +
+        totalPages +
+        (
+            allReadable
+            ? " <span class='good'>✓</span>"
+            : " <span class='warning'>⚠</span>"
+        );
+
+
+        if(firstWidth && firstHeight){
+
+            document.getElementById("resultPageSize")
+            .textContent =
+            Math.round(firstWidth) +
+            " × " +
+            Math.round(firstHeight) +
+            " points";
+
+        }else{
+
+            document.getElementById("resultPageSize")
+            .textContent =
+            "Unable to read";
+
+        }
+
+
+        if(allReadable){
+
+            document.getElementById("resultStatus")
+            .innerHTML =
+            "<span class='good'>✓ PDF looks healthy</span>";
+
+            showStatus(
+                "✅ PDF validation completed. All pages were readable."
+            );
+
+        }else{
+
+            document.getElementById("resultStatus")
+            .innerHTML =
+            "<span class='warning'>⚠ Some pages have problems</span>";
+
+            showStatus(
+                "⚠ PDF opened, but some pages could not be read. You can try Basic Repair."
+            );
+
+        }
+
+
+        resultBox.style.display = "block";
+
+
+        showProgress(
+            100,
+            "PDF check completed."
+        );
+
+
+        setTimeout(function(){
+
+            progressBox.style.display =
+            "none";
+
+        },1500);
+
+
+    }catch(error){
+
+        console.error(error);
+
+        progressBox.style.display =
+        "none";
+
+
+        document.getElementById("resultName")
+        .textContent =
+        selectedFile.name;
+
+
+        document.getElementById("resultSize")
+        .textContent =
+        formatBytes(selectedFile.size);
+
+
+        document.getElementById("resultOpen")
+        .innerHTML =
+        "<span class='error'>✕ Cannot open PDF</span>";
+
+
+        document.getElementById("resultPages")
+        .textContent =
+        "-";
+
+
+        document.getElementById("resultReadable")
+        .textContent =
+        "-";
+
+
+        document.getElementById("resultPageSize")
+        .textContent =
+        "-";
+
+
+        document.getElementById("resultStatus")
+        .innerHTML =
+        "<span class='error'>✕ PDF may be damaged or unsupported</span>";
+
+
+        resultBox.style.display =
+        "block";
+
+
+        showStatus(
+            "❌ This PDF could not be opened. You can try Basic Repair, but severely damaged PDFs may not be recoverable."
+        );
+
+    }
+
+}
+
+
+async function repairPDF(){
+
+    if(!selectedFile){
+
+        alert("Please select a PDF file first.");
+
+        return;
+
+    }
+
+
+    try{
+
+        showProgress(
+            5,
+            "Opening PDF for repair..."
+        );
+
+
+        const arrayBuffer =
+        await selectedFile.arrayBuffer();
+
+
+        const loadingTask =
+        pdfjsLib.getDocument({
+            data:arrayBuffer
+        });
+
+
+        const pdf =
+        await loadingTask.promise;
+
+
+        const totalPages =
+        pdf.numPages;
+
+
+        const {jsPDF} =
+        window.jspdf;
+
+
+        let outputPDF = null;
+
+
+        let repairedPages = 0;
+
+
+        for(
+            let i = 1;
+            i <= totalPages;
+            i++
+        ){
+
+            try{
+
+                const page =
+                await pdf.getPage(i);
+
+
+                const viewport =
+                page.getViewport({
+                    scale:1.5
+                });
+
+
+                const canvas =
+                document.createElement("canvas");
+
+
+                const context =
+                canvas.getContext("2d");
+
+
+                canvas.width =
+                Math.ceil(viewport.width);
+
+
+                canvas.height =
+                Math.ceil(viewport.height);
+
+
+                await page.render({
+                    canvasContext:context,
+                    viewport:viewport
+                }).promise;
+
+
+                const imageData =
+                canvas.toDataURL(
+                    "image/jpeg",
+                    0.92
+                );
+
+
+                const widthPt =
+                viewport.width / 1.5;
+
+
+                const heightPt =
+                viewport.height / 1.5;
+
+
+                const orientation =
+                widthPt > heightPt
+                ? "landscape"
+                : "portrait";
+
+
+                if(!outputPDF){
+
+                    outputPDF =
+                    new jsPDF({
+                        orientation:orientation,
+                        unit:"pt",
+                        format:[
+                            widthPt,
+                            heightPt
+                        ],
+                        compress:true
+                    });
+
+                }else{
+
+                    outputPDF.addPage(
+                        [widthPt,heightPt],
+                        orientation
+                    );
+
+                }
+
+
+                outputPDF.addImage(
+                    imageData,
+                    "JPEG",
+                    0,
+                    0,
+                    widthPt,
+                    heightPt,
+                    undefined,
+                    "FAST"
+                );
+
+
+                repairedPages++;
+
+
+                const percent =
+                5 +
+                Math.round(
+                    (i / totalPages) * 90
+                );
+
+
+                showProgress(
+                    percent,
+                    "Repairing page " +
+                    i +
+                    " of " +
+                    totalPages +
+                    "..."
+                );
+
+
+                canvas.width = 1;
+                canvas.height = 1;
+
+
+                await new Promise(
+                    resolve =>
+                    setTimeout(resolve,0)
+                );
+
+
+            }catch(pageError){
+
+                console.warn(
+                    "Repair failed for page " +
+                    i,
+                    pageError
+                );
+
+            }
+
+        }
+
+
+        if(!outputPDF ||
+           repairedPages === 0){
+
+            throw new Error(
+                "No readable pages were found."
+            );
+
+        }
+
+
+        showProgress(
+            98,
+            "Creating repaired PDF..."
+        );
+
+
+        outputPDF.save(
+            "MyHelp-India-Repaired-PDF.pdf"
+        );
+
+
+        showProgress(
+            100,
+            "Repair completed."
+        );
+
+
+        showStatus(
+            "✅ Basic repair completed. " +
+            repairedPages +
+            " of " +
+            totalPages +
+            " pages were recreated."
+        );
+
+
+        resultBox.style.display =
+        "block";
+
+
+        document.getElementById("resultName")
+        .textContent =
+        selectedFile.name;
+
+
+        document.getElementById("resultSize")
+        .textContent =
+        formatBytes(selectedFile.size);
+
+
+        document.getElementById("resultOpen")
+        .innerHTML =
+        "<span class='good'>✓ Processed</span>";
+
+
+        document.getElementById("resultPages")
+        .textContent =
+        totalPages;
+
+
+        document.getElementById("resultReadable")
+        .innerHTML =
+        repairedPages +
+        " / " +
+        totalPages;
+
+
+        document.getElementById("resultPageSize")
+        .textContent =
+        "Recreated pages";
+
+
+        document.getElementById("resultStatus")
+        .innerHTML =
+        repairedPages === totalPages
+        ?
+        "<span class='good'>✓ Repair completed</span>"
+        :
+        "<span class='warning'>⚠ Partial repair</span>";
+
+
+        setTimeout(function(){
+
+            progressBox.style.display =
+            "none";
+
+        },2000);
+
+
+    }catch(error){
+
+        console.error(error);
+
+        progressBox.style.display =
+        "none";
+
+
+        showStatus(
+            "❌ Basic repair could not be completed. " +
+            (error.message || "")
+        );
+
+    }
+
+}
+
+
+function showProgress(
+    percent,
+    message
+){
+
+    progressBox.style.display =
+    "block";
+
+
+    progressFill.style.width =
+    percent + "%";
+
+
+    progressText.textContent =
+    message;
+
+}
+
+
+function formatBytes(bytes){
+
+    if(bytes === 0){
+
+        return "0 Bytes";
+
+    }
+
+
+    const units =
+    [
+        "Bytes",
+        "KB",
+        "MB",
+        "GB"
+    ];
+
+
+    const index =
+    Math.floor(
+        Math.log(bytes) /
+        Math.log(1024)
+    );
+
+
+    return (
+        bytes /
+        Math.pow(1024,index)
+    ).toFixed(2)
+    + " " +
+    units[index];
+
+}
+
+
+function escapeHTML(text){
+
+    return text
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+
+}
+
+
+function showStatus(message){
+
+    if(message){
+
+        statusBox.textContent =
+        message;
+
+        statusBox.style.display =
+        "block";
+
+    }else{
+
+        statusBox.style.display =
+        "none";
+
+    }
+
+}
+
+
+function clearForm(){
+
+    selectedFile = null;
+
+    pdfFile.value = "";
+
+    fileInfo.style.display =
+    "none";
+
+    resultBox.style.display =
+    "none";
+
+    statusBox.style.display =
+    "none";
+
+    progressBox.style.display =
+    "none";
+
+    progressFill.style.width =
+    "0%";
+
+    progressText.textContent =
+    "Processing...";
+
+}
+
+
+function goBack(){
+
+    window.location.href =
+    "index.html";
+
+}
+
+</script>
+
+</body>
+</html>

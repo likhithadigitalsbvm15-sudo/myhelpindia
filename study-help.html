@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Study Help - MyHelp India</title>
+<meta name="description" content="Free student study help for Maths, English, Science, homework and exam preparation.">
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f8ff;
+    color: #222;
+}
+
+.header {
+    background: linear-gradient(135deg, #0d47a1, #1976d2, #42a5f5);
+    color: white;
+    text-align: center;
+    padding: 22px 15px;
+}
+
+.header h1 {
+    font-size: 28px;
+    margin-bottom: 6px;
+}
+
+.header p {
+    font-size: 15px;
+}
+
+.container {
+    max-width: 750px;
+    margin: 30px auto;
+    padding: 0 15px;
+}
+
+.card {
+    background: white;
+    padding: 25px;
+    border-radius: 18px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.10);
+}
+
+.title {
+    text-align: center;
+    margin-bottom: 22px;
+}
+
+.title h2 {
+    color: #0d47a1;
+    margin-bottom: 6px;
+}
+
+.title p {
+    color: #666;
+    font-size: 14px;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    margin: 15px 0 7px;
+}
+
+select,
+textarea,
+input {
+    width: 100%;
+    padding: 13px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    font-size: 16px;
+    background: white;
+}
+
+textarea {
+    min-height: 130px;
+    resize: vertical;
+}
+
+.help-btn {
+    width: 100%;
+    margin-top: 20px;
+    padding: 14px;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #1976d2, #0d47a1);
+    color: white;
+    font-size: 17px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.help-btn:hover {
+    opacity: 0.9;
+}
+
+.result {
+    display: none;
+    margin-top: 25px;
+    padding: 20px;
+    background: #eef6ff;
+    border-radius: 14px;
+}
+
+.result h3 {
+    color: #0d47a1;
+    margin-bottom: 12px;
+}
+
+.answer {
+    background: white;
+    padding: 18px;
+    border-radius: 10px;
+    line-height: 1.7;
+    border: 1px solid #dbe7f3;
+    white-space: pre-line;
+}
+
+.tip {
+    margin-top: 15px;
+    padding: 14px;
+    background: #e8f5e9;
+    border-left: 4px solid #2e7d32;
+    border-radius: 8px;
+    color: #1b5e20;
+}
+
+.info {
+    margin-top: 20px;
+    padding: 13px;
+    background: #fff8e1;
+    border-left: 4px solid #ffb300;
+    border-radius: 8px;
+    font-size: 13px;
+    color: #555;
+}
+
+.buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 18px;
+}
+
+.clear-btn,
+.back-btn {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    border-radius: 9px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.clear-btn {
+    background: #eeeeee;
+    color: #333;
+}
+
+.back-btn {
+    background: #e3f2fd;
+    color: #0d47a1;
+}
+
+.footer {
+    text-align: center;
+    margin: 25px 10px;
+    color: #777;
+    font-size: 13px;
+}
+
+@media (max-width: 600px) {
+    .card {
+        padding: 18px;
+    }
+
+    .header h1 {
+        font-size: 24px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+    <h1>MyHelp India</h1>
+    <p>Your Life • Our Support</p>
+</div>
+
+<div class="container">
+
+<div class="card">
+
+    <div class="title">
+        <h2>📚 Student Study Help</h2>
+        <p>Get simple study guidance for school subjects</p>
+    </div>
+
+    <label>Select Class</label>
+
+    <select id="className">
+        <option value="">Select Class</option>
+        <option value="1st Class">1st Class</option>
+        <option value="2nd Class">2nd Class</option>
+        <option value="3rd Class">3rd Class</option>
+        <option value="4th Class">4th Class</option>
+        <option value="5th Class">5th Class</option>
+        <option value="6th Class">6th Class</option>
+        <option value="7th Class">7th Class</option>
+        <option value="8th Class">8th Class</option>
+        <option value="9th Class">9th Class</option>
+        <option value="10th Class">10th Class</option>
+    </select>
+
+    <label>Select Subject</label>
+
+    <select id="subject">
+        <option value="">Select Subject</option>
+        <option value="Maths">➗ Maths</option>
+        <option value="English">🔤 English</option>
+        <option value="Science">🔬 Science</option>
+        <option value="General Knowledge">🌎 General Knowledge</option>
+    </select>
+
+    <label>What do you need help with?</label>
+
+    <textarea
+        id="question"
+        placeholder="Example: Explain addition of fractions in simple words."
+    ></textarea>
+
+    <button class="help-btn" onclick="getHelp()">
+        📖 Get Study Help
+    </button>
+
+    <div class="result" id="result">
+
+        <h3 id="resultTitle">📚 Study Help</h3>
+
+        <div class="answer" id="answer"></div>
+
+        <div class="tip">
+            💡 <strong>Study Tip:</strong>
+            Read the explanation slowly and practice with examples.
+        </div>
+
+    </div>
+
+    <div class="info">
+        ℹ️ This version provides basic study guidance for common topics.
+        For advanced questions, you can add an AI-powered study assistant later.
+    </div>
+
+    <div class="buttons">
+
+        <button class="clear-btn" onclick="clearAll()">
+            Clear
+        </button>
+
+        <button class="back-btn" onclick="goHome()">
+            ← MyHelp India
+        </button>
+
+    </div>
+
+</div>
+
+</div>
+
+<div class="footer">
+    © 2026 MyHelp India • Your Life • Our Support
+</div>
+
+
+<script>
+
+function getHelp() {
+
+    let className =
+        document.getElementById("className").value;
+
+    let subject =
+        document.getElementById("subject").value;
+
+    let question =
+        document.getElementById("question").value.trim();
+
+    if (!className) {
+        alert("Please select your class.");
+        return;
+    }
+
+    if (!subject) {
+        alert("Please select a subject.");
+        return;
+    }
+
+    if (!question) {
+        alert("Please enter your question.");
+        return;
+    }
+
+    let answer = "";
+
+    let lowerQuestion = question.toLowerCase();
+
+
+    /* MATHS */
+
+    if (subject === "Maths") {
+
+        if (
+            lowerQuestion.includes("addition") ||
+            lowerQuestion.includes("add")
+        ) {
+
+            answer =
+`Addition means putting numbers together.
+
+Example:
+5 + 3 = 8
+
+Step 1: Start with 5.
+Step 2: Add 3 more.
+Step 3: The answer is 8.
+
+Practice:
+4 + 2 = 6
+7 + 5 = 12
+10 + 8 = 18`;
+
+        }
+
+        else if (
+            lowerQuestion.includes("subtraction") ||
+            lowerQuestion.includes("subtract") ||
+            lowerQuestion.includes("minus")
+        ) {
+
+            answer =
+`Subtraction means taking one number away from another.
+
+Example:
+9 - 4 = 5
+
+Step 1: Start with 9.
+Step 2: Take away 4.
+Step 3: The answer is 5.
+
+Practice:
+8 - 3 = 5
+10 - 6 = 4
+15 - 7 = 8`;
+
+        }
+
+        else if (
+            lowerQuestion.includes("multiplication") ||
+            lowerQuestion.includes("multiply")
+        ) {
+
+            answer =
+`Multiplication is repeated addition.
+
+Example:
+4 × 3 = 12
+
+This means:
+4 + 4 + 4 = 12
+
+Practice:
+2 × 5 = 10
+3 × 4 = 12
+5 × 6 = 30`;
+
+        }
+
+        else if (
+            lowerQuestion.includes("division") ||
+            lowerQuestion.includes("divide")
+        ) {
+
+            answer =
+`Division means sharing a number equally.
+
+Example:
+12 ÷ 3 = 4
+
+12 items shared equally among 3 groups gives 4 in each group.
+
+Practice:
+10 ÷ 2 = 5
+15 ÷ 3 = 5
+20 ÷ 4 = 5`;
+
+        }
+
+        else {
+
+            answer =
+`Let's understand the Maths question step by step.
+
+For:
+"${question}"
+
+Try these steps:
+
+1. Read the question carefully.
+2. Find the numbers given.
+3. Understand what the question asks.
+4. Choose the correct operation.
+5. Calculate the answer.
+6. Check your answer once again.
+
+For difficult questions, use an AI-powered study assistant for a detailed solution.`;
+
+        }
+
+    }
+
+
+    /* ENGLISH */
+
+    else if (subject === "English") {
+
+        if (
+            lowerQuestion.includes("noun")
+        ) {
+
+            answer =
+`A noun is the name of a person, place, animal or thing.
+
+Examples:
+
+Person → Ravi
+Place → School
+Animal → Dog
+Thing → Book
+
+Example sentence:
+"Ravi has a book."
+
+Ravi and book are nouns.`;
+
+        }
+
+        else if (
+            lowerQuestion.includes("verb")
+        ) {
+
+            answer =
+`A verb is an action word.
+
+Examples:
+
+Run
+Walk
+Eat
+Write
+Read
+Play
+
+Example:
+"Ravi plays cricket."
+
+The word "plays" is the verb.`;
+
+        }
+
+        else if (
+            lowerQuestion.includes("sentence")
+        ) {
+
+            answer =
+`A sentence is a group of words that gives a complete meaning.
+
+Example:
+"I am going to school."
+
+Remember:
+Start a sentence with a capital letter.
+End a sentence with a full stop, question mark or exclamation mark.`;
+
+        }
+
+        else {
+
+            answer =
+`English Study Help
+
+For:
+"${question}"
+
+Try this method:
+
+1. Read the sentence slowly.
+2. Find the important words.
+3. Understand the meaning.
+4. Write the answer in simple English.
+5. Check spelling and grammar.
+
+Practice English every day for better speaking and writing skills.`;
+
+        }
+
+    }
+
+
+    /* SCIENCE */
+
+    else if (subject === "Science") {
+
+        if (
+            lowerQuestion.includes("plant") ||
+            lowerQuestion.includes("photosynthesis")
+        ) {
+
+            answer =
+`Plants make their own food through a process called photosynthesis.
+
+Plants need:
+• Sunlight
+• Water
+• Carbon dioxide
+
+They use these to make food and release oxygen.
+
+Photosynthesis mainly takes place in the leaves.`;
+
+        }
+
+        else if (
+            lowerQuestion.includes("water cycle")
+        ) {
+
+            answer =
+`The water cycle is the continuous movement of water in nature.
+
+Main steps:
+
+1. Evaporation
+2. Condensation
+3. Precipitation
+4. Collection
+
+Example:
+Water gets heated by the Sun → becomes water vapour → forms clouds → falls as rain.`;
+
+        }
+
+        else {
+
+            answer =
+`Science Study Help
+
+For:
+"${question}"
+
+Try to understand:
+
+1. What is the topic?
+2. What are its main parts?
+3. How does it work?
+4. Can you give an example?
+5. Can you explain it in your own words?
+
+Understanding is more important than memorising everything.`;
+
+        }
+
+    }
+
+
+    /* GENERAL KNOWLEDGE */
+
+    else {
+
+        answer =
+`General Knowledge Help
+
+For:
+"${question}"
+
+A good way to learn GK:
+
+• Learn a few facts every day.
+• Read about India and the world.
+• Learn important places and people.
+• Practice questions regularly.
+• Revise what you learned.
+
+For current or advanced information, an AI-powered assistant can provide a detailed answer.`;
+
+    }
+
+
+    document.getElementById("resultTitle").innerText =
+        "📚 " + subject + " Study Help";
+
+    document.getElementById("answer").innerText =
+        answer;
+
+    document.getElementById("result").style.display =
+        "block";
+
+}
+
+
+function clearAll() {
+
+    document.getElementById("className").value = "";
+
+    document.getElementById("subject").value = "";
+
+    document.getElementById("question").value = "";
+
+    document.getElementById("result").style.display = "none";
+
+}
+
+
+function goHome() {
+
+    window.location.href = "index.html";
+
+}
+
+</script>
+
+</body>
+</html>

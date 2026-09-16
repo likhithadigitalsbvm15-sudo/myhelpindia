@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Age Calculator - MyHelp India</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:Arial,sans-serif;
+    background:#f4f8ff;
+    color:#222;
+}
+
+header{
+    background:linear-gradient(135deg,#0d47a1,#1976d2,#42a5f5);
+    color:white;
+    text-align:center;
+    padding:25px 15px;
+}
+
+header h1{
+    font-size:30px;
+    margin-bottom:8px;
+}
+
+header p{
+    font-size:15px;
+}
+
+.container{
+    max-width:850px;
+    margin:30px auto;
+    padding:0 15px;
+}
+
+.card{
+    background:white;
+    padding:25px;
+    border-radius:15px;
+    box-shadow:0 5px 20px rgba(0,0,0,.10);
+    margin-bottom:25px;
+}
+
+h2{
+    color:#0d47a1;
+    margin-bottom:20px;
+}
+
+label{
+    display:block;
+    font-weight:bold;
+    margin:15px 0 7px;
+}
+
+input{
+    width:100%;
+    padding:14px;
+    border:1px solid #ccc;
+    border-radius:8px;
+    font-size:16px;
+}
+
+input:focus{
+    outline:none;
+    border-color:#1976d2;
+}
+
+button,.back-btn{
+    border:none;
+    padding:13px 20px;
+    border-radius:8px;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.calculate{
+    background:#1976d2;
+    color:white;
+    margin-top:22px;
+}
+
+.clear{
+    background:#e53935;
+    color:white;
+    margin-top:22px;
+}
+
+.back-btn{
+    background:#555;
+    color:white;
+    text-decoration:none;
+    display:inline-block;
+    margin-top:22px;
+}
+
+.results{
+    display:none;
+}
+
+.age-main{
+    text-align:center;
+    background:#e8f5e9;
+    border-radius:14px;
+    padding:25px;
+    margin-bottom:20px;
+}
+
+.age-main h3{
+    color:#2e7d32;
+    margin-bottom:10px;
+}
+
+.age-main p{
+    font-size:32px;
+    font-weight:bold;
+    color:#1b5e20;
+}
+
+.result-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:15px;
+}
+
+.result-box{
+    background:#f4f8ff;
+    border:1px solid #dbe7f5;
+    border-radius:12px;
+    padding:20px;
+    text-align:center;
+}
+
+.result-box h3{
+    color:#555;
+    font-size:15px;
+    margin-bottom:10px;
+}
+
+.result-box p{
+    color:#0d47a1;
+    font-size:22px;
+    font-weight:bold;
+}
+
+.next-birthday{
+    margin-top:20px;
+    background:#fff8e1;
+    border-radius:12px;
+    padding:20px;
+    text-align:center;
+    line-height:1.7;
+}
+
+@media(max-width:600px){
+
+    header h1{
+        font-size:24px;
+    }
+
+    .card{
+        padding:18px;
+    }
+
+    .result-grid{
+        grid-template-columns:1fr;
+    }
+
+    button,.back-btn{
+        width:100%;
+        text-align:center;
+    }
+
+    .age-main p{
+        font-size:25px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>MyHelp India</h1>
+    <p>Professional Age Calculator</p>
+</header>
+
+<div class="container">
+
+    <div class="card">
+
+        <h2>🎂 Age Calculator</h2>
+
+        <label>Date of Birth</label>
+        <input type="date" id="dob">
+
+        <label>Calculate Age On</label>
+        <input type="date" id="today">
+
+        <button class="calculate" onclick="calculateAge()">
+            🧮 Calculate Age
+        </button>
+
+        <button class="clear" onclick="clearCalculator()">
+            🗑️ Clear
+        </button>
+
+        <a href="index.html" class="back-btn">
+            ← Back to MyHelp India
+        </a>
+
+    </div>
+
+    <div class="card results" id="results">
+
+        <h2>📊 Your Age</h2>
+
+        <div class="age-main">
+            <h3>Current Age</h3>
+            <p id="mainAge">0 Years</p>
+        </div>
+
+        <div class="result-grid">
+
+            <div class="result-box">
+                <h3>Years</h3>
+                <p id="years">0</p>
+            </div>
+
+            <div class="result-box">
+                <h3>Months</h3>
+                <p id="months">0</p>
+            </div>
+
+            <div class="result-box">
+                <h3>Days</h3>
+                <p id="days">0</p>
+            </div>
+
+        </div>
+
+        <div class="next-birthday">
+            <strong>🎉 Next Birthday</strong>
+            <p id="birthdayText">Your next birthday information will appear here.</p>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+function setToday(){
+
+    let today = new Date();
+
+    let year = today.getFullYear();
+
+    let month = String(today.getMonth()+1).padStart(2,"0");
+
+    let day = String(today.getDate()).padStart(2,"0");
+
+    document.getElementById("today").value =
+        year + "-" + month + "-" + day;
+}
+
+setToday();
+
+
+function calculateAge(){
+
+    let dobValue = document.getElementById("dob").value;
+
+    let todayValue = document.getElementById("today").value;
+
+    if(!dobValue || !todayValue){
+
+        alert("Please select your Date of Birth and calculation date.");
+
+        return;
+    }
+
+    let birthDate = new Date(dobValue + "T00:00:00");
+
+    let endDate = new Date(todayValue + "T00:00:00");
+
+    if(birthDate > endDate){
+
+        alert("Date of Birth cannot be after the calculation date.");
+
+        return;
+    }
+
+    let years = endDate.getFullYear() - birthDate.getFullYear();
+
+    let months = endDate.getMonth() - birthDate.getMonth();
+
+    let days = endDate.getDate() - birthDate.getDate();
+
+    if(days < 0){
+
+        months--;
+
+        let previousMonth =
+            new Date(
+                endDate.getFullYear(),
+                endDate.getMonth(),
+                0
+            );
+
+        days += previousMonth.getDate();
+    }
+
+    if(months < 0){
+
+        years--;
+
+        months += 12;
+    }
+
+    document.getElementById("mainAge").innerText =
+        years + " Years " +
+        months + " Months " +
+        days + " Days";
+
+    document.getElementById("years").innerText = years;
+
+    document.getElementById("months").innerText = months;
+
+    document.getElementById("days").innerText = days;
+
+
+    let nextBirthday =
+        new Date(
+            endDate.getFullYear(),
+            birthDate.getMonth(),
+            birthDate.getDate()
+        );
+
+    if(nextBirthday < endDate){
+
+        nextBirthday.setFullYear(
+            endDate.getFullYear() + 1
+        );
+    }
+
+    let daysLeft =
+        Math.ceil(
+            (nextBirthday - endDate) /
+            (1000 * 60 * 60 * 24)
+        );
+
+    if(daysLeft === 0){
+
+        document.getElementById("birthdayText").innerText =
+            "🎉 Happy Birthday! Today is your birthday.";
+
+    }else{
+
+        document.getElementById("birthdayText").innerText =
+            "Your next birthday is in " +
+            daysLeft + " days.";
+
+    }
+
+    document.getElementById("results").style.display =
+        "block";
+
+    document.getElementById("results").scrollIntoView({
+        behavior:"smooth"
+    });
+}
+
+
+function clearCalculator(){
+
+    document.getElementById("dob").value = "";
+
+    setToday();
+
+    document.getElementById("results").style.display =
+        "none";
+}
+
+</script>
+
+</body>
+</html>

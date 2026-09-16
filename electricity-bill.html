@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Electricity Bill Estimate - MyHelp India</title>
+<meta name="description" content="Estimate your electricity bill based on units consumed.">
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f8ff;
+    color: #222;
+}
+
+.header {
+    background: linear-gradient(135deg, #0d47a1, #1976d2, #42a5f5);
+    color: white;
+    text-align: center;
+    padding: 22px 15px;
+}
+
+.header h1 {
+    font-size: 28px;
+    margin-bottom: 6px;
+}
+
+.header p {
+    font-size: 15px;
+}
+
+.container {
+    max-width: 650px;
+    margin: 30px auto;
+    padding: 0 15px;
+}
+
+.card {
+    background: white;
+    padding: 25px;
+    border-radius: 18px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.10);
+}
+
+.title {
+    text-align: center;
+    margin-bottom: 22px;
+}
+
+.title h2 {
+    color: #0d47a1;
+    margin-bottom: 6px;
+}
+
+.title p {
+    color: #666;
+    font-size: 14px;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    margin: 15px 0 7px;
+}
+
+input,
+select {
+    width: 100%;
+    padding: 13px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    font-size: 16px;
+    background: white;
+}
+
+.calculate-btn {
+    width: 100%;
+    margin-top: 24px;
+    padding: 14px;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #1976d2, #0d47a1);
+    color: white;
+    font-size: 17px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.calculate-btn:hover {
+    opacity: 0.9;
+}
+
+.result {
+    display: none;
+    margin-top: 25px;
+    padding: 20px;
+    background: #eef6ff;
+    border-radius: 14px;
+}
+
+.result h3 {
+    text-align: center;
+    color: #0d47a1;
+    margin-bottom: 18px;
+}
+
+.result-box {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px;
+    margin-bottom: 8px;
+    background: white;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+}
+
+.total {
+    margin-top: 15px;
+    padding: 18px;
+    background: #e8f5e9;
+    border-radius: 12px;
+    text-align: center;
+    color: #1b5e20;
+}
+
+.total span {
+    display: block;
+    font-size: 28px;
+    font-weight: bold;
+    margin-top: 8px;
+}
+
+.info {
+    margin-top: 20px;
+    padding: 13px;
+    background: #fff8e1;
+    border-left: 4px solid #ffb300;
+    border-radius: 8px;
+    font-size: 13px;
+    color: #555;
+}
+
+.buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 18px;
+}
+
+.clear-btn,
+.back-btn {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    border-radius: 9px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.clear-btn {
+    background: #eeeeee;
+    color: #333;
+}
+
+.back-btn {
+    background: #e3f2fd;
+    color: #0d47a1;
+}
+
+.footer {
+    text-align: center;
+    margin: 25px 10px;
+    color: #777;
+    font-size: 13px;
+}
+
+@media (max-width: 600px) {
+    .card {
+        padding: 18px;
+    }
+
+    .header h1 {
+        font-size: 24px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+    <h1>MyHelp India</h1>
+    <p>Your Life • Our Support</p>
+</div>
+
+<div class="container">
+
+<div class="card">
+
+    <div class="title">
+        <h2>⚡ Electricity Bill Estimate</h2>
+        <p>Estimate your electricity bill from units consumed</p>
+    </div>
+
+    <label>Units Consumed (kWh)</label>
+    <input
+        type="number"
+        id="units"
+        placeholder="Example: 150"
+        min="0"
+    >
+
+    <label>Connection Type</label>
+    <select id="connection">
+        <option value="domestic">🏠 Domestic</option>
+        <option value="commercial">🏢 Commercial</option>
+    </select>
+
+    <label>Fixed / Service Charge (₹)</label>
+    <input
+        type="number"
+        id="fixedCharge"
+        value="50"
+        min="0"
+    >
+
+    <button class="calculate-btn" onclick="calculateBill()">
+        ⚡ Calculate Bill
+    </button>
+
+    <div class="result" id="result">
+
+        <h3>📊 Estimated Electricity Bill</h3>
+
+        <div class="result-box">
+            <span>Units Consumed</span>
+            <strong id="showUnits">0</strong>
+        </div>
+
+        <div class="result-box">
+            <span>Energy Charges</span>
+            <strong id="energyCharge">₹0.00</strong>
+        </div>
+
+        <div class="result-box">
+            <span>Fixed / Service Charge</span>
+            <strong id="showFixed">₹0.00</strong>
+        </div>
+
+        <div class="result-box">
+            <span>Estimated Total</span>
+            <strong id="beforeTotal">₹0.00</strong>
+        </div>
+
+        <div class="total">
+            Estimated Bill
+            <span id="totalBill">₹0.00</span>
+        </div>
+
+    </div>
+
+    <div class="info">
+        ℹ️ This is only an estimated bill. Actual electricity charges
+        depend on your state, DISCOM, tariff slab, taxes, subsidies,
+        meter charges and other applicable fees.
+    </div>
+
+    <div class="buttons">
+        <button class="clear-btn" onclick="clearAll()">
+            Clear
+        </button>
+
+        <button class="back-btn" onclick="goHome()">
+            ← MyHelp India
+        </button>
+    </div>
+
+</div>
+
+</div>
+
+<div class="footer">
+    © 2026 MyHelp India • Your Life • Our Support
+</div>
+
+
+<script>
+
+function calculateBill() {
+
+    let units = parseFloat(document.getElementById("units").value);
+
+    let connection =
+        document.getElementById("connection").value;
+
+    let fixedCharge =
+        parseFloat(document.getElementById("fixedCharge").value) || 0;
+
+    if (isNaN(units) || units < 0) {
+        alert("Please enter valid electricity units.");
+        return;
+    }
+
+    let energyCharge = 0;
+
+    /*
+       Sample slab rates for estimation only.
+
+       Domestic:
+       0–100 units       ₹2.50/unit
+       101–200 units     ₹4.00/unit
+       201–400 units     ₹5.50/unit
+       Above 400         ₹7.00/unit
+
+       Commercial:
+       0–100 units       ₹5.00/unit
+       101–200 units     ₹6.50/unit
+       201–400 units     ₹8.00/unit
+       Above 400         ₹9.50/unit
+    */
+
+    if (connection === "domestic") {
+
+        if (units <= 100) {
+            energyCharge = units * 2.50;
+        }
+        else if (units <= 200) {
+            energyCharge =
+                (100 * 2.50) +
+                ((units - 100) * 4.00);
+        }
+        else if (units <= 400) {
+            energyCharge =
+                (100 * 2.50) +
+                (100 * 4.00) +
+                ((units - 200) * 5.50);
+        }
+        else {
+            energyCharge =
+                (100 * 2.50) +
+                (100 * 4.00) +
+                (200 * 5.50) +
+                ((units - 400) * 7.00);
+        }
+
+    } else {
+
+        if (units <= 100) {
+            energyCharge = units * 5.00;
+        }
+        else if (units <= 200) {
+            energyCharge =
+                (100 * 5.00) +
+                ((units - 100) * 6.50);
+        }
+        else if (units <= 400) {
+            energyCharge =
+                (100 * 5.00) +
+                (100 * 6.50) +
+                ((units - 200) * 8.00);
+        }
+        else {
+            energyCharge =
+                (100 * 5.00) +
+                (100 * 6.50) +
+                (200 * 8.00) +
+                ((units - 400) * 9.50);
+        }
+    }
+
+    let total = energyCharge + fixedCharge;
+
+    document.getElementById("showUnits").innerText =
+        units + " Units";
+
+    document.getElementById("energyCharge").innerText =
+        "₹" + energyCharge.toLocaleString("en-IN", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
+
+    document.getElementById("showFixed").innerText =
+        "₹" + fixedCharge.toLocaleString("en-IN", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
+
+    document.getElementById("beforeTotal").innerText =
+        "₹" + total.toLocaleString("en-IN", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
+
+    document.getElementById("totalBill").innerText =
+        "₹" + total.toLocaleString("en-IN", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
+
+    document.getElementById("result").style.display = "block";
+}
+
+
+function clearAll() {
+
+    document.getElementById("units").value = "";
+
+    document.getElementById("connection").value = "domestic";
+
+    document.getElementById("fixedCharge").value = "50";
+
+    document.getElementById("result").style.display = "none";
+}
+
+
+function goHome() {
+
+    window.location.href = "index.html";
+}
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>MyHelp India - PDF Watermark</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    background:#f4f8ff;
+    color:#222;
+}
+
+header{
+    background:linear-gradient(135deg,#0d47a1,#1976d2,#42a5f5);
+    color:white;
+    text-align:center;
+    padding:28px 15px;
+}
+
+header h1{
+    font-size:30px;
+    margin-bottom:8px;
+}
+
+header p{
+    font-size:16px;
+}
+
+.container{
+    max-width:850px;
+    margin:25px auto;
+    padding:15px;
+}
+
+.card{
+    background:white;
+    border-radius:15px;
+    padding:25px;
+    margin-bottom:20px;
+    box-shadow:0 5px 18px rgba(0,0,0,.10);
+}
+
+h2{
+    color:#0d47a1;
+    margin-bottom:15px;
+}
+
+.file-box{
+    border:2px dashed #1976d2;
+    border-radius:12px;
+    padding:25px;
+    text-align:center;
+    background:#f8fbff;
+}
+
+input[type="file"],
+input[type="text"],
+input[type="number"],
+select{
+    width:100%;
+    padding:13px;
+    margin-top:8px;
+    border:1px solid #ccc;
+    border-radius:8px;
+    font-size:16px;
+    background:white;
+}
+
+label{
+    display:block;
+    font-weight:bold;
+    margin-top:20px;
+    margin-bottom:5px;
+}
+
+.row{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:15px;
+}
+
+button{
+    border:none;
+    padding:13px 18px;
+    border-radius:8px;
+    font-size:16px;
+    cursor:pointer;
+    margin:8px 5px 0 0;
+    background:#1976d2;
+    color:white;
+}
+
+button:hover{
+    background:#0d47a1;
+}
+
+.green{
+    background:#2e7d32;
+}
+
+.green:hover{
+    background:#1b5e20;
+}
+
+.red{
+    background:#d32f2f;
+}
+
+.red:hover{
+    background:#b71c1c;
+}
+
+#fileInfo{
+    margin-top:18px;
+    padding:15px;
+    background:#eef5ff;
+    border-radius:10px;
+    display:none;
+    line-height:1.7;
+}
+
+#status{
+    display:none;
+    margin-top:18px;
+    padding:13px;
+    background:#e3f2fd;
+    border-radius:8px;
+    color:#0d47a1;
+    line-height:1.5;
+}
+
+.info{
+    background:#f1f8e9;
+    padding:15px;
+    border-radius:10px;
+    margin-top:18px;
+    line-height:1.7;
+}
+
+.footer{
+    text-align:center;
+    padding:25px;
+    color:#666;
+    font-size:14px;
+}
+
+@media(max-width:600px){
+    .row{
+        grid-template-columns:1fr;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>💧 PDF Watermark</h1>
+    <p>Add your own text watermark to a PDF</p>
+</header>
+
+<div class="container">
+
+<div class="card">
+
+    <h2>📄 Select PDF</h2>
+
+    <div class="file-box">
+
+        <p><b>Choose your PDF file</b></p>
+
+        <input
+            type="file"
+            id="pdfInput"
+            accept="application/pdf,.pdf"
+        >
+
+    </div>
+
+    <div id="fileInfo"></div>
+
+    <label>✏️ Watermark Text</label>
+
+    <input
+        type="text"
+        id="watermarkText"
+        placeholder="Example: CONFIDENTIAL"
+        value="CONFIDENTIAL"
+    >
+
+    <div class="row">
+
+        <div>
+            <label>📏 Font Size</label>
+
+            <input
+                type="number"
+                id="fontSize"
+                value="48"
+                min="10"
+                max="150"
+            >
+        </div>
+
+        <div>
+            <label>🔄 Rotation</label>
+
+            <select id="rotation">
+                <option value="45">45°</option>
+                <option value="0">0°</option>
+                <option value="90">90°</option>
+                <option value="315">-45°</option>
+            </select>
+        </div>
+
+    </div>
+
+    <label>📍 Watermark Position</label>
+
+    <select id="position">
+        <option value="center">Center</option>
+        <option value="top">Top</option>
+        <option value="bottom">Bottom</option>
+        <option value="diagonal">Diagonal Center</option>
+    </select>
+
+    <label>🌫️ Opacity</label>
+
+    <select id="opacity">
+        <option value="0.15">Very Light</option>
+        <option value="0.25" selected>Light</option>
+        <option value="0.40">Medium</option>
+        <option value="0.60">Strong</option>
+    </select>
+
+    <button class="green" onclick="addWatermark()">
+        💧 Add Watermark
+    </button>
+
+    <button class="red" onclick="clearAll()">
+        🗑 Clear
+    </button>
+
+    <div id="status"></div>
+
+    <div class="info">
+        <b>How to use:</b><br>
+        1. Select a PDF file.<br>
+        2. Enter your watermark text.<br>
+        3. Choose size, position and opacity.<br>
+        4. Click <b>Add Watermark</b>.<br>
+        5. Your watermarked PDF will be downloaded.
+    </div>
+
+</div>
+
+<div class="card">
+
+    <h2>ℹ️ About PDF Watermark</h2>
+
+    <p>
+        Add a custom text watermark to every page of your PDF.
+        Your PDF is processed in your browser and is not uploaded
+        to a server.
+    </p>
+
+</div>
+
+</div>
+
+<div class="footer">
+    © 2026 MyHelp India • Your Life • Our Support
+</div>
+
+<script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+
+<script>
+
+let selectedPDF = null;
+let totalPages = 0;
+
+document.getElementById("pdfInput").addEventListener(
+    "change",
+    async function(){
+
+        const file = this.files[0];
+
+        if(!file){
+            return;
+        }
+
+        selectedPDF = file;
+
+        try{
+
+            const arrayBuffer =
+                await file.arrayBuffer();
+
+            const pdf =
+                await PDFLib.PDFDocument.load(arrayBuffer);
+
+            totalPages =
+                pdf.getPageCount();
+
+            const info =
+                document.getElementById("fileInfo");
+
+            info.style.display = "block";
+
+            info.innerHTML =
+                "📄 <b>File:</b> " +
+                escapeHTML(file.name) +
+                "<br>📑 <b>Total Pages:</b> " +
+                totalPages +
+                "<br>💾 <b>File Size:</b> " +
+                formatSize(file.size);
+
+            showStatus(
+                "PDF loaded successfully."
+            );
+
+        }
+        catch(error){
+
+            selectedPDF = null;
+            totalPages = 0;
+
+            alert(
+                "Unable to open this PDF. Please select a valid PDF file."
+            );
+
+        }
+
+    }
+);
+
+
+async function addWatermark(){
+
+    if(!selectedPDF){
+
+        alert("Please select a PDF file first.");
+
+        return;
+    }
+
+    const text =
+        document.getElementById("watermarkText")
+        .value.trim();
+
+    if(!text){
+
+        alert("Please enter watermark text.");
+
+        return;
+    }
+
+    try{
+
+        showStatus(
+            "⏳ Adding watermark to PDF... Please wait."
+        );
+
+        const arrayBuffer =
+            await selectedPDF.arrayBuffer();
+
+        const pdf =
+            await PDFLib.PDFDocument.load(arrayBuffer);
+
+        const font =
+            await pdf.embedFont(
+                PDFLib.StandardFonts.HelveticaBold
+            );
+
+        const pages =
+            pdf.getPages();
+
+        const fontSize =
+            Math.max(
+                10,
+                Math.min(
+                    150,
+                    Number(
+                        document.getElementById("fontSize").value
+                    ) || 48
+                )
+            );
+
+        const rotation =
+            Number(
+                document.getElementById("rotation").value
+            );
+
+        const opacity =
+            Number(
+                document.getElementById("opacity").value
+            );
+
+        const position =
+            document.getElementById("position").value;
+
+        pages.forEach(function(page){
+
+            const width =
+                page.getWidth();
+
+            const height =
+                page.getHeight();
+
+            const textWidth =
+                font.widthOfTextAtSize(
+                    text,
+                    fontSize
+                );
+
+            let x;
+            let y;
+
+            if(position === "top"){
+
+                x =
+                    (width - textWidth) / 2;
+
+                y =
+                    height - fontSize - 40;
+
+            }
+            else if(position === "bottom"){
+
+                x =
+                    (width - textWidth) / 2;
+
+                y = 40;
+
+            }
+            else{
+
+                x =
+                    (width - textWidth) / 2;
+
+                y =
+                    (height - fontSize) / 2;
+
+            }
+
+            page.drawText(
+                text,
+                {
+                    x:x,
+                    y:y,
+                    size:fontSize,
+                    font:font,
+                    color:PDFLib.rgb(
+                        0.3,
+                        0.3,
+                        0.3
+                    ),
+                    opacity:opacity,
+                    rotate:PDFLib.degrees(rotation)
+                }
+            );
+
+        });
+
+        const pdfBytes =
+            await pdf.save();
+
+        const blob =
+            new Blob(
+                [pdfBytes],
+                {type:"application/pdf"}
+            );
+
+        const url =
+            URL.createObjectURL(blob);
+
+        const link =
+            document.createElement("a");
+
+        link.href = url;
+
+        link.download =
+            "MyHelp-India-Watermarked-PDF.pdf";
+
+        document.body.appendChild(link);
+
+        link.click();
+
+        link.remove();
+
+        setTimeout(function(){
+
+            URL.revokeObjectURL(url);
+
+        },1000);
+
+        showStatus(
+            "✅ Watermark added successfully! Download started."
+        );
+
+    }
+    catch(error){
+
+        console.error(error);
+
+        showStatus(
+            "❌ Unable to add watermark. Please try another PDF."
+        );
+
+    }
+
+}
+
+
+function clearAll(){
+
+    selectedPDF = null;
+    totalPages = 0;
+
+    document.getElementById("pdfInput").value = "";
+
+    document.getElementById("watermarkText").value =
+        "CONFIDENTIAL";
+
+    document.getElementById("fileInfo").style.display =
+        "none";
+
+    document.getElementById("status").style.display =
+        "none";
+
+}
+
+
+function showStatus(message){
+
+    const status =
+        document.getElementById("status");
+
+    status.style.display = "block";
+
+    status.innerText = message;
+
+}
+
+
+function formatSize(bytes){
+
+    if(bytes < 1024){
+
+        return bytes + " B";
+
+    }
+
+    if(bytes < 1024 * 1024){
+
+        return (bytes / 1024).toFixed(1) + " KB";
+
+    }
+
+    return (bytes / (1024 * 1024)).toFixed(2) + " MB";
+
+}
+
+
+function escapeHTML(text){
+
+    return text
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+
+}
+
+</script>
+
+</body>
+</html>

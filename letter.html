@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>MyHelp India - School Leave Letter Generator</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #eef5fb;
+    color: #222;
+}
+
+header {
+    background: linear-gradient(135deg, #0d47a1, #1976d2, #00a86b);
+    color: white;
+    text-align: center;
+    padding: 20px;
+}
+
+.logo {
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.subtitle {
+    margin-top: 5px;
+    font-size: 14px;
+}
+
+.container {
+    max-width: 900px;
+    margin: 30px auto;
+    padding: 0 18px;
+}
+
+.card {
+    background: white;
+    padding: 28px;
+    border-radius: 18px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.10);
+}
+
+h1 {
+    text-align: center;
+    color: #0d47a1;
+}
+
+.intro {
+    text-align: center;
+    color: #666;
+    margin-bottom: 28px;
+}
+
+.section-title {
+    color: #0d47a1;
+    border-bottom: 2px solid #00a86b;
+    padding-bottom: 8px;
+}
+
+.field {
+    margin-top: 16px;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 7px;
+}
+
+input,
+select,
+textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccd6df;
+    border-radius: 8px;
+    font-size: 15px;
+}
+
+textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+button {
+    width: 100%;
+    margin-top: 25px;
+    padding: 14px;
+    border: none;
+    border-radius: 9px;
+    background: #1976d2;
+    color: white;
+    font-size: 17px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #0d47a1;
+}
+
+.back {
+    display: block;
+    text-align: center;
+    margin-top: 20px;
+    color: #1976d2;
+    text-decoration: none;
+}
+
+/* Letter */
+
+#letterPage {
+    display: none;
+}
+
+.letter {
+    max-width: 850px;
+    margin: 30px auto;
+    background: white;
+    padding: 50px;
+    min-height: 900px;
+    box-shadow: 0 5px 25px rgba(0,0,0,0.12);
+}
+
+.letter-header {
+    text-align: center;
+    border-bottom: 3px solid #1976d2;
+    padding-bottom: 15px;
+    margin-bottom: 30px;
+}
+
+.letter-header h1 {
+    margin: 0;
+    color: #0d47a1;
+}
+
+.date {
+    text-align: right;
+    margin-bottom: 30px;
+}
+
+.subject {
+    font-weight: bold;
+    margin: 25px 0;
+}
+
+.letter-body {
+    font-size: 16px;
+    line-height: 1.8;
+    white-space: pre-line;
+}
+
+.signature {
+    margin-top: 50px;
+    line-height: 1.7;
+}
+
+.actions {
+    max-width: 850px;
+    margin: 20px auto;
+    display: flex;
+    gap: 12px;
+}
+
+.actions button {
+    margin-top: 0;
+}
+
+.edit {
+    background: #777;
+}
+
+@media(max-width:600px) {
+    .card {
+        padding: 20px;
+    }
+
+    .letter {
+        padding: 25px;
+        margin: 15px;
+    }
+
+    .actions {
+        margin: 15px;
+    }
+}
+
+@media print {
+    body {
+        background: white;
+    }
+
+    .letter {
+        margin: 0;
+        box-shadow: none;
+        max-width: none;
+    }
+
+    .actions {
+        display: none;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">🇮🇳 MyHelp India</div>
+    <div class="subtitle">Professional School Leave Letter Generator</div>
+</header>
+
+
+<!-- FORM -->
+
+<div class="container" id="formPage">
+
+<div class="card">
+
+<h1>📝 School Leave Letter</h1>
+
+<p class="intro">
+Create a professional school leave letter in seconds.
+</p>
+
+<h2 class="section-title">👤 Student Details</h2>
+
+<div class="field">
+<label>Student Name</label>
+<input id="studentName" placeholder="Enter student name">
+</div>
+
+<div class="field">
+<label>School Name</label>
+<input id="schoolName" placeholder="Enter school name">
+</div>
+
+<div class="field">
+<label>Class</label>
+<input id="studentClass" placeholder="Example: 3rd Class">
+</div>
+
+<div class="field">
+<label>Roll Number</label>
+<input id="rollNumber" placeholder="Enter roll number">
+</div>
+
+
+<h2 class="section-title">📅 Leave Details</h2>
+
+<div class="field">
+<label>Leave From</label>
+<input type="date" id="fromDate">
+</div>
+
+<div class="field">
+<label>Leave To</label>
+<input type="date" id="toDate">
+</div>
+
+<div class="field">
+<label>Reason for Leave</label>
+
+<select id="reason">
+
+<option value="">Select Reason</option>
+<option value="I am suffering from fever and I have been advised to take rest.">
+Fever / Illness
+</option>
+
+<option value="I am not feeling well and need to take rest at home.">
+Not Feeling Well
+</option>
+
+<option value="I have a family function to attend.">
+Family Function
+</option>
+
+<option value="I have an important family matter to attend to.">
+Family Reason
+</option>
+
+<option value="I need leave due to personal reasons.">
+Personal Reason
+</option>
+
+<option value="custom">
+Other Reason
+</option>
+
+</select>
+</div>
+
+<div class="field" id="customReasonBox" style="display:none;">
+
+<label>Enter Your Reason</label>
+
+<textarea id="customReason"
+placeholder="Enter your reason"></textarea>
+
+</div>
+
+
+<button onclick="createLetter()">
+✨ Create Professional Letter
+</button>
+
+<a class="back" href="index.html">
+← Back to MyHelp India
+</a>
+
+</div>
+</div>
+
+
+<!-- LETTER -->
+
+<div id="letterPage">
+
+<div class="letter" id="letter">
+
+<div class="letter-header">
+<h1>School Leave Application</h1>
+<p id="letterSchool"></p>
+</div>
+
+<div class="date">
+Date: <span id="letterDate"></span>
+</div>
+
+<p>
+To,<br>
+The Class Teacher / Principal,<br>
+<span id="school2"></span>
+</p>
+
+<div class="subject">
+Subject: Request for Leave
+</div>
+
+<div class="letter-body">
+
+Respected Sir/Madam,
+
+I am <strong id="letterStudent"></strong>, studying in
+<strong id="letterClass"></strong>.
+
+I kindly request you to grant me leave from
+<strong id="letterFrom"></strong> to
+<strong id="letterTo"></strong>.
+
+The reason for my leave is that
+<strong id="letterReason"></strong>
+
+I kindly request you to consider my request and grant me leave for the above-mentioned period.
+
+Thank you.
+
+Yours obediently,
+
+</div>
+
+<div class="signature">
+
+<strong id="signatureName"></strong><br>
+Class: <span id="signatureClass"></span><br>
+Roll Number: <span id="signatureRoll"></span>
+
+</div>
+
+</div>
+
+
+<div class="actions">
+
+<button onclick="window.print()">
+🖨️ Print / Save as PDF
+</button>
+
+<button class="edit" onclick="editLetter()">
+✏️ Edit Letter
+</button>
+
+</div>
+
+</div>
+
+
+<script>
+
+document.getElementById("reason").addEventListener("change", function() {
+
+    if(this.value === "custom") {
+        document.getElementById("customReasonBox").style.display = "block";
+    } else {
+        document.getElementById("customReasonBox").style.display = "none";
+    }
+
+});
+
+
+function formatDate(dateValue) {
+
+    if(!dateValue) return "";
+
+    const date = new Date(dateValue + "T00:00:00");
+
+    return date.toLocaleDateString("en-IN", {
+        day: "2-digit",
+        month: "long",
+        year: "numeric"
+    });
+
+}
+
+
+function createLetter() {
+
+    const name = document.getElementById("studentName").value.trim();
+    const school = document.getElementById("schoolName").value.trim();
+    const studentClass = document.getElementById("studentClass").value.trim();
+    const roll = document.getElementById("rollNumber").value.trim();
+    const from = document.getElementById("fromDate").value;
+    const to = document.getElementById("toDate").value;
+    const reasonSelect = document.getElementById("reason").value;
+
+    if(name === "") {
+        alert("Please enter student name.");
+        return;
+    }
+
+    if(school === "") {
+        alert("Please enter school name.");
+        return;
+    }
+
+    if(studentClass === "") {
+        alert("Please enter class.");
+        return;
+    }
+
+    if(from === "" || to === "") {
+        alert("Please select leave dates.");
+        return;
+    }
+
+    if(reasonSelect === "") {
+        alert("Please select leave reason.");
+        return;
+    }
+
+    let reason = reasonSelect;
+
+    if(reasonSelect === "custom") {
+
+        reason = document.getElementById("customReason").value.trim();
+
+        if(reason === "") {
+            alert("Please enter your reason.");
+            return;
+        }
+
+    }
+
+
+    document.getElementById("letterSchool").textContent = school;
+    document.getElementById("school2").textContent = school;
+
+    document.getElementById("letterStudent").textContent = name;
+    document.getElementById("letterClass").textContent = studentClass;
+
+    document.getElementById("letterFrom").textContent = formatDate(from);
+    document.getElementById("letterTo").textContent = formatDate(to);
+
+    document.getElementById("letterReason").textContent = reason;
+
+    document.getElementById("signatureName").textContent = name;
+    document.getElementById("signatureClass").textContent = studentClass;
+    document.getElementById("signatureRoll").textContent = roll;
+
+    const today = new Date();
+
+    document.getElementById("letterDate").textContent =
+        today.toLocaleDateString("en-IN", {
+            day: "2-digit",
+            month: "long",
+            year: "numeric"
+        });
+
+
+    document.getElementById("formPage").style.display = "none";
+    document.getElementById("letterPage").style.display = "block";
+
+    window.scrollTo(0,0);
+
+}
+
+
+function editLetter() {
+
+    document.getElementById("letterPage").style.display = "none";
+    document.getElementById("formPage").style.display = "block";
+
+    window.scrollTo(0,0);
+
+}
+
+</script>
+
+</body>
+</html>
